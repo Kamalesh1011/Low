@@ -12,12 +12,14 @@ import Loans from './pages/Loans';
 import SchemeFinder from './pages/SchemeFinder';
 import VibeCoder from './pages/VibeCoder';
 import AgentBuilder from './pages/AgentBuilder';
+import AppBuilder from './pages/AppBuilder';
 import Login from './pages/Login';
 import MyBusiness from './pages/MyBusiness';
 import MyApps from './pages/MyApps';
 import KnowledgeBase from './pages/KnowledgeBase';
 import ExpertConnect from './pages/ExpertConnect';
 import ComplianceCenter from './pages/ComplianceCenter';
+import Marketplace from './pages/Marketplace';
 import Settings from './pages/Settings';
 import Header from './components/Header';
 import useStore from './store/useStore';
@@ -71,12 +73,14 @@ function App() {
               <Route path="/loans" element={<PageWrapper><Loans /></PageWrapper>} />
               <Route path="/finder" element={<PageWrapper><SchemeFinder /></PageWrapper>} />
               <Route path="/vibe" element={<PageWrapper><VibeCoder /></PageWrapper>} />
+              <Route path="/builder" element={<PageWrapper><AppBuilder /></PageWrapper>} />
               <Route path="/agents" element={<PageWrapper><AgentBuilder /></PageWrapper>} />
               <Route path="/business" element={<PageWrapper><MyBusiness /></PageWrapper>} />
               <Route path="/apps" element={<PageWrapper><MyApps /></PageWrapper>} />
               <Route path="/knowledge" element={<PageWrapper><KnowledgeBase /></PageWrapper>} />
               <Route path="/experts" element={<PageWrapper><ExpertConnect /></PageWrapper>} />
               <Route path="/compliance" element={<PageWrapper><ComplianceCenter /></PageWrapper>} />
+              <Route path="/marketplace" element={<PageWrapper><Marketplace /></PageWrapper>} />
               <Route path="/settings" element={<PageWrapper><Settings /></PageWrapper>} />
             </Routes>
           </AnimatePresence>

@@ -24,13 +24,13 @@ APP_SYSTEM_PROMPT = """You are OmniForge Nexus BuilderBot — an expert full-sta
 When given a description of an app, you generate production-ready code.
 
 Generate a complete, working application with these files:
-1. backend/main.py — FastAPI backend with proper routes, Pydantic models, async DB queries
+1. backend/main.py — FastAPI backend with proper routes
 2. backend/models.py — SQLAlchemy 2.0 async models
-3. backend/schemas.py — Pydantic v2 schemas
-4. frontend/src/App.tsx — React + TypeScript main component
-5. frontend/src/components/Dashboard.tsx — Main dashboard UI
-6. docker-compose.yml — Docker configuration
-7. README.md — Setup and usage instructions
+3. backend/tests/test_main.py — Comprehensive Pytest unit tests
+4. frontend/src/App.tsx — React main component
+5. frontend/src/components/Dashboard.tsx — Premium Dashboard UI
+6. docker-compose.yml — Full Docker infra with PG and Redis
+7. README.md — Setup instructions
 
 Output ONLY a valid JSON object with this structure:
 {
@@ -113,8 +113,8 @@ MODE_PROMPTS = {
 }
 
 MODE_MODELS = {
-    "app": settings.BUILDER_MODEL,
-    "agent": settings.BUILDER_MODEL,
+    "app": "anthropic/claude-3.5-sonnet",
+    "agent": "anthropic/claude-3.5-sonnet",
     "website": "anthropic/claude-3.5-sonnet",
 }
 

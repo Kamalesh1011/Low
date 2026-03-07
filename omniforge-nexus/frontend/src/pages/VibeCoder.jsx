@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import useStore from '../store/useStore';
 import {
@@ -17,6 +18,7 @@ import {
 // ── Data ─────────────────────────────────────────────────────────
 
 const MODES = [
+    { id: 'swarm', icon: Cpu, label: 'Swarm Engine', desc: 'World-Class Multi-Agent Swarm', color: '#10b981', hex: '#10b981', badgeColor: 'active-swarm' },
     { id: 'app', icon: Layers, label: 'App Builder', desc: 'Full-stack React + FastAPI apps', color: 'var(--fire)', hex: '#ff6b35', badgeColor: 'active-app' },
     { id: 'agent', icon: Bot, label: 'Agent Studio', desc: 'Autonomous AI agents', color: 'var(--plasma)', hex: '#7b2fff', badgeColor: 'active-agent' },
     { id: 'website', icon: Globe, label: 'Web Studio', desc: 'Professional websites & landing', color: 'var(--cyan)', hex: '#00d4ff', badgeColor: 'active-website' },
@@ -30,6 +32,9 @@ const TEMPLATES = {
         { id: 'a4', name: 'HR Payroll System', emoji: '💰', desc: 'Payroll + ESI/PF compliance', tags: ['React', 'Python', 'PostgreSQL'], stars: 156, time: '~55s', prompt: 'Create an HR payroll system with salary slip generation, PF/ESI compliance, and attendance management' },
         { id: 'a5', name: 'E-commerce Store', emoji: '🛒', desc: 'Full online shop + payments', tags: ['Next.js', 'FastAPI', 'Stripe'], stars: 489, time: '~65s', prompt: 'Build a complete e-commerce platform for handicrafts with product catalog, cart, Razorpay integration, and order tracking' },
         { id: 'a6', name: 'Analytics Dashboard', emoji: '📈', desc: 'Business intelligence tool', tags: ['React', 'FastAPI', 'Recharts'], stars: 203, time: '~40s', prompt: 'Build a business analytics dashboard with revenue charts, KPI tracking, and export to PDF/Excel' },
+        { id: 'a7', name: 'Agriculture Supply Chain', emoji: '🚜', desc: 'Farm-to-fork tracking', tags: ['React', 'Python', 'GIS'], stars: 145, time: '~50s', prompt: 'Build a supply chain app for agriculture with crop harvesting logs, transport tracking, and direct-to-consumer sales portal' },
+        { id: 'a8', name: 'Textile Order Manager', emoji: '🧶', desc: 'Design to delivery workflow', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 220, time: '~45s', prompt: 'Create a textile order management system with design upload, dye house tracking, and automated shipping labels' },
+        { id: 'a9', name: 'Food Cloud Kitchen', emoji: '🍳', desc: 'Multi-brand kitchen manager', tags: ['React', 'Python', 'WebSockets'], stars: 310, time: '~55s', prompt: 'Build a cloud kitchen manager with Swiggy/Zomato order sync, real-time KDS (Kitchen Display System), and inventory auto-deduction' },
     ],
     agent: [
         { id: 'ag1', name: 'Customer Support Bot', emoji: '💬', desc: 'Handle FAQs, complaints, escalations', tags: ['OpenAI', 'Twilio', 'FastAPI'], stars: 398, time: '~30s', prompt: 'Build a customer support AI agent that handles FAQs via WhatsApp, email, and web chat with escalation logic' },
@@ -38,6 +43,9 @@ const TEMPLATES = {
         { id: 'ag4', name: 'Lead Nurture Agent', emoji: '🎯', desc: 'Follow up leads via email/WhatsApp', tags: ['OpenAI', 'Twilio', 'CRM'], stars: 445, time: '~32s', prompt: 'Create an AI lead nurturing agent that follows up with prospects via personalized messages across WhatsApp, email, and SMS' },
         { id: 'ag5', name: 'Finance Tracker', emoji: '💹', desc: 'Monitor cash flow, flag anomalies', tags: ['Python', 'OpenAI', 'PostgreSQL'], stars: 223, time: '~30s', prompt: 'Build a finance monitoring AI agent that tracks transactions, identifies anomalies, and generates weekly cash flow reports' },
         { id: 'ag6', name: 'Scheme Finder Bot', emoji: '🏛️', desc: 'Match MSME to gov schemes', tags: ['Python', 'OpenAI', 'FastAPI'], stars: 534, time: '~25s', prompt: 'Create an AI agent that matches MSMEs with relevant government schemes based on their profile and auto-generates applications' },
+        { id: 'ag7', name: 'Tax Compliance Auditor', emoji: '⚖️', desc: 'Scan bills for tax leaks', tags: ['Vision AI', 'Python', 'GST'], stars: 278, time: '~40s', prompt: 'Build an AI agent that scans purchase invoices using OCR and identifies missing GST credits or tax discrepancies' },
+        { id: 'ag8', name: 'Market Sentiment Agent', emoji: '📊', desc: 'Trend analysis for local markets', tags: ['Scrapy', 'NLP', 'FastAPI'], stars: 195, time: '~35s', prompt: 'Create an AI agent that monitors social media and local news for textile market trends and competitor pricing shifts' },
+        { id: 'ag9', name: 'Auto-Booking Agent', emoji: '📦', desc: 'AI Logistics & Courier booking', tags: ['Python', 'Delhivery API', 'LLM'], stars: 312, time: '~30s', prompt: 'Create an AI agent that automatically chooses the cheapest courier for an order and books the pickup via API' },
     ],
     website: [
         { id: 'w1', name: 'Business Landing Page', emoji: '🏢', desc: 'Professional company website', tags: ['React', 'Tailwind', 'Framer'], stars: 612, time: '~25s', prompt: 'Build a professional landing page for a manufacturing business with hero, services, gallery, and WhatsApp contact' },
@@ -52,7 +60,7 @@ const BUILD_PHASES = [
     { phase: 'Backend', icon: '⚙️', color: '#f97316', steps: ['Generating FastAPI routes…', 'Creating Pydantic models…', 'Setting up PostgreSQL…', 'Adding JWT auth…', 'Writing tests…'] },
     { phase: 'Frontend', icon: '🎨', color: '#3b82f6', steps: ['Building React components…', 'Creating UI layouts…', 'Adding state management…', 'Connecting APIs…', 'Adding animations…'] },
     { phase: 'Testing', icon: '🧪', color: '#10b981', steps: ['Running unit tests…', 'Integration testing…', 'Validating API schemas…', 'Performance benchmark…'] },
-    { phase: 'Deploy', icon: '🚀', color: '#f59e0b', steps: ['Containerizing Docker…', 'Setting up CI/CD…', 'Configuring Nginx…', '✅ App is live!'] },
+    { phase: 'Deploy', icon: '🚀', color: '#f59e0b', steps: ['Containerizing Docker…', 'Setting up CI/CD…', 'Configuring Nginx…', 'Finalizing deployment…'] },
 ];
 
 const CODE_SAMPLES = {
@@ -418,10 +426,15 @@ function DeployModal({ app, onClose, mode, prompt }) {
                                     display: 'flex', alignItems: 'center', padding: '0 20px', gap: 14,
                                     flexShrink: 0,
                                 }}>
-                                    <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${color}, ${color}99)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>🏢</div>
-                                    <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 12, color: 'var(--t1)', letterSpacing: 1, textTransform: 'uppercase' }}>{appName}</span>
+                                    <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${color}, ${color}99)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>
+                                        {mode === 'agent' ? '🤖' : mode === 'website' ? '🌐' : '🏢'}
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 12, color: 'var(--t1)', letterSpacing: 1, textTransform: 'uppercase' }}>{appName}</span>
+                                        <span style={{ fontSize: 9, color: '#00ff88', fontWeight: 600 }}>● RUNNING V1.0.0</span>
+                                    </div>
                                     <div style={{ flex: 1 }} />
-                                    {['Dashboard', 'Invoices', 'Reports', 'Settings'].map(n => (
+                                    {['Dashboard', 'Analytics', 'System', 'Logs'].map(n => (
                                         <span key={n} style={{ fontSize: 11.5, color: n === 'Dashboard' ? color : 'var(--t3)', fontWeight: n === 'Dashboard' ? 700 : 400, cursor: 'pointer', padding: '4px 8px', borderRadius: 6, background: n === 'Dashboard' ? `${color}15` : 'transparent' }}>{n}</span>
                                     ))}
                                     <div style={{ width: 28, height: 28, borderRadius: 8, background: `${color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -434,10 +447,10 @@ function DeployModal({ app, onClose, mode, prompt }) {
                                     {/* Stats row */}
                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
                                         {[
-                                            { label: 'Total Revenue', value: '₹24.8L', delta: '+18%', color },
-                                            { label: 'Invoices', value: '342', delta: '+24', color: '#7b2fff' },
-                                            { label: 'Customers', value: '89', delta: '+7', color: '#00ff88' },
-                                            { label: 'Pending GST', value: '₹1.2L', delta: 'Due 20th', color: '#ffd700' },
+                                            { label: 'Total API Calls', value: '1,280', delta: '+18%', color },
+                                            { label: 'Active Tasks', value: String(app?.apis || 8), delta: '+2', color: '#7b2fff' },
+                                            { label: 'DB Latency', value: '14ms', delta: 'Fast', color: '#00ff88' },
+                                            { label: 'Uptime', value: '99.9%', delta: 'Live', color: '#ffd700' },
                                         ].map(s => (
                                             <div key={s.label} style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${s.color}20`, borderRadius: 10, padding: '12px 14px' }}>
                                                 <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 700, color: s.color }}>{s.value}</div>
@@ -547,24 +560,67 @@ function DeployModal({ app, onClose, mode, prompt }) {
     );
 }
 
-function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected }) {
-    const downloadCode = () => {
-        if (!app?.result?.files) {
-            toast.success('Source code downloaded as omniforge_build.zip', { icon: '📦' });
+function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }) {
+    const [viewType, setViewType] = useState('ui'); // ui | logs | raw
+
+    // Website Live Preview (Real-time iframe)
+    const getWebsiteSource = () => {
+        if (mode !== 'website' || !app?.result?.files) return null;
+        const html = app.result.files['index.html'] || '';
+        const css = app.result.files['styles/main.css'] || '';
+        const js = app.result.files['js/main.js'] || '';
+
+        return `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>${css}</style>
+            </head>
+            <body>
+                ${html}
+                <script>${js}</script>
+            </body>
+            </html>
+        `;
+    };
+
+    const downloadCode = async () => {
+        const filesToDownload = app?.result?.files || generatedFiles;
+        if (!filesToDownload || Object.keys(filesToDownload).length === 0) {
+            toast.error('No files generated yet');
             return;
         }
-        // Create a simple downloadable text of all files
-        const content = Object.entries(app.result.files || {}).map(
-            ([name, code]) => `\n${'='.repeat(60)}\n// FILE: ${name}\n${'='.repeat(60)}\n${code}`
-        ).join('\n');
-        const blob = new Blob([content], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${app?.url?.split('.')[0] || 'project'}_source.txt`;
-        a.click();
-        URL.revokeObjectURL(url);
-        toast.success('Code downloaded!', { icon: '📦' });
+
+        const loadToast = toast.loading('Bundling project as ZIP...');
+        try {
+            const payload = {
+                project_name: app?.url?.split('.')[0] || 'omniforge_project',
+                files: filesToDownload
+            };
+
+            const response = await fetch('/api/v1/builds/download', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error('Download failed');
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${payload.project_name}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
+            toast.success('Downloaded Full Stack ZIP!', { id: loadToast });
+        } catch (e) {
+            console.error(e);
+            toast.error('Failed to download project', { id: loadToast });
+        }
     };
 
     const techStack = app?.result?.tech_stack || {};
@@ -594,8 +650,8 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected }) {
                     </div>
                     {app?.githubRepo && (
                         <a href={app.githubRepo} target="_blank" rel="noopener noreferrer"
-                            style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 5, fontSize: 10, color: '#34d399', background: 'rgba(0,255,136,0.1)', padding: '4px 10px', borderRadius: 20, border: '1px solid rgba(0,255,136,0.3)', textDecoration: 'none' }}>
-                            <GitBranch size={10} /> View on GitHub
+                            style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 5, fontSize: 10, color: '#34d399', background: 'rgba(52,211,153,0.1)', padding: '6px 14px', borderRadius: 20, border: '1px solid rgba(52,211,153,0.3)', textDecoration: 'none', fontWeight: 700 }}>
+                            <GitBranch size={12} /> View on GitHub
                         </a>
                     )}
                 </div>
@@ -613,9 +669,43 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected }) {
                     ))}
                 </div>
                 <div style={{ display: 'flex', gap: 7 }}>
-                    <button className="btn btn-primary" style={{ flex: 1, justifyContent: 'center', fontSize: 11.5 }} onClick={onOpenDeploy}><ExternalLink size={12} /> Preview</button>
+                    <button className="btn btn-primary" style={{ flex: 1, justifyContent: 'center', fontSize: 11.5 }} onClick={onOpenDeploy}><ExternalLink size={12} /> Open Demo</button>
                     <button className="btn btn-secondary" style={{ fontSize: 11.5 }} onClick={downloadCode}><Download size={12} /> Download</button>
                     <button className="btn btn-secondary" style={{ fontSize: 11.5 }} onClick={onPushGitHub}><GitBranch size={12} /> GitHub</button>
+                </div>
+            </div>
+
+            {/* Real-time Content Preview */}
+            <div style={{ flex: 1, background: 'rgba(0,0,0,0.5)', borderRadius: 14, overflow: 'hidden', border: '1px solid var(--border-subtle)', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ padding: '8px 12px', background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span className="dot-live" />
+                        <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 1 }}>REAL-TIME {mode?.toUpperCase()} PREVIEW</span>
+                    </div>
+                </div>
+                <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+                    {mode === 'website' ? (
+                        <iframe
+                            srcDoc={getWebsiteSource()}
+                            style={{ width: '100%', height: '100%', border: 'none', background: 'white' }}
+                            title="Live Preview"
+                        />
+                    ) : mode === 'agent' ? (
+                        <AgentSimulator agent={app} />
+                    ) : (
+                        <AppSimulator app={app} />
+                    )}
+                </div>
+
+                {/* Live Output Log at bottom of preview */}
+                <div style={{ height: 100, background: 'rgba(0,0,0,0.8)', borderTop: '1px solid var(--border-subtle)', padding: 10, fontFamily: 'var(--font-mono)', fontSize: 9, overflowY: 'auto', color: '#00ff88' }}>
+                    <div style={{ color: 'var(--text-muted)', marginBottom: 4 }}>RUNTIME LOGS (STDOUT)</div>
+                    <div>[SYSTEM] Initializing container runtime...</div>
+                    <div style={{ color: '#fb923c' }}>[BACKEND] Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)</div>
+                    <div>[DB] Connected to PostgreSQL on port 5432</div>
+                    <div>[FRONTEND] VITE v5.0.0 ready in 452ms</div>
+                    <div style={{ opacity: 0.5 }}>[INFO] Incoming request: GET /api/v1/health</div>
+                    <div style={{ opacity: 0.5 }}>[INFO] Incoming request: GET /api/v1/data</div>
                 </div>
             </div>
 
@@ -710,11 +800,13 @@ export default function VibeCoder() {
     // Real LLM: generated files and result from LLM
     const [generatedFiles, setGeneratedFiles] = useState({});
     const [generatedResult, setGeneratedResult] = useState(null);
+    const [streamingText, setStreamingText] = useState('');
     const timerRef = useRef(null);
     const textareaRef = useRef(null);
     const currentMode = MODES.find(m => m.id === mode);
-    // GitHub from store
-    const github = useStore(s => s.github);
+    // GitHub and save from store
+    const { github, saveBuiltProject } = useStore();
+    const navigate = useNavigate();
 
     const CODE_TABS = [
         { id: 'backend', label: 'Backend', icon: Server, color: '#f97316', file: 'main.py' },
@@ -726,6 +818,7 @@ export default function VibeCoder() {
     const simulateBuild = useCallback((onDone) => {
         let p = 0, s = 0;
         setPhase(0); setStepIdx(0);
+        if (timerRef.current) clearInterval(timerRef.current);
         timerRef.current = setInterval(() => {
             s++;
             if (s >= BUILD_PHASES[p].steps.length) {
@@ -739,13 +832,13 @@ export default function VibeCoder() {
             }
             setStepIdx(s);
             setLogs(prev => [...prev.slice(-30), `[${BUILD_PHASES[p]?.phase}] ${BUILD_PHASES[p]?.steps[s % BUILD_PHASES[p]?.steps.length]}`]);
-        }, 700);
+        }, 80);
     }, []);
 
     const startBuild = async () => {
         if (!prompt.trim()) return;
         setBuilding(true); setDone(false); setPhase(0); setStepIdx(0);
-        setGeneratedFiles({}); setGeneratedResult(null);
+        setGeneratedFiles({}); setGeneratedResult(null); setStreamingText('');
         setBuiltApp(null); setLogs([]); setStreamError(null); setRightPanel('terminal');
 
         // Start build pipeline animation in parallel
@@ -754,7 +847,8 @@ export default function VibeCoder() {
         });
 
         try {
-            const res = await fetch('/api/v1/llm/generate/stream', {
+            const endpoint = mode === 'swarm' ? '/api/v1/multiagent/swarm' : '/api/v1/llm/generate/stream';
+            const res = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ prompt, mode, stream: true }),
@@ -784,32 +878,61 @@ export default function VibeCoder() {
                     try {
                         const evt = JSON.parse(dataStr);
                         if (evt.type === 'start') {
-                            setLogs(prev => [...prev.slice(-30), `[INFO] [LLM] 🚀 Starting ${mode} generation with ${evt.model}...`]);
+                            setLogs(prev => [...prev.slice(-30), `[INFO] [System] ${evt.message || '🚀 Initializing Swarm Engine...'}`]);
+                        } else if (evt.type === 'agent_start') {
+                            setLogs(prev => [...prev.slice(-30), `[INFO] [Agent] 🤖 ${evt.agent} (${evt.model}) starting...`]);
+                            setLogs(prev => [...prev.slice(-30), `[${evt.agent}] ${evt.status}`]);
+                        } else if (evt.type === 'agent_complete') {
+                            setLogs(prev => [...prev.slice(-30), `[SUCCESS] [Agent] ✅ ${evt.agent} logic complete.`]);
                         } else if (evt.type === 'chunk') {
-                            // Don't spam logs with every token; just occasional updates
+                            const content = evt.content || '';
+                            setStreamingText(prev => prev + content);
+                            // Occasional character echo to terminal for life
+                            if (Math.random() > 0.95) {
+                                setLogs(prev => [...prev.slice(-30), `[STREAM] ${content.slice(0, 5)}...`]);
+                            }
                         } else if (evt.type === 'complete') {
                             const result = evt.result;
                             setGeneratedResult(result);
                             const files = result?.files || {};
                             setGeneratedFiles(files);
 
-                            // Build a dynamic file tree from real generated files
                             const fileList = Object.keys(files);
-                            setLogs(prev => [...prev.slice(-30), `[SUCCESS] [Builder] ✅ Generated ${fileList.length} files: ${fileList.slice(0, 4).join(', ')}${fileList.length > 4 ? '...' : ''}`]);
-                            setLogs(prev => [...prev.slice(-30), `[SUCCESS] [Deployer] 🎉 Build complete! Ready to deploy.`]);
+                            setLogs(prev => [...prev.slice(-30), `[SUCCESS] [Builder] ✅ Synthesized ${fileList.length} files.`]);
 
-                            // Stop animation, set done
                             if (timerRef.current) clearInterval(timerRef.current);
                             setBuilding(false);
                             setDone(true);
+                            setPhase(4); setStepIdx(4);
                             setRightPanel('preview');
-                            setBuiltApp({
+
+                            const generatedAppData = {
                                 url: `${(result?.project_name || result?.agent_name || result?.site_name || 'app').toLowerCase().replace(/\s+/g, '-')}.omniforge.ai`,
-                                apis: Object.keys(result?.api_endpoints || {}).length || fileList.filter(f => f.includes('router') || f.includes('route')).length || 8,
+                                apis: Object.keys(result?.api_endpoints || {}).length || fileList.length || 8,
                                 tables: result?.tables?.length || 6,
                                 files: fileList,
                                 result,
+                            };
+                            setBuiltApp(generatedAppData);
+
+                            if (fileList.length > 0) {
+                                setSelectedFile(fileList[0]);
+                                if (rightPanel !== 'preview') setRightPanel('code');
+                            }
+
+                            saveBuiltProject({
+                                id: Date.now().toString(),
+                                mode: mode,
+                                prompt: prompt,
+                                files: fileList,
+                                githubRepo: null,
+                                name: result?.project_name || result?.agent_name || result?.site_name || 'AI Project'
                             });
+
+                            if (github?.connected) {
+                                setLogs(prev => [...prev.slice(-30), `[INFO] [Turbo] ⚡ Auto-Deploying to GitHub...`]);
+                                pushToGitHub(files);
+                            }
                         } else if (evt.type === 'error') {
                             throw new Error(evt.message || 'Generation failed');
                         }
@@ -830,38 +953,48 @@ export default function VibeCoder() {
         }
     };
 
-    const pushToGitHub = async () => {
+    const pushToGitHub = async (filesOverride = null) => {
+        const filesToPush = filesOverride || generatedFiles;
         if (!github?.connected) {
             toast.error('Connect your GitHub account in Settings first');
             return;
         }
-        if (!generatedFiles || Object.keys(generatedFiles).length === 0) {
+        if (!filesToPush || Object.keys(filesToPush).length === 0) {
             toast.error('No files to push — generate a project first');
             return;
         }
         const repoName = (builtApp?.result?.project_name || builtApp?.result?.agent_name || builtApp?.result?.site_name || 'omniforge-project').toLowerCase().replace(/[^a-z0-9-]/g, '-');
+
+        setLogs(prev => [...prev, `[INFO] [Turbo] 🌐 Committing ${Object.keys(filesToPush).length} files via Git Data Tree API...`]);
+        setLogs(prev => [...prev, `[INFO] [Turbo] 🚄 Atomically syncing to main branch...`]);
+
+        const deployId = toast.loading(`Turbo-Sync: Building Git Tree...`);
         try {
-            toast.loading('Pushing code to GitHub...', { id: 'gh-push' });
             const res = await fetch('/api/v1/github/repos/push', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     github_token: github.token,
+                    username: github.user?.login,
                     repo_name: repoName,
-                    files: generatedFiles,
-                    description: `Generated by OmniForge Nexus: ${prompt.slice(0, 100)}`,
+                    files: filesToPush,
+                    description: `🚀 Turbo-Deploy: ${prompt.slice(0, 50)}`,
                     private: false,
                 }),
             });
             const data = await res.json();
             if (data.success) {
-                toast.success(`✅ Pushed ${data.pushed_count} files to ${data.repo_url}!`, { id: 'gh-push', duration: 6000 });
+                setLogs(prev => [...prev, `[SUCCESS] [Turbo] ✅ Sync Complete! Commit [${data.commit_sha}]`]);
+                setLogs(prev => [...prev, `[SUCCESS] [Turbo] 🌍 Live Repository: ${data.repo_url}`]);
+                toast.success(`🚀 Turbo-Deployed Successfully!`, { id: deployId, duration: 4000 });
                 setBuiltApp(prev => ({ ...prev, githubRepo: data.repo_url }));
+                setRightPanel('preview');
             } else {
                 throw new Error(data.detail || 'Push failed');
             }
         } catch (e) {
-            toast.error(`GitHub push failed: ${e.message}`, { id: 'gh-push' });
+            setLogs(prev => [...prev, `[ERROR] [GitHub] ❌ Deployment failed: ${e.message}`]);
+            toast.error(`GitHub push failed: ${e.message}`, { id: deployId });
         }
     };
 
@@ -886,16 +1019,27 @@ export default function VibeCoder() {
                 <div style={{ width: 1, height: 24, background: 'var(--border-subtle)', margin: '0 4px' }} />
 
                 {/* Mode Switcher */}
-                <div style={{ display: 'flex', gap: 3 }}>
+                <div style={{ display: 'flex', gap: 6, background: 'rgba(255,255,255,0.03)', padding: 4, borderRadius: 12, border: '1px solid rgba(255,255,255,0.05)' }}>
                     {MODES.map(m => (
                         <motion.button
                             key={m.id}
+                            whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.96 }}
                             onClick={() => { setMode(m.id); setDone(false); setBuilding(false); setLogs([]); setPrompt(''); if (timerRef.current) clearInterval(timerRef.current); }}
-                            className={`vc-mode-pill ${mode === m.id ? m.badgeColor : ''}`}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', borderRadius: 9,
+                                border: 'none', cursor: 'pointer', fontSize: 11, fontWeight: 700, transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                background: mode === m.id ? `linear-gradient(135deg, ${m.hex}, ${m.hex}cc)` : 'transparent',
+                                color: mode === m.id ? 'white' : 'var(--text-muted)',
+                                boxShadow: mode === m.id ? `0 4px 15px ${m.hex}40` : 'none',
+                                position: 'relative', overflow: 'hidden'
+                            }}
                         >
                             <m.icon size={13} />
                             {m.label}
+                            {mode === m.id && (
+                                <motion.div layoutId="mode-glow" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)', animation: 'sweep 2s linear infinite' }} />
+                            )}
                         </motion.button>
                     ))}
                 </div>
@@ -903,27 +1047,48 @@ export default function VibeCoder() {
                 <div style={{ width: 1, height: 24, background: 'var(--border-subtle)', margin: '0 4px' }} />
 
                 {/* Right Panel Switcher */}
-                <div style={{ display: 'flex', gap: 3 }}>
+                <div style={{ display: 'flex', gap: 6, background: 'rgba(0,0,0,0.2)', padding: 4, borderRadius: 12, border: '1px solid rgba(255,255,255,0.03)' }}>
                     {[{ id: 'code', icon: Code2, label: 'Code' }, { id: 'terminal', icon: Terminal, label: 'Terminal' }, { id: 'preview', icon: Eye, label: 'Preview' }].map(p => (
                         <button key={p.id} onClick={() => setRightPanel(p.id)} style={{
-                            display: 'flex', alignItems: 'center', gap: 5, padding: '5px 10px', borderRadius: 7,
-                            background: rightPanel === p.id ? 'rgba(249,115,22,0.15)' : 'transparent',
-                            border: `1px solid ${rightPanel === p.id ? 'rgba(249,115,22,0.3)' : 'var(--border-faint)'}`,
-                            color: rightPanel === p.id ? '#fb923c' : 'var(--text-muted)',
-                            cursor: 'pointer', fontSize: 11, fontWeight: 600, transition: 'all 0.18s',
+                            display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', borderRadius: 9,
+                            background: rightPanel === p.id ? 'rgba(255,255,255,0.06)' : 'transparent',
+                            border: '1px solid ' + (rightPanel === p.id ? 'rgba(255,255,255,0.1)' : 'transparent'),
+                            color: rightPanel === p.id ? '#fff' : 'rgba(255,255,255,0.4)',
+                            cursor: 'pointer', fontSize: 10.5, fontWeight: 800, transition: 'all 0.2s',
+                            letterSpacing: '0.5px', textTransform: 'uppercase'
                         }}>
-                            <p.icon size={12} /> {p.label}
+                            <p.icon size={12} style={{ color: rightPanel === p.id ? '#fb923c' : 'inherit' }} /> {p.label}
                         </button>
                     ))}
                 </div>
 
                 <div style={{ marginLeft: 'auto', display: 'flex', gap: 7, alignItems: 'center' }}>
+                    <div style={{
+                        display: 'flex', alignItems: 'center', gap: 6, padding: '5px 10px',
+                        background: github?.connected ? 'rgba(16,185,129,0.08)' : 'rgba(255,255,255,0.03)',
+                        border: '1px solid var(--border-subtle)', borderRadius: 7, cursor: 'pointer'
+                    }} onClick={() => navigate('/settings')}>
+                        <GitBranch size={12} style={{ color: github?.connected ? '#10b981' : 'var(--text-muted)' }} />
+                        <span style={{ fontSize: 10, fontWeight: 700, color: github?.connected ? '#10b981' : 'var(--text-muted)' }}>
+                            {github?.connected ? 'GITHUB LINKED' : 'GIT DISCONNECTED'}
+                        </span>
+                    </div>
                     {done && (
-                        <motion.button initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="btn btn-primary" style={{ fontSize: 11, padding: '5px 12px' }}>
-                            <ExternalLink size={12} /> Deploy App
+                        <motion.button
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="btn btn-primary"
+                            style={{ fontSize: 11, padding: '5px 12px' }}
+                            onClick={pushToGitHub}
+                        >
+                            <ExternalLink size={12} /> Live Deploy
                         </motion.button>
                     )}
-                    <button className="btn btn-secondary" style={{ fontSize: 11, padding: '5px 10px' }} onClick={() => { setDone(false); setBuilding(false); setBuiltApp(null); setPrompt(''); setLogs([]); setStreamError(null); if (timerRef.current) clearInterval(timerRef.current); }}>
+                    <button className="btn btn-secondary" style={{ fontSize: 11, padding: '5px 10px' }} onClick={() => {
+                        setDone(false); setBuilding(false); setBuiltApp(null); setPrompt(''); setLogs([]);
+                        setStreamError(null); setGeneratedFiles({}); setGeneratedResult(null);
+                        if (timerRef.current) clearInterval(timerRef.current);
+                    }}>
                         <RotateCcw size={12} /> Reset
                     </button>
                 </div>
@@ -950,7 +1115,8 @@ export default function VibeCoder() {
                                 placeholder={
                                     mode === 'app' ? 'Describe your app…\n\nEx: GST billing app for a textile business with invoice PDF generation'
                                         : mode === 'agent' ? 'Describe your agent…\n\nEx: AI agent that monitors inventory and sends WhatsApp alerts when stock is low'
-                                            : 'Describe your website…\n\nEx: Professional website for my handicraft export business with product gallery'
+                                            : mode === 'swarm' ? 'Describe a complex world-class project…\n\nEx: A multi-tenant ERP system for manufacturing with AI planning agents and supply chain tracking'
+                                                : 'Describe your website…\n\nEx: Professional website for my handicraft export business with product gallery'
                                 }
                                 rows={5}
                                 style={{
@@ -988,10 +1154,10 @@ export default function VibeCoder() {
                     <AnimatePresence>
                         {building && (
                             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
-                                style={{ padding: '0 12px 10px', flexShrink: 0, overflow: 'hidden' }}>
-                                <div style={{ fontSize: 10.5, fontWeight: 700, color: currentMode.color, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
-                                    <Loader size={10} style={{ animation: 'spin 1s linear infinite' }} />
-                                    Building your {currentMode.label}…
+                                style={{ padding: '0 12px 14px', flexShrink: 0, overflow: 'hidden' }}>
+                                <div style={{ fontSize: 10, fontWeight: 900, color: currentMode.color, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6, textTransform: 'uppercase', letterSpacing: 1.2 }}>
+                                    <div style={{ width: 4, height: 4, borderRadius: '50%', background: currentMode.color, boxShadow: `0 0 8px ${currentMode.color}` }} />
+                                    Synthesizing {currentMode.label}
                                 </div>
                                 <BuildPipeline phase={phase} stepIdx={stepIdx} />
                             </motion.div>
@@ -999,93 +1165,152 @@ export default function VibeCoder() {
                     </AnimatePresence>
 
                     {/* Templates */}
-                    <div style={{ flex: 1, overflowY: 'auto', padding: '0 12px 12px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                            <span className="section-label" style={{ fontSize: 9.5 }}>⚡ Quick Templates</span>
-                            <span style={{ fontSize: 9.5, color: 'var(--text-muted)' }}>{(TEMPLATES[mode] || TEMPLATES.app).length} templates</span>
+                    <div style={{ flex: 1, overflowY: 'auto', padding: '0 12px 14px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                            <span style={{ fontSize: 9.5, fontWeight: 800, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase' }}>⚡ Recommended </span>
+                            <span style={{ fontSize: 9, background: 'rgba(255,255,255,0.06)', padding: '2px 8px', borderRadius: 20, color: 'var(--text-faint)' }}>{(TEMPLATES[mode] || TEMPLATES.app).length}</span>
                         </div>
-                        {(TEMPLATES[mode] || TEMPLATES.app).map(item => (
-                            <TemplateCard key={item.id} item={item} onSelect={setPrompt} />
-                        ))}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                            {(TEMPLATES[mode] || TEMPLATES.app).map(item => (
+                                <TemplateCard key={item.id} item={item} onSelect={setPrompt} active={prompt === item.prompt} />
+                            ))}
+                        </div>
                     </div>
                 </div>
 
                 {/* CENTER: File Tree */}
-                <div className="panel" style={{ width: 200, background: '#070d1c' }}>
-                    <div className="panel-header">
-                        <Folder size={12} style={{ color: '#f59e0b' }} />
-                        <span className="panel-title">EXPLORER</span>
+                <div style={{ width: 220, borderRight: '1px solid var(--border-subtle)', background: 'rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ padding: '12px 14px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.02)' }}>
+                        <div style={{ width: 22, height: 22, borderRadius: 6, background: 'rgba(245,158,11,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <FolderOpen size={13} style={{ color: '#f59e0b' }} />
+                        </div>
+                        <span style={{ fontSize: 10.5, fontWeight: 800, color: '#eef2ff', letterSpacing: 1.2, textTransform: 'uppercase' }}>Workspace</span>
                         {done && (
-                            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}>
-                                <span className="dot-live" style={{ marginLeft: 4 }} />
+                            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} style={{ marginLeft: 'auto' }}>
+                                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#34d399', boxShadow: '0 0 10px #34d399' }} />
                             </motion.div>
                         )}
                     </div>
-                    <div style={{ flex: 1, overflowY: 'auto', padding: '8px 6px' }}>
-                        {done ? (
-                            FILE_TREE.map((node, i) => (
-                                <FileTreeNode key={i} node={node} onSelect={n => setSelectedFile(n.name)} selected={selectedFile} />
-                            ))
+                    <div style={{ flex: 1, overflowY: 'auto', padding: '8px' }}>
+                        {Object.keys(generatedFiles).length > 0 ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                {Object.keys(generatedFiles).map((file, i) => (
+                                    <FileTreeNode key={i} node={{ name: file, type: 'file' }} onSelect={n => setSelectedFile(n.name)} selected={selectedFile} />
+                                ))}
+                            </div>
+                        ) : building ? (
+                            <div style={{ padding: '30px 10px', textAlign: 'center' }}>
+                                <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} style={{ margin: '0 auto 12px', width: 24, height: 24, borderRadius: '50%', border: `2px solid ${currentMode.color}40`, borderTopColor: currentMode.color }} />
+                                <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>Synthesizing Project...</div>
+                            </div>
                         ) : (
-                            <div style={{ padding: '20px 8px', textAlign: 'center', color: 'var(--text-muted)', fontSize: 10.5 }}>
-                                <Folder size={28} style={{ margin: '0 auto 8px', opacity: 0.3 }} />
-                                Files appear after build
+                            <div style={{ padding: '40px 10px', textAlign: 'center', opacity: 0.4 }}>
+                                <Folder size={32} style={{ margin: '0 auto 10px', color: 'var(--text-muted)' }} />
+                                <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>No files yet</div>
                             </div>
                         )}
                     </div>
                 </div>
 
                 {/* RIGHT: Code / Terminal / Preview */}
-                <div className="vc-center" style={{ background: '#070d1c' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: '#02040a' }}>
                     {/* Code Tab bar */}
                     {rightPanel === 'code' && (
-                        <div style={{ display: 'flex', borderBottom: '1px solid var(--border-subtle)', flexShrink: 0, background: 'rgba(0,0,0,0.3)' }}>
+                        <div style={{ display: 'flex', borderBottom: '1px solid var(--border-subtle)', flexShrink: 0, background: 'rgba(0,0,0,0.4)', padding: '0 4px' }}>
                             {CODE_TABS.map(t => (
                                 <button key={t.id} onClick={() => setActiveCodeTab(t.id)} style={{
-                                    display: 'flex', alignItems: 'center', gap: 5, padding: '9px 14px',
+                                    display: 'flex', alignItems: 'center', gap: 6, padding: '10px 16px',
                                     border: 'none', borderBottom: `2px solid ${activeCodeTab === t.id ? t.color : 'transparent'}`,
-                                    background: activeCodeTab === t.id ? 'rgba(255,255,255,0.04)' : 'transparent',
-                                    color: activeCodeTab === t.id ? t.color : 'var(--text-muted)',
-                                    cursor: 'pointer', fontSize: 11.5, fontWeight: 700, transition: 'all 0.18s',
-                                    fontFamily: 'var(--font-ui)', whiteSpace: 'nowrap',
+                                    background: activeCodeTab === t.id ? 'rgba(255,255,255,0.03)' : 'transparent',
+                                    color: activeCodeTab === t.id ? t.color : 'rgba(255,255,255,0.4)',
+                                    cursor: 'pointer', fontSize: 11, fontWeight: 800, transition: 'all 0.2s',
+                                    fontFamily: 'var(--font-ui)', textTransform: 'uppercase', letterSpacing: '0.5px'
                                 }}>
                                     <t.icon size={12} />{t.label}
                                 </button>
                             ))}
                         </div>
                     )}
-                    <div style={{ flex: 1, overflow: 'hidden', padding: 12 }}>
+
+                    {rightPanel === 'terminal' && (
+                        <div style={{ padding: '10px 16px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(0,0,0,0.3)' }}>
+                            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#fb923c', boxShadow: '0 0 8px #fb923c' }} />
+                            <div style={{ fontSize: 10, fontWeight: 900, color: '#eef2ff', letterSpacing: 1.5, textTransform: 'uppercase' }}>Build Execution Runtime</div>
+                            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <span style={{ fontSize: 9, color: 'var(--text-muted)', fontWeight: 600 }}>STREAMING LIVE</span>
+                                <span className="dot-live" style={{ width: 6, height: 6 }} />
+                            </div>
+                        </div>
+                    )}
+
+                    {rightPanel === 'preview' && (
+                        <div style={{ padding: '10px 16px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(0,0,0,0.3)' }}>
+                            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#34d399', boxShadow: '0 0 8px #34d399' }} />
+                            <div style={{ fontSize: 10, fontWeight: 900, color: '#eef2ff', letterSpacing: 1.5, textTransform: 'uppercase' }}>Live Deployment Preview</div>
+                            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <div style={{ fontSize: 9, color: '#34d399', fontWeight: 700, background: 'rgba(52,211,153,0.1)', padding: '2px 8px', borderRadius: 100 }}>REAL-TIME SYNC</div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
                         <AnimatePresence mode="wait">
                             {rightPanel === 'code' ? (
-                                <motion.div key="code" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ height: '100%' }}>
-                                    {done || building ? (
+                                <motion.div key="code" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ height: '100%', padding: 12 }}>
+                                    {building && streamingText ? (
+                                        <div style={{ height: '100%', position: 'relative' }}>
+                                            <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 10, display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(99,102,241,0.2)', padding: '4px 10px', borderRadius: 20, border: '1px solid rgba(99,102,241,0.3)' }}>
+                                                <motion.div animate={{ opacity: [0, 1, 0] }} transition={{ duration: 1, repeat: Infinity }} style={{ width: 6, height: 6, borderRadius: '50%', background: '#6366f1' }} />
+                                                <span style={{ fontSize: 9, fontWeight: 900, color: '#6366f1', letterSpacing: 1 }}>RAW STREAM</span>
+                                            </div>
+                                            <CodePanel
+                                                code={streamingText + ' █'}
+                                                filename="stream_buffer.json"
+                                            />
+                                        </div>
+                                    ) : done || building ? (
                                         <CodePanel
                                             code={
-                                                generatedFiles && Object.keys(generatedFiles).length > 0
-                                                    ? (Object.values(generatedFiles)[0] || CODE_SAMPLES[activeCodeTab])
-                                                    : CODE_SAMPLES[activeCodeTab]
+                                                selectedFile && generatedFiles[selectedFile]
+                                                    ? generatedFiles[selectedFile]
+                                                    : (generatedFiles && Object.keys(generatedFiles).length > 0
+                                                        ? Object.values(generatedFiles)[0]
+                                                        : CODE_SAMPLES[activeCodeTab])
                                             }
-                                            filename={
-                                                generatedFiles && Object.keys(generatedFiles).length > 0
-                                                    ? Object.keys(generatedFiles)[0]
-                                                    : (CODE_TABS.find(t => t.id === activeCodeTab)?.file || 'file')
-                                            }
+                                            filename={selectedFile || (CODE_TABS.find(t => t.id === activeCodeTab)?.file || 'file')}
                                         />
                                     ) : (
                                         <EmptyState mode={mode} />
                                     )}
                                 </motion.div>
                             ) : rightPanel === 'terminal' ? (
-                                <motion.div key="terminal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ height: '100%' }}>
+                                <motion.div key="terminal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ height: '100%', padding: 12 }}>
                                     <TerminalPanel logs={logs} error={streamError} />
                                 </motion.div>
                             ) : (
-                                <motion.div key="preview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ height: '100%' }}>
-                                    {done ? <PreviewPanel app={builtApp} onOpenDeploy={() => setShowDeployModal(true)} onPushGitHub={pushToGitHub} githubConnected={github?.connected} /> : (
-                                        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12, color: 'var(--text-muted)' }}>
-                                            <Eye size={36} style={{ opacity: 0.25 }} />
-                                            <div style={{ fontSize: 12.5, fontWeight: 600 }}>Preview appears after build completes</div>
-                                            <div style={{ fontSize: 11, color: 'var(--text-faint)' }}>Describe your project and click Generate</div>
+                                <motion.div key="preview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ height: '100%', padding: 12 }}>
+                                    {done ? <PreviewPanel app={builtApp} onOpenDeploy={() => setShowDeployModal(true)} onPushGitHub={pushToGitHub} githubConnected={github?.connected} mode={mode} /> : streamError ? (
+                                        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12, color: '#ef4444', textAlign: 'center', padding: 20 }}>
+                                            <AlertCircle size={36} />
+                                            <div style={{ fontSize: 14, fontWeight: 700 }}>Build Failed</div>
+                                            <div style={{ fontSize: 12, color: 'var(--text-muted)', maxWidth: 300 }}>{streamError}</div>
+                                            <div style={{ fontSize: 11, color: 'var(--text-faint)', marginTop: 8 }}>
+                                                Check your OpenRouter API Key in <code>backend/.env</code> or your account credits.
+                                            </div>
+                                            <button className="btn btn-secondary" style={{ marginTop: 12 }} onClick={startBuild}>Retry Build</button>
+                                        </div>
+                                    ) : (
+                                        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16, color: 'var(--text-muted)' }}>
+                                            <div style={{ position: 'relative' }}>
+                                                <Eye size={44} style={{ opacity: 0.1 }} />
+                                                <motion.div animate={{ opacity: [0, 1, 0] }} transition={{ duration: 2, repeat: Infinity }} style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <div style={{ width: 40, height: 40, border: '1px solid var(--cyan)', borderRadius: '50%', opacity: 0.3 }} />
+                                                </motion.div>
+                                            </div>
+                                            <div style={{ textAlign: 'center' }}>
+                                                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 4 }}>Awaiting Generation</div>
+                                                <div style={{ fontSize: 11, color: 'var(--text-faint)' }}>Describe your vision to see it come to life.</div>
+                                            </div>
                                         </div>
                                     )}
                                 </motion.div>
@@ -1100,7 +1325,7 @@ export default function VibeCoder() {
                         <Cpu size={12} style={{ color: '#6366f1' }} />
                         <span className="panel-title">AI CONSOLE</span>
                         <motion.div animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}>
-                            <span style={{ fontSize: 9, color: '#6366f1', marginLeft: 4 }}>● GPT-4o</span>
+                            <span style={{ fontSize: 9, color: '#f97316', marginLeft: 4 }}>● Claude 3.5 Sonnet</span>
                         </motion.div>
                     </div>
 
@@ -1136,13 +1361,13 @@ export default function VibeCoder() {
                     {/* AI Suggestions */}
                     <div style={{ flex: 1, overflowY: 'auto', padding: '10px 12px' }}>
                         <div className="section-label" style={{ fontSize: 9, marginBottom: 8 }}>💡 AI SUGGESTIONS</div>
-                        {[
+                        {(generatedResult?.suggestions || [
                             { icon: '🔒', text: 'Add rate limiting to API endpoints', type: 'Security' },
                             { icon: '⚡', text: 'Enable Redis caching for 2x speed boost', type: 'Performance' },
                             { icon: '📱', text: 'Add PWA support for mobile users', type: 'UX' },
                             { icon: '🧪', text: 'Generate unit tests with pytest', type: 'Testing' },
                             { icon: '📊', text: 'Connect Mixpanel for user analytics', type: 'Analytics' },
-                        ].map((tip, i) => (
+                        ]).slice(0, 5).map((tip, i) => (
                             <motion.div key={i} whileHover={{ x: 3 }} style={{
                                 display: 'flex', alignItems: 'flex-start', gap: 8, padding: '9px 10px',
                                 borderRadius: 9, border: '1px solid var(--border-faint)',
@@ -1174,6 +1399,131 @@ export default function VibeCoder() {
             </div>
 
             {showDeployModal && <DeployModal app={builtApp} onClose={() => setShowDeployModal(false)} mode={mode} prompt={prompt} />}
+        </div>
+    );
+}
+
+function AppSimulator({ app }) {
+    const color = '#3b82f6';
+    const result = app?.result || {};
+    const appName = result?.project_name || 'AI Application';
+    const features = result?.features || ['Database Management', 'Auth Integration', 'API Routing'];
+    const techItems = result?.tech_stack ? Object.entries(result.tech_stack) : [['frontend', 'React'], ['backend', 'FastAPI']];
+
+    return (
+        <div style={{ height: '100%', background: '#0a1122', display: 'flex', flexDirection: 'column', color: '#eef2ff' }}>
+            <div style={{ padding: '14px 20px', background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${color}, #2563eb)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, boxShadow: `0 4px 12px ${color}30` }}>🏢</div>
+                <div>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: 'white' }}>{appName}</div>
+                    <div style={{ fontSize: 9, color: '#34d399', fontWeight: 700, marginTop: 2 }}>PRODUCTION READY • v1.0.0</div>
+                </div>
+                <div style={{ flex: 1 }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 9, fontWeight: 800, color: 'rgba(255,255,255,0.3)' }}>API STATUS</span>
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }} />
+                </div>
+            </div>
+            <div style={{ flex: 1, padding: 20, overflowY: 'auto' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 24 }}>
+                    {techItems.map(([key, value]) => (
+                        <div key={key} style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.02)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+                            <div style={{ fontSize: 13, fontWeight: 900, color: '#6366f1', textTransform: 'uppercase' }}>{value}</div>
+                            <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.4)', marginTop: 4, fontWeight: 700, letterSpacing: 0.5 }}>{key}</div>
+                        </div>
+                    ))}
+                </div>
+
+                <div style={{ marginBottom: 24 }}>
+                    <div style={{ fontSize: 11, fontWeight: 800, color: 'rgba(255,255,255,0.5)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+                        INTEGRATED FEATURES
+                        <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.05)' }} />
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                        {features.slice(0, 6).map((f, i) => (
+                            <div key={i} style={{ padding: '10px 12px', background: 'rgba(16,185,129,0.03)', borderRadius: 10, border: '1px solid rgba(16,185,129,0.1)', display: 'flex', alignItems: 'center', gap: 10 }}>
+                                <Check size={10} style={{ color: '#10b981' }} />
+                                <span style={{ fontSize: 11, color: '#eef2ff', fontWeight: 500 }}>{f}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div style={{ background: 'rgba(255,255,255,0.015)', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)', padding: 18 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
+                        <div style={{ fontSize: 11, fontWeight: 800, color: 'rgba(255,255,255,0.6)' }}>LIVE API MONITOR</div>
+                        <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>REAL-TIME TRAFFIC</div>
+                    </div>
+                    {[
+                        { method: 'GET', path: '/api/v1/data', time: '14ms', status: 200 },
+                        { method: 'POST', path: '/api/v1/auth', time: '42ms', status: 201 },
+                        { method: 'GET', path: '/api/v1/health', time: '8ms', status: 200 },
+                    ].map((entry, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.03)' : 'none' }}>
+                            <div style={{ fontSize: 9, fontWeight: 900, color: entry.method === 'POST' ? '#f59e0b' : '#10b981', background: 'rgba(255,255,255,0.03)', padding: '2px 6px', borderRadius: 4, width: 40, textAlign: 'center' }}>{entry.method}</div>
+                            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)', fontFamily: 'var(--font-mono)', flex: 1 }}>{entry.path}</div>
+                            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>{entry.time}</div>
+                            <div style={{ fontSize: 10, fontWeight: 700, color: '#10b981' }}>{entry.status}</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function AgentSimulator({ agent }) {
+    const color = '#8b5cf6';
+    const result = agent?.result || {};
+    const agentName = result?.agent_name || 'AI Assistant';
+    const capabilities = result?.capabilities || ['Natural Language Processing', 'Tool Execution', 'Context Management'];
+
+    return (
+        <div style={{ height: '100%', background: '#0a0f1d', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <div style={{ padding: '12px 20px', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 26, height: 26, borderRadius: 8, background: `linear-gradient(135deg, ${color}, #7c3aed)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, boxShadow: `0 4px 10px ${color}30` }}>🤖</div>
+                <div>
+                    <div style={{ fontSize: 12.5, fontWeight: 800, color: 'white' }}>{agentName}</div>
+                    <div style={{ fontSize: 8.5, color: '#a78bfa', fontWeight: 700, textTransform: 'uppercase' }}>Autonomous Engine</div>
+                </div>
+                <div style={{ flex: 1 }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} />
+                    <div style={{ fontSize: 9, color: '#10b981', fontWeight: 800 }}>ACTIVE</div>
+                </div>
+            </div>
+            <div style={{ flex: 1, padding: 18, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <div style={{ alignSelf: 'flex-start', background: 'rgba(255,255,255,0.04)', padding: '12px 16px', borderRadius: '18px 18px 18px 4px', maxWidth: '85%', fontSize: 12, lineHeight: 1.6, color: '#eef2ff', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    Greetings. I am **{agentName}**. My neural weights have been initialized for your specific task description.
+                    I have verified my core capabilities and I am ready to operate.
+                </div>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, margin: '4px 0' }}>
+                    {capabilities.map((cap, i) => (
+                        <div key={i} style={{ fontSize: 9, fontWeight: 800, color: color, background: `${color}15`, padding: '4px 10px', borderRadius: 100, border: `1px solid ${color}30` }}>
+                            ⚡ {cap.toUpperCase()}
+                        </div>
+                    ))}
+                </div>
+
+                <div style={{ alignSelf: 'flex-start', background: 'rgba(255,255,255,0.04)', padding: '12px 16px', borderRadius: '18px 18px 18px 4px', maxWidth: '85%', fontSize: 12, color: 'white', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 8 }}>
+                        <div style={{ width: 10, height: 10, borderRadius: '50%', border: '2px solid #10b981', borderTopColor: 'transparent', animation: 'spin 1.5s linear infinite' }} />
+                        <span style={{ fontSize: 10, fontWeight: 900, color: '#10b981', letterSpacing: 0.5 }}>ORCHESTRATING TOOLS...</span>
+                    </div>
+                    Successfully hooked into system environment. Monitoring 14 distinct data streams. Zero anomalies detected in current cycle.
+                </div>
+            </div>
+            <div style={{ padding: 14, borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}>
+                <div style={{ display: 'flex', gap: 10 }}>
+                    <div style={{ flex: 1, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '10px 14px', color: 'rgba(255,255,255,0.2)', fontSize: 12.5, fontWeight: 500 }}>
+                        Issue command to agent...
+                    </div>
+                    <div style={{ width: 38, height: 38, borderRadius: 12, background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', cursor: 'not-allowed' }}>
+                        <Send size={16} />
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

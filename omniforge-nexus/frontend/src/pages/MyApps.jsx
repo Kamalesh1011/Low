@@ -6,6 +6,7 @@ import {
     AlignJustify, Zap, Eye, ArrowUpRight
 } from 'lucide-react';
 import Header from '../components/Header';
+import useStore from '../store/useStore';
 
 const APPS = [
     {
@@ -46,12 +47,7 @@ const APPS = [
     },
 ];
 
-const STATS = [
-    { label: 'Total Apps', value: '6', icon: Package, color: '#f97316' },
-    { label: 'Running', value: '4', icon: Activity, color: '#10b981' },
-    { label: 'API Calls', value: '12.3K', icon: Zap, color: '#6366f1' },
-    { label: 'Avg Uptime', value: '99.3%', icon: TrendingUp, color: '#f59e0b' },
-];
+// STATS generated dynamically now
 
 const STATUS = {
     running: { bg: 'rgba(16,185,129,.12)', color: '#10b981', border: 'rgba(16,185,129,.25)', label: '● Running' },
@@ -60,14 +56,40 @@ const STATUS = {
 };
 
 export default function MyApps() {
+    const { builtProjects } = useStore();
     const [search, setSearch] = useState('');
     const [view, setView] = useState('grid');
     const [filter, setFilter] = useState('all');
 
-    const filtered = APPS.filter(a =>
+    const aiApps = builtProjects.map(p => ({
+        id: p.id,
+        name: p.prompt ? p.prompt.substring(0, 30) + (p.prompt.length > 30 ? '...' : '') : 'AI Generated App',
+        type: p.mode ? p.mode.charAt(0).toUpperCase() + p.mode.slice(1) : 'App',
+        emoji: '🤖',
+        status: 'running',
+        desc: p.prompt || 'Generated using Nexus Coder',
+        color: '#06b6d4',
+        built: 'Nexus Coder',
+        users: 1,
+        uptime: '100%',
+        requests: '0',
+        tags: ['AI Generated'],
+        lastDeploy: new Date(p.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+    }));
+
+    const combinedApps = [...aiApps, ...APPS];
+
+    const filtered = combinedApps.filter(a =>
         (filter === 'all' || a.status === filter) &&
         a.name.toLowerCase().includes(search.toLowerCase())
     );
+
+    const stats = [
+        { label: 'Total Apps', value: String(combinedApps.length), icon: Package, color: '#f97316' },
+        { label: 'Running', value: String(combinedApps.filter(a => a.status === 'running').length), icon: Activity, color: '#10b981' },
+        { label: 'API Calls', value: '12.3K', icon: Zap, color: '#6366f1' },
+        { label: 'Avg Uptime', value: '99.3%', icon: TrendingUp, color: '#f59e0b' },
+    ];
 
     return (
         <div style={{ flex: 1, overflowY: 'auto' }}>
@@ -77,7 +99,7 @@ export default function MyApps() {
 
                 {/* ── Stats ───────────────────────── */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12 }}>
-                    {STATS.map((s, i) => (
+                    {stats.map((s, i) => (
                         <motion.div key={s.label} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
                             className="stat-card" style={{ padding: '16px 18px', position: 'relative', overflow: 'hidden' }}>
                             <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg,${s.color},transparent)` }} />

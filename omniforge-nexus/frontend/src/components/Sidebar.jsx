@@ -6,7 +6,7 @@ import {
     Settings, ChevronLeft, ChevronRight, Globe, TrendingUp,
     BookOpen, ShieldCheck, LogOut, Cpu,
     Search, RefreshCw, Sparkles, Bot, Package,
-    Activity, Zap
+    Activity, Zap, Layout, ShoppingBag
 } from 'lucide-react';
 import useStore from '../store/useStore';
 
@@ -19,8 +19,11 @@ const NAV = [
     },
     {
         group: 'AI BUILDER', items: [
+            { icon: Cpu, label: 'Swarm Engine', path: '/vibe', key: 'swarm', badge: 'SWARM', color: '#10b981' },
             { icon: Sparkles, label: 'Nexus Coder', path: '/vibe', key: 'vibe', badge: 'AI', color: 'var(--fire)' },
+            { icon: Layout, label: 'Low-Code', path: '/builder', key: 'builder', color: 'var(--cyan)' },
             { icon: Bot, label: 'Agent Studio', path: '/agents', key: 'agents', color: 'var(--plasma)' },
+            { icon: ShoppingBag, label: 'Marketplace', path: '/marketplace', key: 'marketplace', color: '#ec4899', badge: 'HOT' },
             { icon: Package, label: 'My Apps', path: '/apps', key: 'apps' },
         ]
     },
@@ -106,23 +109,29 @@ export default function Sidebar() {
                         style={{ padding: '8px 10px 0' }}
                     >
                         <div style={{
-                            padding: '8px 11px',
-                            borderRadius: 9,
-                            background: 'linear-gradient(135deg, rgba(0,212,255,0.07), rgba(123,47,255,0.05))',
-                            border: '1px solid var(--b1)',
-                            display: 'flex', alignItems: 'center', gap: 8,
+                            padding: '10px 14px',
+                            borderRadius: 12,
+                            background: 'rgba(255,255,255,0.03)',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                            display: 'flex', alignItems: 'center', gap: 10,
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                            position: 'relative', overflow: 'hidden'
                         }}>
+                            <div style={{ position: 'absolute', top: 0, right: 0, width: 40, height: 40, background: 'radial-gradient(circle, rgba(0,212,255,0.1), transparent)', filter: 'blur(10px)' }} />
                             <motion.div
                                 animate={{ rotate: 360 }}
-                                transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+                                transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+                                style={{ zIndex: 1 }}
                             >
-                                <Cpu size={11} style={{ color: 'var(--cyan)' }} />
+                                <Cpu size={13} style={{ color: 'var(--cyan)' }} />
                             </motion.div>
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                                <div style={{ fontFamily: 'var(--font-display)', fontSize: 9, fontWeight: 700, color: 'var(--cyan)', letterSpacing: 1.5, textTransform: 'uppercase' }}>AI Engine Online</div>
-                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8.5, color: 'var(--t3)', marginTop: 1 }}>GPT-4o · Gemini Ultra</div>
+                            <div style={{ flex: 1, minWidth: 0, zIndex: 1 }}>
+                                <div style={{ fontFamily: 'var(--font-display)', fontSize: 9.5, fontWeight: 800, color: '#eef2ff', letterSpacing: 1.5, textTransform: 'uppercase' }}>AI Neural Engine</div>
+                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 7.5, color: '#34d399', marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
+                                    <Zap size={8} /> CLAUDE · GPT-4o · GEMINI · DEEPSEEK
+                                </div>
                             </div>
-                            <span className="dot-live" />
+                            <span className="dot-live" style={{ width: 6, height: 6, background: '#34d399', boxShadow: '0 0 10px #34d399' }} />
                         </div>
                     </motion.div>
                 )}
@@ -191,17 +200,18 @@ export default function Sidebar() {
                 <AnimatePresence>
                     {!sidebarCollapsed && (
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, marginBottom: 8 }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 12 }}>
                                 {[
-                                    { label: 'Apps Built', value: '3', color: 'var(--fire)' },
-                                    { label: 'Agents', value: '2', color: 'var(--plasma)' },
+                                    { label: 'Apps Built', value: '3', color: '#fb923c', icon: Package },
+                                    { label: 'AI Credits', value: '480', color: '#818cf8', icon: Zap },
                                 ].map(s => (
                                     <div key={s.label} style={{
-                                        padding: '7px 10px', borderRadius: 8,
-                                        background: 'rgba(0,212,255,0.04)', border: '1px solid var(--b0)', textAlign: 'center',
+                                        padding: '10px 8px', borderRadius: 12,
+                                        background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center',
+                                        position: 'relative', overflow: 'hidden'
                                     }}>
-                                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 700, color: s.color }}>{s.value}</div>
-                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'var(--t3)', marginTop: 1 }}>{s.label}</div>
+                                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 900, color: s.color }}>{s.value}</div>
+                                        <div style={{ fontFamily: 'var(--font-ui)', fontSize: 8, color: 'var(--text-muted)', marginTop: 2, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>{s.label}</div>
                                     </div>
                                 ))}
                             </div>
@@ -209,12 +219,12 @@ export default function Sidebar() {
                     )}
                 </AnimatePresence>
                 <div className="user-card">
-                    <div className="user-avatar">{user.name.charAt(0)}</div>
+                    <div className="user-avatar">{user?.name?.charAt(0) || 'U'}</div>
                     <AnimatePresence>
                         {!sidebarCollapsed && (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ flex: 1, minWidth: 0 }}>
-                                <div className="user-name truncate">{user.name}</div>
-                                <div className="user-role">{user.businessType} · {user.state}</div>
+                                <div className="user-name truncate">{user?.name || 'User'}</div>
+                                <div className="user-role">{user?.businessName || 'MSME Owner'} · {user?.state || 'India'}</div>
                             </motion.div>
                         )}
                     </AnimatePresence>

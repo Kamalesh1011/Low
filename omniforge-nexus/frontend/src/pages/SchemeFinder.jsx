@@ -157,7 +157,6 @@ export default function SchemeFinder() {
                                         onClick={() => handleOption(QUESTIONS[step].id, opt.value)}
                                         style={{
                                             padding: '20px 16px',
-                                            background: 'rgba(255,255,255,0.04)',
                                             border: `1px solid ${answers[QUESTIONS[step].id] === opt.value ? 'rgba(249,115,22,0.5)' : 'rgba(255,255,255,0.08)'}`,
                                             borderRadius: 16,
                                             cursor: 'pointer',

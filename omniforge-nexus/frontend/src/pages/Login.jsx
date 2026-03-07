@@ -3,23 +3,74 @@ import { motion } from 'framer-motion';
 import { User, Lock, ArrowRight, ShieldCheck, Mail, Mic } from 'lucide-react';
 import useStore from '../store/useStore';
 
+const DEMO_USER = {
+    name: 'Kamalesh ',
+    email: 'kamalesh@omniforge.ai',
+    role: 'admin',
+    businessName: 'Kamalesh Tech Solutions',
+    udyamNo: 'UDYAM-TN-07-0234567',
+    state: 'Tamil Nadu',
+    plan: 'enterprise',
+    credits: 480,
+    org_name: 'OmniForge Nexus',
+};
+
 export default function Login() {
     const { login } = useStore();
     const [isRegister, setIsRegister] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     // Form States
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-            login(); // login action from store
-        }, 1500);
+        setError('');
+        try {
+            // Try real backend demo-login first
+            const res = await fetch('/api/v1/auth/demo-login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            if (res.ok) {
+                const data = await res.json();
+                const token = data?.data?.access_token || data?.access_token;
+                if (token) {
+                    localStorage.setItem('omniforge_token', token);
+                    // Try to fetch real user profile
+                    try {
+                        const meRes = await fetch('/api/v1/auth/me', {
+                            headers: { Authorization: `Bearer ${token}` }
+                        });
+                        if (meRes.ok) {
+                            const meData = await meRes.json();
+                            const u = meData?.data || meData;
+                            login({
+                                ...DEMO_USER,
+                                name: u.name || DEMO_USER.name,
+                                email: u.email || DEMO_USER.email,
+                                role: u.role || DEMO_USER.role,
+                                plan: u.plan || DEMO_USER.plan,
+                                credits: u.credits || DEMO_USER.credits,
+                                token,
+                            });
+                            return;
+                        }
+                    } catch (_) { /* fallthrough */ }
+                    login({ ...DEMO_USER, token });
+                    return;
+                }
+            }
+        } catch (_) { /* backend offline – use demo fallback */ }
+
+        // Fallback: instant demo login if backend is not running
+        await new Promise(r => setTimeout(r, 800));
+        login(DEMO_USER);
+        setLoading(false);
     };
 
     return (

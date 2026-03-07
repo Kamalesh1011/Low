@@ -21,7 +21,7 @@ from services.gateway.routers import (
     auth, builds, agents, schema, workflows, vault, analytics,
     templates, marketplace, websocket_router,
 )
-from services.gateway.routers import github_router, llm_router
+from services.gateway.routers import github_router, llm_router, multiagent_router
 
 logger = structlog.get_logger(__name__)
 
@@ -141,6 +141,7 @@ app.include_router(marketplace.router, prefix=f"{API_V1}/marketplace", tags=["Ma
 app.include_router(websocket_router.router, tags=["WebSocket"])
 app.include_router(github_router.router, prefix=f"{API_V1}/github", tags=["GitHub"])
 app.include_router(llm_router.router, prefix=f"{API_V1}/llm", tags=["LLM"])
+app.include_router(multiagent_router.router, prefix=f"{API_V1}/multiagent", tags=["MultiAgent"])
 
 
 # ── Health & Meta ─────────────────────────────────────────────

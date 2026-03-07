@@ -61,10 +61,15 @@ class Settings(BaseSettings):
     # ── Storage ───────────────────────────────────────────────
     STORAGE_BACKEND: str = "local"
     LOCAL_STORAGE_PATH: str = "./storage"
+    AWS_ACCESS_KEY_ID: str = ""
+    AWS_SECRET_ACCESS_KEY: str = ""
+    AWS_S3_BUCKET: str = "omniforge-nexus"
+    AWS_REGION: str = "ap-south-1"
 
     class Config:
         env_file = ".env"
         case_sensitive = True
+        extra = "ignore"  # Silently ignore unknown env vars
 
 
 @lru_cache()

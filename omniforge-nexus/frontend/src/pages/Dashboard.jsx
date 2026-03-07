@@ -78,10 +78,10 @@ export default function Dashboard() {
     const topPosts = communityPosts.slice(0, 2);
 
     return (
-        <div style={{ flex: 1, overflowY: 'auto' }}>
+        <div style={{ flex: 1, overflowY: 'auto', width: '100%', display: 'flex', flexDirection: 'column' }}>
             <Header title="Mission Control" subtitle="Your MSME intelligence dashboard" />
 
-            <div className="page-content" style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+            <div className="page-content" style={{ display: 'flex', flexDirection: 'column', gap: 20, flex: 1 }}>
 
                 {/* ── Hero Banner ──────────────────────────────────────── */}
                 <motion.div
@@ -119,7 +119,7 @@ export default function Dashboard() {
                     <div style={{ position: 'relative', zIndex: 1 }}>
                         <div style={{ fontSize: 12, color: '#fb923c', fontWeight: 700, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
                             <span>👋</span>
-                            <span>{greeting}, {user.name.split(' ')[0]}</span>
+                            <span>{greeting}, {user?.name?.split(' ')[0] || 'User'}</span>
                             <span style={{ fontSize: 10, background: 'rgba(249,115,22,0.15)', padding: '2px 8px', borderRadius: 100, border: '1px solid rgba(249,115,22,0.25)' }}>
                                 MSME Owner
                             </span>
@@ -134,8 +134,8 @@ export default function Dashboard() {
                             Build. Automate.{' '}
                             <span className="text-grad-saffron">Scale.</span>
                         </h1>
-                        <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 8, lineHeight: 1.7, maxWidth: 480 }}>
-                            {user.businessName} · Udyam: <strong style={{ color: 'var(--text-secondary)' }}>{user.udyamNo}</strong>
+                        <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 8, lineHeight: 1.7, maxWidth: 600 }}>
+                            {user?.businessName || 'My Business'} · Udyam: <strong style={{ color: 'var(--text-secondary)' }}>{user?.udyamNo || 'Pending'}</strong>
                             <br />
                             AI-powered platform for Indian MSMEs — build apps, find schemes, and grow faster.
                         </p>
@@ -175,7 +175,7 @@ export default function Dashboard() {
                         {[
                             { label: 'MSME Grade', value: 'Small', color: '#10b981', icon: Shield },
                             { label: 'AI Credits', value: '480', color: '#6366f1', icon: Zap },
-                            { label: 'State', value: user.state, color: '#f97316', icon: Target },
+                            { label: 'State', value: user?.state || 'India', color: '#f97316', icon: Target },
                         ].map(({ label, value, color, icon: Icon }) => (
                             <div key={label} style={{
                                 textAlign: 'center', padding: '14px 16px',
@@ -501,6 +501,42 @@ export default function Dashboard() {
                 </div>
 
             </div>
+
+            {/* ── Platform Health & Analytics (New) ────────────────── */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="card card-p" style={{
+                background: 'rgba(5, 12, 30, 0.4)',
+                border: '1px solid var(--b1)',
+                marginBottom: 20
+            }}>
+                <div className="flex-between" style={{ marginBottom: 16 }}>
+                    <div>
+                        <div className="section-title">Nexus Global Infrastructure</div>
+                        <div className="section-subtitle">Real-time performance across 1.2M MSME nodes</div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <div className="text-right">
+                            <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 1 }}>SYSTEM STATUS</div>
+                            <div style={{ fontSize: 13, color: '#00ff88', fontWeight: 700 }}>● ALL SYSTEMS OPERATIONAL</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 14 }}>
+                    {[
+                        { label: 'Cloud Requests', value: '12.4M', sub: 'Last 24h', color: 'var(--cyan)' },
+                        { label: 'Active Builders', value: '842', sub: 'Coding now', color: 'var(--fire)' },
+                        { label: 'Avg Latency', value: '12ms', sub: 'Edge Optimized', color: 'var(--plasma)' },
+                        { label: 'Uptime', value: '99.98%', sub: 'High Availability', color: '#00ff88' },
+                        { label: 'AI Builds', value: '1,420', sub: 'Today', color: '#ffd700' },
+                    ].map(m => (
+                        <div key={m.label} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-faint)', borderRadius: 14, padding: '14px 16px' }}>
+                            <div style={{ fontSize: 18, fontWeight: 900, color: m.color, fontFamily: 'var(--font-display)' }}>{m.value}</div>
+                            <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', marginTop: 4 }}>{m.label}</div>
+                            <div style={{ fontSize: 9, color: 'var(--text-muted)', marginTop: 2 }}>{m.sub}</div>
+                        </div>
+                    ))}
+                </div>
+            </motion.div>
         </div>
     );
 }

@@ -12,9 +12,10 @@ const useStore = create(
             sidebarCollapsed: false,
             activeModule: 'dashboard',
             language: 'en',
+            activeWorkspace: 'Default Home',
             notifications: [
-                { id: 1, type: 'success', message: 'New MSME Scheme: PM SVANidhi 3.0 Live', time: '2m ago', read: false },
-                { id: 2, type: 'info', message: 'GST Return Due: 20 March 2026', time: '1d ago', read: true },
+                { id: 1, type: 'success', message: 'Nexus Engine v2.0 Deployed: 100+ New Features Live!', time: 'Now', read: false },
+                { id: 2, type: 'info', message: 'New Marketplace Component: Advanced Data Grid available.', time: '5m ago', read: false },
             ],
 
             // ─── GitHub Integration ───
@@ -34,7 +35,40 @@ const useStore = create(
             agentRuns: [], // History of agent runs
 
             // ─── VibeCoder: Built Apps / Agents / Websites ───
-            builtProjects: [], // Array of { id, mode, prompt, files, createdAt, githubRepo, deploydAt }
+            builtProjects: [],
+            generatedApps: [],
+
+            // ─── Marketplace ───
+            marketplace: {
+                components: [
+                    { id: 'mc1', name: 'GST Billing Grid', author: 'Nexus Team', rating: 4.9, icon: '🏛️', price: 'Free' },
+                    { id: 'mc2', name: 'WhatsApp Sales Agent', author: 'AI Devs', rating: 4.8, icon: '💬', price: '$29' },
+                    { id: 'mc3', name: 'Inventory Sync Tool', author: 'Nexus Team', rating: 4.7, icon: '📦', price: 'Free' },
+                    { id: 'mc4', name: 'Payment Link Gen', author: 'Nexus Team', rating: 4.9, icon: '💳', price: 'Free' },
+                ],
+                trending: ['Inventory', 'GST', 'WhatsApp'],
+            },
+
+            // ─── Analytics ───
+            platformMetrics: {
+                totalRequests: 12450,
+                activeUsers: 842,
+                avgResponseTime: '12ms',
+                uptime: '99.98%',
+                buildsToday: 142,
+            },
+
+            // ─── Themes ───
+            theme: 'dark', // dark | light | cyber
+
+            templates: [
+                { id: 't1', name: 'CRM Dashboard', desc: 'Customer relation management with analytics', icon: '📊', time: '45s' },
+                { id: 't2', name: 'E-commerce Store', desc: 'Modern shopping experience with cart', icon: '🛍️', time: '60s' },
+                { id: 't3', name: 'AI Chat Agent', desc: 'Conversational agent for customer support', icon: '🤖', time: '30s' },
+                { id: 't4', name: 'Portfolio Site', desc: 'Beautiful showcase for your work', icon: '✨', time: '40s' },
+                { id: 't5', name: 'SaaS Landing Page', desc: 'Convert visitors into users', icon: '🚀', time: '50s' },
+                { id: 't6', name: 'Inventory App', desc: 'Track stock and manage orders', icon: '📦', time: '55s' },
+            ],
 
             // ─── MSME Schemes Data (real scheme info) ───
             schemes: [
@@ -192,7 +226,11 @@ const useStore = create(
             ],
 
             // ─── Loan Applications ───
-            loanApplications: [],
+            loanApplications: [
+                { id: 'la_001', icon: '🏦', bank: 'State Bank of India', scheme: 'MUDRA Kishore', amount: '₹5 Lakh', status: 'approved' },
+                { id: 'la_002', icon: '🏛️', bank: 'Bank of Baroda', scheme: 'CGTMSE Covered', amount: '₹12 Lakh', status: 'processing' },
+                { id: 'la_003', icon: '💳', bank: 'SIDBI eFunds', scheme: 'Stand-Up India', amount: '₹25 Lakh', status: 'processing' },
+            ],
 
             // ─── Scraper State ───
             scraperStatus: 'idle',
@@ -205,7 +243,21 @@ const useStore = create(
             setLanguage: (lang) => set({ language: lang }),
 
             // Auth
-            login: (userData) => set({ isAuthenticated: true, user: userData || { name: 'Demo User', email: 'demo@omniforge.ai', role: 'owner' } }),
+            login: (userData) => set({
+                isAuthenticated: true,
+                user: {
+                    name: 'Kamalesh Arumugam',
+                    email: 'kamalesh@omniforge.ai',
+                    role: 'admin',
+                    businessName: 'Kamalesh Tech Solutions',
+                    udyamNo: 'UDYAM-TN-07-0234567',
+                    state: 'Tamil Nadu',
+                    plan: 'enterprise',
+                    credits: 480,
+                    org_name: 'OmniForge Nexus',
+                    ...(userData || {}),
+                }
+            }),
             logout: () => set({ isAuthenticated: false, user: null }),
 
             markAllRead: () => set(state => ({
@@ -395,6 +447,14 @@ const useStore = create(
                         createdAt: new Date().toISOString(),
                     },
                     ...state.builtProjects.slice(0, 19), // Keep last 20
+                ],
+                generatedApps: [
+                    {
+                        id: `proj_${Date.now()}`,
+                        ...project,
+                        createdAt: new Date().toISOString(),
+                    },
+                    ...state.builtProjects.slice(0, 19),
                 ]
             })),
 
@@ -429,6 +489,8 @@ const useStore = create(
                 agents: state.agents,
                 agentRuns: state.agentRuns,
                 builtProjects: state.builtProjects,
+                generatedApps: state.generatedApps,
+                loanApplications: state.loanApplications,
                 language: state.language,
                 sidebarCollapsed: state.sidebarCollapsed,
                 isAuthenticated: state.isAuthenticated,

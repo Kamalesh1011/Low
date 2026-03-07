@@ -1,156 +1,139 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import {
-    Puzzle, Search, Star, Download, ArrowUpRight, Zap,
-    Shield, Package, Code2, Globe, Database, Bot,
-    Filter, TrendingUp, CheckCircle2, Plus
-} from 'lucide-react';
+import { ShoppingBag, Star, Download, Search, Filter, Zap, Layout, Bot, Server, ShieldCheck } from 'lucide-react';
 import Header from '../components/Header';
-
-const PLUGINS = [
-    { id: 'p01', name: 'GST India Suite', icon: '📊', category: 'Finance', rating: 4.9, downloads: '12.4K', desc: 'Complete GST filing, returns, e-invoice, and compliance toolkit', price: 'Free', verified: true, color: '#6366f1' },
-    { id: 'p02', name: 'WhatsApp Business', icon: '💬', category: 'Communication', rating: 4.8, downloads: '28.1K', desc: 'Send invoices, alerts, and reports via WhatsApp Business API', price: '₹999/mo', verified: true, color: '#25d366' },
-    { id: 'p03', name: 'Tally Sync', icon: '🔄', category: 'Accounting', rating: 4.7, downloads: '9.2K', desc: 'Bidirectional sync with Tally Prime for accounting data', price: '₹1,499/mo', verified: true, color: '#f59e0b' },
-    { id: 'p04', name: 'IndiaMART Connector', icon: '🛒', category: 'E-commerce', rating: 4.6, downloads: '6.8K', desc: 'Sync leads, products, and orders from IndiaMART', price: '₹799/mo', verified: false, color: '#ef4444' },
-    { id: 'p05', name: 'Razorpay Payments', icon: '💳', category: 'Payments', rating: 4.9, downloads: '34.2K', desc: 'Accept payments, subscriptions, and manage refunds', price: 'Free', verified: true, color: '#3395ff' },
-    { id: 'p06', name: 'Shiprocket Logistics', icon: '🚚', category: 'Logistics', rating: 4.5, downloads: '8.7K', desc: 'Multi-carrier shipping, tracking, and COD management', price: '₹599/mo', verified: true, color: '#f97316' },
-    { id: 'p07', name: 'Zoho CRM Bridge', icon: '🤝', category: 'CRM', rating: 4.4, downloads: '5.1K', desc: 'Sync contacts, deals, and activities with Zoho CRM', price: '₹1,299/mo', verified: false, color: '#ec4899' },
-    { id: 'p08', name: 'OpenAI GPT Agent', icon: '🤖', category: 'AI', rating: 4.9, downloads: '42.8K', desc: 'Embed GPT-4o powered chatbots and assistants in your apps', price: 'Free', verified: true, color: '#10a37f' },
-    { id: 'p09', name: 'Aadhaar eKYC', icon: '🪪', category: 'Compliance', rating: 4.6, downloads: '3.4K', desc: 'Aadhaar-based eKYC for customer verification', price: '₹2,999/mo', verified: true, color: '#f59e0b' },
-    { id: 'p10', name: 'AWS Deployment', icon: '☁️', category: 'DevOps', rating: 4.8, downloads: '19.6K', desc: 'One-click deploy to AWS ECS, EC2, or Lambda', price: 'Free', verified: true, color: '#f97316' },
-    { id: 'p11', name: 'Prometheus Monitor', icon: '📈', category: 'Observability', rating: 4.7, downloads: '11.3K', desc: 'Auto-instrument apps with Prometheus + Grafana dashboards', price: 'Free', verified: true, color: '#e6522c' },
-    { id: 'p12', name: 'ONDC Integration', icon: '🌐', category: 'E-commerce', rating: 4.5, downloads: '2.8K', desc: 'List products and accept orders on India\'s ONDC network', price: '₹1,999/mo', verified: false, color: '#6366f1' },
-];
-
-const CATEGORIES = ['All', 'Finance', 'AI', 'Payments', 'Communication', 'E-commerce', 'DevOps', 'Logistics', 'CRM', 'Compliance', 'Observability', 'Accounting'];
+import useStore from '../store/useStore';
+import { toast } from 'react-hot-toast';
 
 export default function Marketplace() {
+    const { marketplace } = useStore();
     const [search, setSearch] = useState('');
-    const [category, setCategory] = useState('All');
-    const [installed, setInstalled] = useState(new Set(['p01', 'p05', 'p08', 'p10']));
+    const [tab, setTab] = useState('all');
 
-    const filtered = PLUGINS.filter(p => {
-        const matchCat = category === 'All' || p.category === category;
-        const matchSearch = !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.desc.toLowerCase().includes(search.toLowerCase());
-        return matchCat && matchSearch;
-    });
+    const filtered = marketplace.components.filter(c =>
+        c.name.toLowerCase().includes(search.toLowerCase()) &&
+        (tab === 'all' || (tab === 'free' && c.price === 'Free') || (tab === 'premium' && c.price !== 'Free'))
+    );
 
-    const toggleInstall = (id) => {
-        setInstalled(s => {
-            const n = new Set(s);
-            n.has(id) ? n.delete(id) : n.add(id);
-            return n;
-        });
+    const install = (name) => {
+        toast.promise(
+            new Promise(r => setTimeout(r, 1500)),
+            {
+                loading: `Installing ${name}...`,
+                success: `${name} added to your library!`,
+                error: 'Installation failed',
+            }
+        );
     };
 
     return (
         <div className="flex-1 overflow-y-auto">
-            <Header title="Plugin Marketplace" subtitle="Extend OmniForge with 200+ integrations and plugins" />
+            <Header title="Nexus Marketplace" subtitle="Supercharge your apps with community-built blocks and agents" />
 
-            <div className="p-6 space-y-6">
-                {/* Hero */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="relative overflow-hidden rounded-2xl p-6"
-                    style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.12), rgba(6,182,212,0.08))', border: '1px solid rgba(139,92,246,0.2)' }}
-                >
-                    <div className="absolute inset-0 grid-pattern opacity-20" />
-                    <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
-                        <div>
-                            <div className="tag tag-primary mb-3 inline-flex"><Puzzle size={10} /> 200+ Plugins Available</div>
-                            <h2 className="text-2xl font-bold text-white text-display mb-2">
-                                Extend with <span className="gradient-text">Powerful Plugins</span>
-                            </h2>
-                            <p className="text-sm text-slate-400">Connect payment gateways, logistics, CRMs, compliance tools, and AI models. Install in one click, configure with AI.</p>
-                        </div>
-                        <div className="flex items-center gap-3 lg:justify-end">
-                            {[
-                                { label: 'Total Plugins', value: '200+', color: '#6366f1' },
-                                { label: 'Installed', value: installed.size, color: '#10b981' },
-                                { label: 'Free Plugins', value: '84', color: '#f59e0b' },
-                            ].map(s => (
-                                <div key={s.label} className="text-center p-3 glass rounded-xl">
-                                    <div className="text-2xl font-bold text-display" style={{ color: s.color }}>{s.value}</div>
-                                    <div className="text-[10px] text-slate-500">{s.label}</div>
-                                </div>
-                            ))}
-                        </div>
+            <div className="p-6 space-y-8">
+                {/* Hero Section */}
+                <div className="relative rounded-3xl p-10 overflow-hidden border border-indigo-500/20" style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.05))' }}>
+                    <div className="absolute top-0 right-0 p-8 opacity-10">
+                        <ShoppingBag size={120} />
                     </div>
-                </motion.div>
+                    <div className="relative max-w-2xl">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-6">
+                            <Zap size={12} /> New Quantum Blocks
+                        </div>
+                        <h1 className="text-4xl font-bold text-white mb-4 leading-tight">Everything you need to <span className="gradient-text">Scale Faster</span>.</h1>
+                        <p className="text-slate-400 text-lg mb-8">Browse hundreds of verified UI kits, backend routers, AI personas, and security modules built for the OmniForge ecosystem.</p>
 
-                {/* Search */}
-                <div className="flex items-center gap-3">
-                    <div className="relative flex-1">
-                        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search plugins..." className="input-field pl-9" />
+                        <div className="flex items-center gap-4">
+                            <div className="relative flex-1 max-w-md">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+                                <input
+                                    className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-indigo-500 transition-all font-sans"
+                                    placeholder="Search components, agents, or templates..."
+                                    value={search}
+                                    onChange={e => setSearch(e.target.value)}
+                                />
+                            </div>
+                            <button className="btn btn-secondary py-4 px-6 rounded-2xl">
+                                <Filter size={20} />
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                {/* Categories */}
-                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
-                    {CATEGORIES.map(cat => (
-                        <button
-                            key={cat}
-                            onClick={() => setCategory(cat)}
-                            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${category === cat ? 'bg-indigo-500 text-white' : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08] border border-white/[0.06]'
+                {/* Filters */}
+                <div className="flex items-center gap-3 mb-10 overflow-x-auto pb-2 scrollbar-hide">
+                    {['all', 'free', 'premium', 'ui', 'agents', 'security'].map(t => (
+                        <motion.button
+                            key={t}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setTab(t)}
+                            className={`px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 relative overflow-hidden ${tab === t
+                                    ? 'text-white shadow-[0_0_20px_rgba(99,102,241,0.3)]'
+                                    : 'bg-white/5 text-slate-500 hover:text-slate-300 border border-transparent hover:border-white/10'
                                 }`}
                         >
-                            {cat}
-                        </button>
+                            {tab === t && (
+                                <motion.div
+                                    layoutId="marketTab"
+                                    className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600"
+                                    style={{ zIndex: -1 }}
+                                />
+                            )}
+                            {t}
+                        </motion.button>
                     ))}
                 </div>
 
-                {/* Plugin Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {filtered.map((p, i) => (
+                {/* Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {filtered.map((item) => (
                         <motion.div
-                            key={p.id}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: i * 0.04 }}
-                            className="card p-5 group"
+                            whileHover={{ scale: 1.02 }}
+                            className="group relative bg-[#090e1a] border border-white/5 rounded-3xl p-6 hover:border-indigo-500/40 transition-all shadow-2xl"
+                            style={{ background: 'linear-gradient(135deg, rgba(24,24,27,0.4), rgba(9,9,11,0.6))', backdropFilter: 'blur(10px)' }}
                         >
-                            <div className="flex items-start justify-between mb-3">
-                                <div
-                                    className="w-11 h-11 rounded-xl flex items-center justify-center text-2xl border"
-                                    style={{ background: `${p.color}18`, borderColor: `${p.color}30` }}
-                                >
-                                    {p.icon}
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
+                            <div className="flex items-start justify-between mb-6 relative">
+                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 flex items-center justify-center text-3xl shadow-inner">
+                                    {item.icon}
                                 </div>
-                                {p.verified && (
-                                    <div className="flex items-center gap-1 text-[9px] text-emerald-400">
-                                        <CheckCircle2 size={9} /> Verified
+                                <div className="text-right">
+                                    <div className="flex items-center gap-1 text-amber-500 font-bold text-sm bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                                        <Star size={12} fill="currentColor" /> {item.rating}
                                     </div>
-                                )}
-                            </div>
-
-                            <h3 className="text-sm font-bold text-white mb-1">{p.name}</h3>
-                            <span className="tag tag-primary text-[9px] mb-2 inline-flex">{p.category}</span>
-                            <p className="text-[11px] text-slate-500 leading-relaxed mb-4">{p.desc}</p>
-
-                            <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-1 text-[10px] text-slate-500">
-                                    <Star size={9} className="text-amber-400" />
-                                    <span className="text-amber-400 font-medium">{p.rating}</span>
-                                    <span>• {p.downloads} downloads</span>
+                                    <div className="text-[9px] text-slate-400 mt-2 uppercase tracking-[0.15em] font-extrabold opacity-70">{item.price}</div>
                                 </div>
-                                <span className={`text-[10px] font-semibold ${p.price === 'Free' ? 'text-emerald-400' : 'text-slate-300'}`}>
-                                    {p.price}
-                                </span>
                             </div>
 
-                            <button
-                                onClick={() => toggleInstall(p.id)}
-                                className={`w-full py-2 rounded-lg text-xs font-semibold transition-all ${installed.has(p.id)
-                                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/30'
-                                        : 'btn-primary'
-                                    }`}
-                            >
-                                {installed.has(p.id) ? '✓ Installed' : 'Install Plugin'}
-                            </button>
+                            <h3 className="text-white font-bold text-lg mb-1 group-hover:text-indigo-400 transition-colors">{item.name}</h3>
+                            <p className="text-slate-500 text-xs mb-6 font-medium italic">by {item.author}</p>
+
+                            <div className="flex items-center gap-2 relative">
+                                <button
+                                    className="flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg hover:shadow-indigo-500/25 transition-all flex items-center justify-center gap-2 hover:translate-y-[-1px]"
+                                    onClick={() => install(item.name)}
+                                >
+                                    <Download size={14} /> Install Now
+                                </button>
+                                <button className="w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:border-white/20 transition-all group/btn">
+                                    <Zap size={14} className="group-hover/btn:text-amber-400 group-hover/btn:scale-110 transition-all" />
+                                </button>
+                            </div>
                         </motion.div>
                     ))}
+                </div>
+
+                {/* Trending Tags */}
+                <div className="border-t border-white/5 pt-8">
+                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Trending Search</h4>
+                    <div className="flex flex-wrap gap-2">
+                        {marketplace.trending.map(tag => (
+                            <span key={tag} className="px-4 py-2 rounded-full bg-white/5 border border-white/5 text-[10px] text-slate-400 font-bold hover:border-indigo-500/30 cursor-pointer transition-all">
+                                #{tag}
+                            </span>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
