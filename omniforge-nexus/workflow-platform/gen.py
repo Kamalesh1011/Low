@@ -1,0 +1,812 @@
+"""Generate nindex.html for BhartFlow workflow platform."""
+import os
+
+HTML = r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BhartFlow – Voice AI Workflow Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0b0f1a;--panel:rgba(13,18,32,0.98);--accent:#6366f1;--a2:#8b5cf6;
+  --ok:#10b981;--err:#ef4444;--warn:#f59e0b;--text:#e2e8f0;--muted:#64748b;
+  --border:rgba(99,102,241,0.18);--node:rgba(17,24,44,0.97);--glass:rgba(255,255,255,0.03)
+}
+body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column}
+/* ── Header ─────────────────────────── */
+header{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(9,13,25,.98);border-bottom:1px solid var(--border);flex-shrink:0;z-index:100;backdrop-filter:blur(24px)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand h1{font-size:17px;font-weight:800;background:linear-gradient(135deg,#6366f1,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.badge{font-size:9px;padding:2px 8px;border-radius:20px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);color:#a5b4fc;font-weight:600;letter-spacing:.04em}
+#vi{display:flex;align-items:center;gap:7px;padding:5px 13px;border-radius:20px;cursor:pointer;border:1px solid var(--border);background:var(--glass);transition:all .25s;user-select:none}
+#vi:hover{border-color:var(--accent);background:rgba(99,102,241,.1)}
+#vi.listening{border-color:var(--err);background:rgba(239,68,68,.08)}
+#vi.listening .vdot{background:var(--err);animation:pulse 1s infinite}
+#vi.listening .vbar{animation:wv .7s ease infinite;background:var(--err)}
+.vdot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s}
+.vbars{display:flex;gap:2px;align-items:center;height:14px}
+.vbar{width:3px;background:var(--muted);border-radius:2px;height:3px;transition:all .3s}
+.vbar:nth-child(2){animation-delay:.1s!important}
+.vbar:nth-child(3){animation-delay:.2s!important}
+.vbar:nth-child(4){animation-delay:.3s!important}
+@keyframes wv{0%,100%{height:3px}50%{height:14px}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+#vtext{font-size:11px;color:var(--muted);white-space:nowrap;min-width:64px}
+.hctrl{display:flex;align-items:center;gap:6px}
+btn,button{font-family:Inter,sans-serif;font-size:12px;font-weight:500;padding:6px 12px;border-radius:7px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--text);cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1}
+button:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2)}
+button.primary{background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:#fff;font-weight:600}
+button.primary:hover{opacity:.88}
+button.vbtn{background:rgba(99,102,241,.1);border-color:rgba(99,102,241,.3);color:#a5b4fc}
+button.vbtn:hover,button.vbtn.active{background:rgba(99,102,241,.22)}
+button.zbtn{padding:5px 9px}
+/* ── Main grid ──────────────────────── */
+.main{display:grid;grid-template-columns:270px 1fr 270px;grid-template-rows:1fr 170px;height:calc(100vh - 56px);overflow:hidden}
+.lpanel,.rpanel{background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.rpanel{border-right:none;border-left:1px solid var(--border)}
+.phead{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.phead span{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.pill{font-size:10px;padding:2px 8px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted)}
+.pill.running{background:rgba(99,102,241,.15);border-color:rgba(99,102,241,.35);color:#a5b4fc}
+.pill.finished{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.3);color:#6ee7b7}
+.pill.error{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:#fca5a5}
+/* ── Tabs ───────────────────────────── */
+.tabs{display:flex;padding:8px 10px;gap:5px;border-bottom:1px solid var(--border);flex-shrink:0}
+.tab{flex:1;text-align:center;font-size:11px;font-weight:500;padding:5px;border-radius:6px;cursor:pointer}
+.tab.active{background:rgba(99,102,241,.18);border-color:rgba(99,102,241,.35);color:#a5b4fc}
+/* ── AI chat ────────────────────────── */
+.ai-wrap{display:flex;flex-direction:column;flex:1;overflow:hidden}
+.ai-msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px}
+.ai-msgs::-webkit-scrollbar{width:3px}
+.ai-msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+.m{padding:9px 11px;border-radius:10px;font-size:12px;line-height:1.6;word-wrap:break-word;animation:fi .2s ease}
+.m.user{background:rgba(99,102,241,.13);border:1px solid rgba(99,102,241,.22);margin-left:24px}
+.m.ai{background:rgba(255,255,255,.03);border:1px solid var(--border);margin-right:6px}
+.m.err{background:rgba(239,68,68,.09);border-color:rgba(239,68,68,.22);color:#fca5a5}
+.m.vc{border-left:3px solid var(--accent)}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.ai-inp{padding:9px 10px;border-top:1px solid var(--border);display:flex;gap:6px;align-items:flex-end;flex-shrink:0}
+.ai-inp textarea{flex:1;resize:none;min-height:34px;max-height:80px;padding:7px 9px;border-radius:7px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-family:Inter,sans-serif;font-size:12px;outline:none}
+.ai-inp textarea:focus{border-color:var(--accent)}
+/* ── Palette ────────────────────────── */
+.palette{flex:1;overflow-y:auto;padding:8px}
+.palette::-webkit-scrollbar{width:3px}
+.palette::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+.pi{padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.025);cursor:grab;margin-bottom:5px;transition:all .18s;user-select:none}
+.pi:hover{border-color:rgba(99,102,241,.4);background:rgba(99,102,241,.07);transform:translateX(3px)}
+.pi:active{cursor:grabbing}
+.pi .pt{font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px}
+.pi .ps{font-size:10px;color:var(--muted);margin-top:2px}
+.pi .ic{font-size:14px}
+.cat-head{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:8px 4px 4px;display:flex;align-items:center;gap:6px}
+.cat-head::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.06)}
+/* ── Canvas ─────────────────────────── */
+.canvas-wrap{grid-column:2;position:relative;overflow:hidden;background:var(--bg);cursor:default}
+.canvas-wrap::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(99,102,241,.07) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0}
+#zoom-wrap{width:100%;height:100%;transform-origin:0 0;position:relative;z-index:1}
+#canvas{position:relative;width:3000px;height:2000px}
+svg#conns{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:0}
+/* ── Nodes ──────────────────────────── */
+.node{position:absolute;width:195px;background:var(--node);border:1px solid rgba(99,102,241,.22);border-radius:12px;cursor:default;user-select:none;z-index:10;transition:box-shadow .2s,border-color .2s}
+.node:hover{box-shadow:0 0 0 1px rgba(99,102,241,.35),0 6px 28px rgba(0,0,0,.5)}
+.node.selected{border-color:var(--accent)!important;box-shadow:0 0 0 2px rgba(99,102,241,.28),0 8px 36px rgba(0,0,0,.6)!important}
+.node.trigger .nh{background:rgba(99,102,241,.06)}
+.node.action .nh{background:rgba(139,92,246,.06)}
+.node.ai-n .nh{background:rgba(16,185,129,.06)}
+.node.logic-n .nh{background:rgba(245,158,11,.06)}
+.nh{padding:9px 11px 7px;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:flex-start;justify-content:space-between;border-radius:12px 12px 0 0}
+.ntitle{font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px}
+.ntype{font-size:9px;color:var(--muted);margin-top:1px;text-transform:uppercase;letter-spacing:.05em}
+.na{display:flex;gap:3px;align-items:center;margin-left:4px}
+.lbtn{font-size:9px;padding:2px 7px;border-radius:4px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.28);color:#a5b4fc;cursor:pointer}
+.lbtn.active{background:rgba(99,102,241,.28)}
+.dbtn{font-size:10px;padding:2px 6px;background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.18);color:#fca5a5;border-radius:4px;cursor:pointer}
+.dbtn:hover{background:rgba(239,68,68,.18)}
+.nb{padding:7px 11px;font-size:10px;color:var(--muted);min-height:26px;line-height:1.4;word-break:break-all}
+.nf{padding:3px 11px 8px;display:flex;justify-content:space-between;align-items:center}
+.chip{font-size:9px;padding:1px 6px;border-radius:4px;background:rgba(255,255,255,.04);color:var(--muted);border:1px solid rgba(255,255,255,.06)}
+/* ── Config panel ───────────────────── */
+.cfg{flex:1;overflow-y:auto;padding:12px}
+.cfg::-webkit-scrollbar{width:3px}
+.cfg::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+.field{margin-bottom:9px}
+.field label{display:block;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;padding:7px 9px;border-radius:7px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-family:Inter,sans-serif;font-size:12px;outline:none;transition:border .2s}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field textarea{resize:vertical;min-height:56px}
+.field select{cursor:pointer}
+.field select option{background:#131828}
+.cs{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:13px 0 7px;display:flex;align-items:center;gap:5px}
+.cs::after{content:"";flex:1;height:1px;background:rgba(99,102,241,.18)}
+.ibox{padding:9px 11px;border-radius:8px;background:rgba(99,102,241,.07);border:1px solid rgba(99,102,241,.18);font-size:11px;color:#a5b4fc;line-height:1.6;margin-bottom:9px}
+/* ── Log bar ────────────────────────── */
+.logbar{grid-column:1/-1;background:rgba(9,13,25,.98);border-top:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+#logwrap{flex:1;overflow-y:auto;padding:6px 16px;font-family:"Courier New",monospace}
+#logwrap::-webkit-scrollbar{width:3px}
+#logwrap::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+.le{display:grid;grid-template-columns:170px 1fr;gap:8px;font-size:11px;padding:2px 0;border-bottom:1px solid rgba(255,255,255,.025)}
+.le .ts{color:var(--muted)}
+.le .lm{color:var(--text)}
+.le .lm.err{color:#fca5a5}
+/* ── Canvas controls ────────────────── */
+.cc{position:absolute;bottom:14px;right:14px;display:flex;gap:5px;z-index:50}
+.cc button{padding:5px 9px;font-size:11px}
+/* ── Misc ───────────────────────────── */
+.connecting-hint{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(99,102,241,.2);border:1px solid rgba(99,102,241,.4);color:#a5b4fc;padding:4px 14px;border-radius:20px;font-size:11px;pointer-events:none;display:none;z-index:200}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">
+    <h1>⚡ BhartFlow</h1>
+    <span class="badge">Voice · AI · Low-Code</span>
+  </div>
+  <div id="vi" onclick="toggleVoice()" title="Click to toggle always-on voice mode">
+    <div class="vdot"></div>
+    <div class="vbars">
+      <div class="vbar"></div><div class="vbar"></div>
+      <div class="vbar"></div><div class="vbar"></div>
+    </div>
+    <span id="vtext">Voice: Off</span>
+  </div>
+  <div class="hctrl">
+    <button class="vbtn" id="qv-btn" onclick="quickVoice()">🎤 Quick Voice</button>
+    <button onclick="clearCanvas()" class="danger">🗑 Clear</button>
+    <button onclick="saveWorkflow()">💾 Save</button>
+    <button class="primary" onclick="runWorkflow()">▶ Run</button>
+    <button class="zbtn" onclick="zoomOut()">−</button>
+    <button class="zbtn" onclick="resetZoom()">⊙</button>
+    <button class="zbtn" onclick="zoomIn()">+</button>
+    <button class="zbtn" onclick="zoomFit()">⊞</button>
+  </div>
+</header>
+
+<div class="main">
+  <!-- LEFT -->
+  <div class="lpanel">
+    <div class="tabs">
+      <button class="tab active" id="tab-ai" onclick="switchTab('ai')">🤖 AI Assistant</button>
+      <button class="tab" id="tab-pal" onclick="switchTab('pal')">⚙ Palette</button>
+    </div>
+    <!-- AI -->
+    <div class="ai-wrap" id="ai-section">
+      <div class="ai-msgs" id="ai-msgs">
+        <div class="m ai">
+          <b>👋 Welcome to BhartFlow!</b><br><br>
+          <b>🎤 Voice Mode</b> — Click the voice indicator above or say <em>"Hey Mindora"</em> followed by your command.<br><br>
+          <b>💬 Try prompts like:</b><br>
+          • "Send email to boss@company.com every hour"<br>
+          • "Fetch API and log the response"<br>
+          • "Create a data pipeline workflow"<br><br>
+          <b>⚙ Manual</b> — Switch to Palette tab and drag nodes to canvas.
+        </div>
+      </div>
+      <div class="ai-inp">
+        <button class="vbtn" id="vi-inp" onclick="voiceInput()" style="padding:5px 9px">🎤</button>
+        <textarea id="ai-box" placeholder="Describe your workflow..." rows="1"></textarea>
+        <button class="primary" onclick="sendPrompt()" id="send-btn">✨</button>
+      </div>
+    </div>
+    <!-- PALETTE -->
+    <div style="flex:1;overflow:hidden;display:none;flex-direction:column" id="pal-section">
+      <div class="palette" id="pal"></div>
+    </div>
+  </div>
+
+  <!-- CANVAS -->
+  <div class="canvas-wrap" id="canvas-wrap">
+    <div class="connecting-hint" id="conn-hint">Click another node to connect • Click same node to cancel</div>
+    <div id="zoom-wrap">
+      <div id="canvas">
+        <svg id="conns"></svg>
+      </div>
+    </div>
+    <div class="cc">
+      <span id="conn-status" class="pill">Connect: idle</span>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="rpanel">
+    <div class="phead">
+      <span>Node Config</span>
+      <span class="pill" id="sel-label">None selected</span>
+    </div>
+    <div class="cfg" id="cfg"></div>
+  </div>
+
+  <!-- LOG BAR -->
+  <div class="logbar">
+    <div class="phead">
+      <span>Run Log</span>
+      <span class="pill" id="run-status">Idle</span>
+    </div>
+    <div id="logwrap"></div>
+  </div>
+</div>
+</div>
+
+<script>
+// ── State ────────────────────────────────────────────────────
+let nodes=[],edges=[],idCnt=1,selId=null,connFrom=null;
+let curRun=null,pollInt=null,logCnt=0;
+let zoomLv=1,panX=0,panY=0,panning=false,panStart={x:0,y:0};
+let recoObj=null,voiceOn=false,quickVoiceOn=false;
+const SS=window.speechSynthesis;
+
+// ── DOM refs ─────────────────────────────────────────────────
+const canvasEl=document.getElementById('canvas');
+const conns=document.getElementById('conns');
+const cfg=document.getElementById('cfg');
+const selLabel=document.getElementById('sel-label');
+const connStatus=document.getElementById('conn-status');
+const runStatus=document.getElementById('run-status');
+const logwrap=document.getElementById('logwrap');
+const aiMsgs=document.getElementById('ai-msgs');
+const aiBox=document.getElementById('ai-box');
+const sendBtn=document.getElementById('send-btn');
+const vi=document.getElementById('vi');
+const vtext=document.getElementById('vtext');
+const connHint=document.getElementById('conn-hint');
+const zoomWrap=document.getElementById('zoom-wrap');
+
+// ── Palette data ─────────────────────────────────────────────
+const PAL=[
+  {cat:'Triggers',items:[
+    {type:'start',label:'Start',icon:'▶',summary:'Manual run trigger',cfg:{}},
+    {type:'cron',label:'Cron',icon:'⏰',summary:'Periodic scheduler',cfg:{interval:60,enabled:true}},
+    {type:'webhook',label:'Webhook',icon:'🔗',summary:'HTTP endpoint trigger',cfg:{}},
+  ]},
+  {cat:'Actions',items:[
+    {type:'http',label:'HTTP Request',icon:'🌐',summary:'GET/POST external APIs',cfg:{method:'GET',url:'',headers:{},body:{}}},
+    {type:'gmail_send',label:'Gmail Send',icon:'📧',summary:'Send email via SMTP',cfg:{smtp_server:'smtp.gmail.com',smtp_port:587,username:'',password:'',to:'',subject:'',body:'Hello from BhartFlow!'}},
+    {type:'delay',label:'Delay',icon:'⏳',summary:'Wait N seconds',cfg:{seconds:5}},
+    {type:'log',label:'Log',icon:'📝',summary:'Log to run output',cfg:{message:'Input: {{ $input.data }}'}},
+    {type:'file_read',label:'File Read',icon:'📂',summary:'Read file from disk',cfg:{path:'data/input.json',mode:'text'}},
+    {type:'file_write',label:'File Write',icon:'💾',summary:'Write data to file',cfg:{path:'data/output.json',mode:'json'}},
+    {type:'db_sqlite',label:'SQLite',icon:'🗄',summary:'Run SQL on SQLite DB',cfg:{db_path:'data/my.db',query:'SELECT * FROM table',params:[]}},
+  ]},
+  {cat:'Logic',items:[
+    {type:'set',label:'Set Fields',icon:'⚙',summary:'Set/override data fields',cfg:{fields:{key:'value'}}},
+    {type:'if',label:'IF Branch',icon:'🔀',summary:'Conditional branching',cfg:{expression:'input.status_code == 200'}},
+    {type:'switch',label:'Switch',icon:'🔄',summary:'Route by value',cfg:{property:'input.data.type'}},
+    {type:'function',label:'Function',icon:'⚡',summary:'Custom Python code',cfg:{code:'result = input_data'}},
+    {type:'merge',label:'Merge',icon:'🔗',summary:'Merge context keys',cfg:{keys:[]}},
+    {type:'split_in_batches',label:'Split Batches',icon:'✂',summary:'Split list into batches',cfg:{items_path:'input.items',batch_size:10}},
+  ]},
+  {cat:'AI Nodes',items:[
+    {type:'ai_gemini',label:'Gemini AI',icon:'🤖',summary:'Call Gemini model',cfg:{prompt:'Summarize this:',input_path:'input.data.text'}},
+    {type:'ai_openai',label:'OpenAI',icon:'🧠',summary:'Call OpenAI model',cfg:{model:'gpt-4o-mini',prompt:'Summarize:',input_path:'input.data.text'}},
+  ]},
+];
+
+// ── Tab switch ────────────────────────────────────────────────
+function switchTab(t){
+  document.getElementById('ai-section').style.display=t==='ai'?'flex':'none';
+  document.getElementById('pal-section').style.display=t==='pal'?'flex':'none';
+  document.getElementById('tab-ai').classList.toggle('active',t==='ai');
+  document.getElementById('tab-pal').classList.toggle('active',t==='pal');
+}
+
+// ── Palette render ────────────────────────────────────────────
+function renderPalette(){
+  const p=document.getElementById('pal');
+  p.innerHTML='';
+  PAL.forEach(cat=>{
+    const ch=document.createElement('div');
+    ch.className='cat-head';
+    ch.textContent=cat.cat;
+    p.appendChild(ch);
+    cat.items.forEach(item=>{
+      const el=document.createElement('div');
+      el.className='pi';
+      el.draggable=true;
+      el.dataset.type=item.type;
+      el.innerHTML=`<div class="pt"><span class="ic">${item.icon}</span>${item.label}</div><div class="ps">${item.summary}</div>`;
+      el.addEventListener('dragstart',e=>{
+        e.dataTransfer.setData('text/plain',item.type);
+        e.dataTransfer.effectAllowed='copy';
+      });
+      p.appendChild(el);
+    });
+  });
+  document.getElementById('canvas-wrap').addEventListener('dragover',e=>e.preventDefault());
+  document.getElementById('canvas-wrap').addEventListener('drop',e=>{
+    e.preventDefault();
+    const tp=e.dataTransfer.getData('text/plain');
+    if(!tp) return;
+    const cr=canvasEl.getBoundingClientRect();
+    const x=(e.clientX-cr.left)/zoomLv-panX/zoomLv;
+    const y=(e.clientY-cr.top)/zoomLv-panY/zoomLv;
+    addNode(tp,x,y);
+  });
+}
+
+// ── Node helpers ──────────────────────────────────────────────
+function palItem(type){return PAL.flatMap(c=>c.items).find(i=>i.type===type)||{type,label:type,icon:'◾',summary:'',cfg:{}};}
+function genId(){return 'node-'+(idCnt++);}
+function findNode(id){return nodes.find(n=>n.id===id);}
+
+function nodeClass(type){
+  if(['start','cron','webhook'].includes(type)) return 'trigger';
+  if(['ai_gemini','ai_openai'].includes(type)) return 'ai-n';
+  if(['if','switch','function','merge','split_in_batches','set'].includes(type)) return 'logic-n';
+  return 'action';
+}
+
+function nodeSummary(n){
+  const c=n.config||{};
+  switch(n.type){
+    case 'http': return `${c.method||'GET'} ${(c.url||'(no url)').slice(0,25)}`;
+    case 'delay': return `Wait ${c.seconds||0}s`;
+    case 'log': return (c.message||'').slice(0,30)+'…';
+    case 'gmail_send': return `To: ${c.to||'(none)'}`;
+    case 'cron': return `Every ${c.interval||'?'}s`;
+    case 'webhook': return `/webhook/${n.id}`;
+    case 'ai_gemini': return `Gemini: ${(c.prompt||'').slice(0,20)}…`;
+    case 'ai_openai': return `OpenAI: ${c.model||'gpt-4o-mini'}`;
+    case 'if': return `if ${(c.expression||'').slice(0,24)}`;
+    case 'db_sqlite': return `DB: ${c.db_path||''}`;
+    default: return '—';
+  }
+}
+
+// ── Render canvas ─────────────────────────────────────────────
+function renderCanvas(){
+  canvasEl.querySelectorAll('.node').forEach(e=>e.remove());
+  nodes.forEach(n=>{
+    const pi=palItem(n.type);
+    const el=document.createElement('div');
+    el.className=`node ${nodeClass(n.type)}${n.id===selId?' selected':''}`;
+    el.style.left=(n.x||50)+'px';
+    el.style.top=(n.y||50)+'px';
+    el.dataset.id=n.id;
+    el.innerHTML=`
+    <div class="nh">
+      <div><div class="ntitle">${pi.icon||'◾'} ${n.label||pi.label}</div><div class="ntype">${n.type}</div></div>
+      <div class="na">
+        <button class="lbtn${connFrom===n.id?' active':''}" data-cid="${n.id}">Link</button>
+        <button class="dbtn" data-did="${n.id}">✕</button>
+      </div>
+    </div>
+    <div class="nb">${nodeSummary(n)}</div>
+    <div class="nf"><span class="chip">${n.id}</span></div>`;
+    el.addEventListener('mousedown',onNodeMD);
+    el.addEventListener('click',ev=>{
+      const cid=ev.target.dataset.cid;
+      const did=ev.target.dataset.did;
+      if(did){deleteNode(did);ev.stopPropagation();return;}
+      if(cid){handleLink(cid);ev.stopPropagation();return;}
+      selectNode(n.id);ev.stopPropagation();
+    });
+    canvasEl.appendChild(el);
+  });
+  renderConns();
+}
+
+function renderConns(){
+  conns.innerHTML='';
+  const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+  const mk=document.createElementNS('http://www.w3.org/2000/svg','marker');
+  mk.setAttribute('id','arr');mk.setAttribute('viewBox','0 0 10 10');
+  mk.setAttribute('refX','9');mk.setAttribute('refY','5');
+  mk.setAttribute('markerUnits','strokeWidth');
+  mk.setAttribute('markerWidth','5');mk.setAttribute('markerHeight','5');
+  mk.setAttribute('orient','auto');
+  const mp=document.createElementNS('http://www.w3.org/2000/svg','path');
+  mp.setAttribute('d','M 0 0 L 10 5 L 0 10 z');
+  mp.setAttribute('fill','rgba(99,102,241,0.7)');
+  mk.appendChild(mp);defs.appendChild(mk);conns.appendChild(defs);
+  edges.forEach(e=>{
+    const fn=findNode(e.from),tn=findNode(e.to);
+    if(!fn||!tn) return;
+    const fe=document.querySelector(`.node[data-id="${fn.id}"]`);
+    const te=document.querySelector(`.node[data-id="${tn.id}"]`);
+    if(!fe||!te) return;
+    const fr=fe.getBoundingClientRect(),tr=te.getBoundingClientRect();
+    const cr=canvasEl.getBoundingClientRect();
+    const x1=fr.right-cr.left-8,y1=fr.top-cr.top+fr.height/2;
+    const x2=tr.left-cr.left+8,y2=tr.top-cr.top+tr.height/2;
+    const dx=Math.max(50,Math.abs(x2-x1)/2);
+    const line=document.createElementNS('http://www.w3.org/2000/svg','path');
+    line.setAttribute('d',`M ${x1},${y1} C ${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`);
+    line.setAttribute('stroke','rgba(99,102,241,0.6)');
+    line.setAttribute('stroke-width','1.5');
+    line.setAttribute('fill','none');
+    line.setAttribute('marker-end','url(#arr)');
+    conns.appendChild(line);
+  });
+}
+
+// ── Node ops ──────────────────────────────────────────────────
+function addNode(type,x,y){
+  const pi=palItem(type);
+  const n={id:genId(),type,label:pi.label,x:x-97,y:y-40,config:JSON.parse(JSON.stringify(pi.cfg||{}))};
+  nodes.push(n);renderCanvas();selectNode(n.id);saveWorkflow(true);
+}
+function deleteNode(id){
+  nodes=nodes.filter(n=>n.id!==id);
+  edges=edges.filter(e=>e.from!==id&&e.to!==id);
+  if(selId===id){selId=null;cfg.innerHTML='<div class="ibox">Node deleted. Select another.</div>';selLabel.textContent='None';}
+  renderCanvas();saveWorkflow(true);
+}
+function handleLink(nodeId){
+  document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('active'));
+  if(!connFrom){
+    connFrom=nodeId;connStatus.textContent=`Linking from: ${nodeId}`;
+    connHint.style.display='block';
+    document.querySelector(`.lbtn[data-cid="${nodeId}"]`)?.classList.add('active');
+  }else if(connFrom===nodeId){
+    connFrom=null;connStatus.textContent='Connect: idle';connHint.style.display='none';
+  }else{
+    if(!edges.some(e=>e.from===connFrom&&e.to===nodeId)){
+      edges.push({id:'edge-'+Date.now(),from:connFrom,to:nodeId});
+    }
+    connFrom=null;connStatus.textContent='Connect: idle';connHint.style.display='none';
+    renderConns();saveWorkflow(true);
+  }
+}
+function selectNode(id){selId=id;renderCanvas();renderCfg(findNode(id));}
+
+// ── Drag nodes ────────────────────────────────────────────────
+let drag=null;
+function onNodeMD(ev){
+  if(ev.target.dataset.cid||ev.target.dataset.did) return;
+  const el=ev.currentTarget,id=el.dataset.id,n=findNode(id);
+  if(!n) return;
+  selectNode(id);
+  const r=el.getBoundingClientRect(),cr=canvasEl.getBoundingClientRect();
+  drag={id,ox:ev.clientX-r.left,oy:ev.clientY-r.top,cleft:cr.left,ctop:cr.top};
+  document.addEventListener('mousemove',onMM);
+  document.addEventListener('mouseup',onMU);
+}
+function onMM(ev){
+  if(!drag) return;
+  const n=findNode(drag.id);if(!n) return;
+  n.x=(ev.clientX-drag.cleft-drag.ox)/zoomLv;
+  n.y=(ev.clientY-drag.ctop-drag.oy)/zoomLv;
+  renderCanvas();
+}
+function onMU(){if(drag) saveWorkflow(true);drag=null;document.removeEventListener('mousemove',onMM);document.removeEventListener('mouseup',onMU);}
+
+// ── Config render ─────────────────────────────────────────────
+function renderCfg(n){
+  if(!n){cfg.innerHTML='<div class="ibox">Select a node to configure it here.</div>';selLabel.textContent='None';return;}
+  selLabel.textContent=n.id;
+  const c=n.config||{};
+  let h=`<div class="field"><label>Label</label><input data-f="label" value="${esc(n.label||'')}"/></div>`;
+  if(n.type==='http'){
+    h+=`<div class="cs">HTTP Settings</div>
+    <div class="field"><label>Method</label><select data-f="method">
+      ${['GET','POST','PUT','DELETE','PATCH'].map(m=>`<option${c.method===m?' selected':''}>${m}</option>`).join('')}
+    </select></div>
+    <div class="field"><label>URL</label><input data-f="url" value="${esc(c.url||'')}"/></div>`;
+  }else if(n.type==='delay'){
+    h+=`<div class="field"><label>Seconds</label><input type="number" min="0" step="1" data-f="seconds" value="${c.seconds||0}"/></div>`;
+  }else if(n.type==='log'){
+    h+=`<div class="field"><label>Message (use {{ $input.data }})</label><textarea data-f="message">${esc(c.message||'')}</textarea></div>`;
+  }else if(n.type==='gmail_send'){
+    h+=`<div class="cs">SMTP Credentials</div>
+    <div class="field"><label>SMTP Server</label><input data-f="smtp_server" value="${esc(c.smtp_server||'smtp.gmail.com')}"/></div>
+    <div class="field"><label>SMTP Port</label><input type="number" data-f="smtp_port" value="${c.smtp_port||587}"/></div>
+    <div class="field"><label>Username / Email</label><input type="email" data-f="username" value="${esc(c.username||'')}"/></div>
+    <div class="field"><label>App Password</label><input type="password" data-f="password" value="${esc(c.password||'')}"/></div>
+    <div class="cs">Email Content</div>
+    <div class="field"><label>To</label><input type="email" data-f="to" value="${esc(c.to||'')}"/></div>
+    <div class="field"><label>Subject</label><input data-f="subject" value="${esc(c.subject||'')}"/></div>
+    <div class="field"><label>Body</label><textarea data-f="body">${esc(c.body||'')}</textarea></div>`;
+  }else if(n.type==='cron'){
+    h+=`<div class="field"><label>Interval (seconds)</label><input type="number" min="1" data-f="interval" value="${c.interval||60}"/></div>
+    <div class="ibox">Fires every ${c.interval||60}s automatically after Save.</div>`;
+  }else if(n.type==='webhook'){
+    const url=`${location.origin}/webhook/${n.id}`;
+    h+=`<div class="cs">Endpoint</div><div class="field"><label>Webhook URL (POST/GET)</label><input value="${url}" readonly/></div>
+    <div class="ibox">Send a request to this URL to trigger the workflow. Payload will be passed as input data.</div>`;
+  }else if(n.type==='start'){
+    h+=`<div class="ibox">This node starts the workflow when you click ▶ Run.</div>`;
+  }else if(n.type==='if'){
+    h+=`<div class="field"><label>Expression (Python)</label><textarea data-f="expression">${esc(c.expression||'input.status_code == 200')}</textarea></div>
+    <div class="ibox">Use <code>input.*</code> to access prior data. Returns true/false to outgoing edges.</div>`;
+  }else if(n.type==='function'){
+    h+=`<div class="field"><label>Python Code (assign to "result")</label><textarea style="min-height:100px" data-f="code">${esc(c.code||'result = input_data')}</textarea></div>`;
+  }else if(n.type==='set'){
+    h+=`<div class="field"><label>Fields JSON ({"key":"value"})</label><textarea data-f="fields">${esc(typeof c.fields==='object'?JSON.stringify(c.fields,null,2):'{}')}</textarea></div>`;
+  }else if(n.type==='db_sqlite'){
+    h+=`<div class="field"><label>DB Path</label><input data-f="db_path" value="${esc(c.db_path||'')}"/></div>
+    <div class="field"><label>SQL Query</label><textarea data-f="query">${esc(c.query||'SELECT * FROM table')}</textarea></div>`;
+  }else if(n.type==='ai_gemini'){
+    h+=`<div class="field"><label>Prompt</label><textarea data-f="prompt">${esc(c.prompt||'Summarize this:')}</textarea></div>
+    <div class="field"><label>Input Path</label><input data-f="input_path" value="${esc(c.input_path||'input.data.text')}"/></div>`;
+  }else if(n.type==='ai_openai'){
+    h+=`<div class="field"><label>Model</label><input data-f="model" value="${esc(c.model||'gpt-4o-mini')}"/></div>
+    <div class="field"><label>Prompt</label><textarea data-f="prompt">${esc(c.prompt||'Summarize:')}</textarea></div>
+    <div class="field"><label>Input Path</label><input data-f="input_path" value="${esc(c.input_path||'input.data.text')}"/></div>`;
+  }else if(n.type==='file_read'){
+    h+=`<div class="field"><label>File Path</label><input data-f="path" value="${esc(c.path||'')}"/></div>
+    <div class="field"><label>Mode</label><select data-f="mode"><option${c.mode==='text'?' selected':''}>text</option><option${c.mode==='json'?' selected':''}>json</option></select></div>`;
+  }else if(n.type==='file_write'){
+    h+=`<div class="field"><label>File Path</label><input data-f="path" value="${esc(c.path||'')}"/></div>
+    <div class="field"><label>Mode</label><select data-f="mode"><option${c.mode==='text'?' selected':''}>text</option><option${c.mode==='json'?' selected':''}>json</option></select></div>`;
+  }else if(n.type==='split_in_batches'){
+    h+=`<div class="field"><label>Items Path</label><input data-f="items_path" value="${esc(c.items_path||'input.items')}"/></div>
+    <div class="field"><label>Batch Size</label><input type="number" min="1" data-f="batch_size" value="${c.batch_size||10}"/></div>`;
+  }else if(n.type==='switch'){
+    h+=`<div class="field"><label>Property Path</label><input data-f="property" value="${esc(c.property||'input.data.type')}"/></div>`;
+  }else if(n.type==='merge'){
+    h+=`<div class="field"><label>Keys (JSON array)</label><input data-f="keys" value="${esc(JSON.stringify(c.keys||[]))}"/></div>`;
+  }
+  cfg.innerHTML=h;
+  cfg.querySelectorAll('input,select,textarea').forEach(el=>{
+    el.addEventListener('input',onCfgChange);
+    el.addEventListener('change',onCfgChange);
+  });
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function onCfgChange(ev){
+  const n=findNode(selId);if(!n) return;
+  const f=ev.target.dataset.f,v=ev.target.value;
+  if(f==='label'){n.label=v;}
+  else{
+    n.config=n.config||{};
+    if(f==='fields'||f==='keys'){try{n.config[f]=JSON.parse(v);}catch{n.config[f]=v;}}
+    else n.config[f]=v;
+  }
+  renderCanvas();
+}
+
+// ── AI chat ───────────────────────────────────────────────────
+function addMsg(html,type='ai'){
+  const d=document.createElement('div');
+  d.className='m '+type;
+  d.innerHTML=html;
+  aiMsgs.appendChild(d);
+  aiMsgs.scrollTop=aiMsgs.scrollHeight;
+  return d;
+}
+
+async function sendPrompt(){
+  const p=aiBox.value.trim();if(!p) return;
+  addMsg(p,'user');aiBox.value='';
+  await genWorkflow(p);
+}
+
+async function genWorkflow(prompt){
+  const d=addMsg('<span class="loading">Generating workflow</span>','ai');
+  sendBtn.disabled=true;
+  try{
+    const r=await fetch('/api/ai/generate-workflow',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    if(!r.ok){const e=await r.json();throw new Error(e.error||'Failed');}
+    const wf=await r.json();
+    nodes=wf.nodes||[];edges=wf.edges||[];
+    const mx=nodes.reduce((m,n)=>{const num=parseInt((n.id||'').split('-')[1]||'0',10);return Math.max(m,isNaN(num)?0:num);},0);
+    idCnt=mx+1;
+    renderCanvas();
+    if(nodes[0]) selectNode(nodes[0].id);
+    d.innerHTML='✅ <b>Workflow created!</b> Configure any credential fields in the right panel, then click ▶ Run.';
+    speak('Workflow created successfully');
+    await saveWorkflow(true);
+  }catch(e){
+    d.className='m err';d.innerHTML='❌ '+e.message;
+    speak('Workflow creation failed');
+  }finally{sendBtn.disabled=false;}
+}
+
+// ── Voice ─────────────────────────────────────────────────────
+function initVoice(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){addMsg('⚠️ Voice recognition not supported in this browser. Use Chrome or Edge.','ai');return;}
+  recoObj=new SR();
+  recoObj.continuous=true;recoObj.interimResults=false;recoObj.lang='en-US';
+  recoObj.onstart=()=>{vi.classList.add('listening');vtext.textContent='Listening…';};
+  recoObj.onend=()=>{
+    if(voiceOn){setTimeout(()=>{try{recoObj.start();}catch{}},200);}
+    else{vi.classList.remove('listening');vtext.textContent='Voice: Off';}
+  };
+  recoObj.onresult=async ev=>{
+    const t=ev.results[ev.results.length-1][0].transcript.trim();
+    const lo=t.toLowerCase();
+    if(lo.includes('hey mindora')||lo.includes('ok mindora')){
+      const cmd=lo.replace(/hey mindora|ok mindora/gi,'').trim();
+      if(cmd.length>0){addMsg('🎤 "'+cmd+'"','user vc');await doVoiceCmd(cmd);}
+    }else if(quickVoiceOn){
+      addMsg('🎤 "'+t+'"','user vc');
+      await doVoiceCmd(t);
+      stopQuickVoice();
+    }
+  };
+  recoObj.onerror=ev=>{if(ev.error!=='no-speech'&&ev.error!=='aborted')addMsg('⚠️ Voice error: '+ev.error,'ai');};
+}
+
+function toggleVoice(){
+  if(!recoObj){addMsg('⚠️ Voice not available','ai');return;}
+  voiceOn=!voiceOn;
+  if(voiceOn){try{recoObj.start();}catch{}addMsg('🎤 Always-on voice activated. Say "Hey Mindora" + command.','ai');speak('Voice mode activated');}
+  else{try{recoObj.stop();}catch{}vtext.textContent='Voice: Off';addMsg('🎤 Voice mode off.','ai');}
+}
+
+function quickVoice(){
+  if(!recoObj){addMsg('⚠️ Voice not available','ai');return;}
+  quickVoiceOn=true;
+  const btn=document.getElementById('qv-btn');btn.classList.add('active');
+  try{recoObj.start();}catch{}
+  addMsg('🎤 Listening… speak your command.','ai');
+  speak('Listening');
+  setTimeout(stopQuickVoice,8000);
+}
+
+function voiceInput(){
+  if(!recoObj){return;}
+  quickVoiceOn=true;
+  document.getElementById('vi-inp').classList.add('active');
+  try{recoObj.start();}catch{}
+}
+
+function stopQuickVoice(){
+  quickVoiceOn=false;
+  document.getElementById('qv-btn').classList.remove('active');
+  document.getElementById('vi-inp').classList.remove('active');
+  if(!voiceOn){try{recoObj.stop();}catch{}vi.classList.remove('listening');vtext.textContent='Voice: Off';}
+}
+
+function speak(text){
+  if(!SS) return;
+  const u=new SpeechSynthesisUtterance(text);
+  u.rate=1.1;u.pitch=1;u.volume=0.8;
+  SS.speak(u);
+}
+
+async function doVoiceCmd(cmd){
+  try{
+    const r=await fetch('/api/voice-command',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
+    const res=await r.json();
+    const msg=res.message||'Done';
+    addMsg('🧠 '+msg,'ai');
+    speak(msg);
+    const a=res.action;
+    if(a==='CREATE_WORKFLOW') await genWorkflow(res.intent?.workflow_prompt||cmd);
+    else if(a==='RUN_WORKFLOW') await runWorkflow();
+    else if(a==='CLEAR_WORKFLOW') clearCanvas();
+    else if(a==='SAVE_WORKFLOW') await saveWorkflow(false);
+  }catch(e){addMsg('❌ '+e.message,'ai err');}
+}
+
+// ── Workflow persistence ──────────────────────────────────────
+async function saveWorkflow(silent=false){
+  try{
+    await fetch('/api/workflow',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nodes,edges})});
+    if(!silent){addMsg('✅ Workflow saved.','ai');speak('Saved');}
+  }catch(e){if(!silent) addMsg('❌ Save failed.','ai err');}
+}
+
+async function loadWorkflow(){
+  try{
+    const r=await fetch('/api/workflow');
+    const d=await r.json();
+    nodes=d.nodes||[];edges=d.edges||[];
+    const mx=nodes.reduce((m,n)=>{const num=parseInt((n.id||'').split('-')[1]||'0',10);return Math.max(m,isNaN(num)?0:num);},0);
+    idCnt=mx+1;
+    renderCanvas();
+  }catch{}
+}
+
+function clearCanvas(){
+  if(!confirm('Clear all nodes and edges?')) return;
+  nodes=[];edges=[];selId=null;connFrom=null;
+  renderCanvas();cfg.innerHTML='<div class="ibox">Canvas cleared. Build a workflow via AI or drag nodes from Palette.</div>';
+  selLabel.textContent='None';connStatus.textContent='Connect: idle';
+  saveWorkflow(true);
+}
+
+// ── Run ───────────────────────────────────────────────────────
+function setStatus(s){
+  runStatus.textContent=s;
+  runStatus.className='pill '+(s.toLowerCase().includes('run')?'running':s.toLowerCase().includes('finish')?'finished':s.toLowerCase().includes('err')?'error':'');
+}
+
+function addLog(src,msg,err=false){
+  const e=document.createElement('div');e.className='le';
+  e.innerHTML=`<div class="ts">${new Date().toLocaleTimeString()} | ${src}</div><div class="lm${err?' err':''}">${msg}</div>`;
+  logwrap.appendChild(e);logwrap.scrollTop=logwrap.scrollHeight;
+}
+
+async function runWorkflow(){
+  if(curRun){addMsg('⚠️ A workflow is already running.','ai');return;}
+  await saveWorkflow(true);
+  logwrap.innerHTML='';logCnt=0;
+  setStatus('Running…');
+  try{
+    const r=await fetch('/api/workflow/run',{method:'POST'});
+    const d=await r.json();
+    if(d.error) throw new Error(d.error);
+    curRun=d.run_id;
+    addLog('System',`Run started — ID: ${curRun}`);
+    speak('Workflow started');
+    pollInt=setInterval(pollRun,1000);
+  }catch(e){addLog('System','Failed to start: '+e.message,true);setStatus('Error');}
+}
+
+async function pollRun(){
+  if(!curRun){clearInterval(pollInt);pollInt=null;return;}
+  try{
+    const r=await fetch('/api/runs/'+curRun);
+    const d=await r.json();
+    const log=d.log||[];
+    for(let i=logCnt;i<log.length;i++){
+      const e=log[i];const isErr=e.message.includes('failed')||e.message.includes('crashed')||e.message.includes('❌');
+      addLog(e.extra?.node_id||'Node',e.message,isErr);
+    }
+    logCnt=log.length;
+    if(d.status!=='running'){
+      clearInterval(pollInt);pollInt=null;curRun=null;
+      if(d.status==='finished'){setStatus('Finished');addLog('System','✅ Workflow completed.');speak('Workflow completed');}
+      else{setStatus('Error');addLog('System','❌ Workflow failed.',true);speak('Workflow failed');}
+    }
+  }catch{}
+}
+
+// ── Zoom & Pan ────────────────────────────────────────────────
+function applyZoom(){zoomWrap.style.transform=`translate(${panX}px,${panY}px) scale(${zoomLv})`;}
+function zoomIn(){zoomLv=Math.min(2.5,zoomLv+0.1);applyZoom();}
+function zoomOut(){zoomLv=Math.max(0.3,zoomLv-0.1);applyZoom();}
+function resetZoom(){zoomLv=1;panX=0;panY=0;applyZoom();}
+function zoomFit(){
+  if(!nodes.length) return;
+  let mnX=Infinity,mnY=Infinity,mxX=-Infinity,mxY=-Infinity;
+  nodes.forEach(n=>{mnX=Math.min(mnX,n.x);mnY=Math.min(mnY,n.y);mxX=Math.max(mxX,n.x+195);mxY=Math.max(mxY,n.y+90);});
+  const cw=document.getElementById('canvas-wrap').clientWidth;
+  const ch=document.getElementById('canvas-wrap').clientHeight;
+  const bw=mxX-mnX,bh=mxY-mnY;
+  zoomLv=Math.min((cw-80)/(bw||1),(ch-80)/(bh||1),1.2);
+  panX=(cw-bw*zoomLv)/2-mnX*zoomLv;
+  panY=(ch-bh*zoomLv)/2-mnY*zoomLv;
+  applyZoom();
+}
+
+zoomWrap.addEventListener('wheel',ev=>{
+  if(!ev.ctrlKey) return;ev.preventDefault();
+  if(ev.deltaY<0) zoomIn();else zoomOut();
+},{passive:false});
+
+const cw=document.getElementById('canvas-wrap');
+cw.addEventListener('mousedown',ev=>{
+  if(ev.target.closest('.node')) return;
+  panning=true;panStart.x=ev.clientX-panX;panStart.y=ev.clientY-panY;cw.style.cursor='grabbing';
+});
+document.addEventListener('mousemove',ev=>{
+  if(!panning) return;
+  panX=ev.clientX-panStart.x;panY=ev.clientY-panStart.y;applyZoom();
+});
+document.addEventListener('mouseup',()=>{panning=false;cw.style.cursor='default';});
+
+canvasEl.addEventListener('click',ev=>{
+  if(ev.target.id==='canvas'||ev.target.id==='conns'){
+    selId=null;connFrom=null;connStatus.textContent='Connect: idle';connHint.style.display='none';
+    renderCanvas();renderCfg(null);
+  }
+});
+
+// ── AI textarea enter ─────────────────────────────────────────
+aiBox.addEventListener('keydown',ev=>{if(ev.key==='Enter'&&!ev.shiftKey){ev.preventDefault();sendPrompt();}});
+aiBox.addEventListener('input',()=>{aiBox.style.height='34px';aiBox.style.height=Math.min(aiBox.scrollHeight,80)+'px';});
+
+// ── Init ──────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  renderPalette();
+  loadWorkflow();
+  initVoice();
+  cfg.innerHTML='<div class="ibox">🎤 Say "Hey Mindora [command]" or type in AI Assistant.<br><br>Click a node to configure it here.</div>';
+});
+</script>
+</body>
+</html>"""
+
+out = os.path.join(os.path.dirname(__file__), 'nindex.html')
+with open(out, 'w', encoding='utf-8') as f:
+    f.write(HTML)
+print(f'Written {len(HTML)} chars to {out}')

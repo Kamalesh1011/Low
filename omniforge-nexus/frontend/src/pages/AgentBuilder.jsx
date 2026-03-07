@@ -1,0 +1,151 @@
+import React, { useState, useCallback } from 'react';
+import {
+    ReactFlow,
+    Controls,
+    Background,
+    applyNodeChanges,
+    applyEdgeChanges,
+    addEdge,
+    MiniMap,
+    Panel
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+import { Bot, Play, Save, Plus, Mail, MessageSquare, Database, ExternalLink } from 'lucide-react';
+import Header from '../components/Header';
+
+// Custom node styles to make it look futuristic / NASA level
+const nodeStyle = {
+    background: 'rgba(15, 23, 42, 0.9)',
+    border: '1px solid rgba(59, 130, 246, 0.3)',
+    borderRadius: '12px',
+    padding: '16px',
+    color: '#fff',
+    minWidth: '200px',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+    backdropFilter: 'blur(10px)'
+};
+
+const initialNodes = [
+    {
+        id: '1',
+        type: 'input',
+        position: { x: 250, y: 100 },
+        style: { ...nodeStyle, borderColor: '#10b981' },
+        data: { label: <div className="flex gap-2 items-center"><Mail size={16} className="text-emerald-500" /> Webhook Trigger</div> },
+    },
+    {
+        id: '2',
+        position: { x: 250, y: 250 },
+        style: { ...nodeStyle, borderColor: '#f97316' },
+        data: { label: <div className="flex gap-2 items-center"><Bot size={16} className="text-orange-500" /> AI LLM Agent</div> },
+    },
+    {
+        id: '3',
+        type: 'output',
+        position: { x: 250, y: 400 },
+        style: { ...nodeStyle, borderColor: '#6366f1' },
+        data: { label: <div className="flex gap-2 items-center"><Database size={16} className="text-indigo-500" /> Save to Database</div> },
+    },
+];
+
+const initialEdges = [
+    { id: 'e1-2', source: '1', target: '2', animated: true, style: { stroke: '#f97316', strokeWidth: 2 } },
+    { id: 'e2-3', source: '2', target: '3', animated: true, style: { stroke: '#6366f1', strokeWidth: 2 } },
+];
+
+export default function AgentBuilder() {
+    const [nodes, setNodes] = useState(initialNodes);
+    const [edges, setEdges] = useState(initialEdges);
+    const [aiPrompt, setAiPrompt] = useState('');
+
+    const onNodesChange = useCallback(
+        (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+        [],
+    );
+    const onEdgesChange = useCallback(
+        (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+        [],
+    );
+    const onConnect = useCallback(
+        (params) => setEdges((eds) => addEdge({ ...params, animated: true, style: { stroke: '#fff', strokeWidth: 2 } }, eds)),
+        [],
+    );
+
+    const handleAIGenerate = (e) => {
+        e.preventDefault();
+        if (!aiPrompt) return;
+        // Simulate AI generating a workflow
+        const newNodes = [
+            { id: 'n1', type: 'input', position: { x: 100, y: 100 }, style: { ...nodeStyle, borderColor: '#10b981' }, data: { label: <div className="flex gap-2"><Mail size={16} /> Email Trigger</div> } },
+            { id: 'n2', position: { x: 100, y: 250 }, style: { ...nodeStyle, borderColor: '#f97316' }, data: { label: <div className="flex gap-2"><Bot size={16} /> Extract Invoice Data (GPT-4o)</div> } },
+            { id: 'n3', type: 'output', position: { x: 100, y: 400 }, style: { ...nodeStyle, borderColor: '#6366f1' }, data: { label: <div className="flex gap-2"><Database size={16} /> Insert to Postgres</div> } },
+        ];
+        const newEdges = [
+            { id: 'e1', source: 'n1', target: 'n2', animated: true, style: { stroke: '#f97316' } },
+            { id: 'e2', source: 'n2', target: 'n3', animated: true, style: { stroke: '#6366f1' } }
+        ];
+        setNodes(newNodes);
+        setEdges(newEdges);
+        setAiPrompt('');
+    };
+
+    return (
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <Header
+                title="Agent Builder"
+                subtitle="n8n style visual workflow builder for AI agents"
+            />
+
+            <div style={{ flex: 1, position: 'relative', marginTop: 10, borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <ReactFlow
+                    nodes={nodes}
+                    edges={edges}
+                    onNodesChange={onNodesChange}
+                    onEdgesChange={onEdgesChange}
+                    onConnect={onConnect}
+                    fitView
+                    theme="dark"
+                >
+                    <Background color="#334155" gap={16} />
+                    <Controls style={{ backgroundColor: 'rgba(15,23,42,0.8)', border: '1px solid rgba(255,255,255,0.1)', fill: '#fff' }} />
+                    <MiniMap nodeStrokeColor="#f97316" nodeColor="rgba(15,23,42,0.9)" maskColor="rgba(0,0,0,0.4)" style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)' }} />
+
+                    <Panel position="top-right" style={{ display: 'flex', gap: 10 }}>
+                        <button className="btn" style={{ background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <Save size={14} /> Save Workflow
+                        </button>
+                        <button className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <Play size={14} /> Deploy Agent
+                        </button>
+                    </Panel>
+
+                    <Panel position="bottom-center" style={{ width: '100%', maxWidth: 600, paddingBottom: 20 }}>
+                        <form onSubmit={handleAIGenerate} style={{
+                            display: 'flex', gap: 10, background: 'rgba(15,23,42,0.9)',
+                            padding: '12px 16px', borderRadius: 20, border: '1px solid rgba(249,115,22,0.3)',
+                            boxShadow: '0 20px 40px rgba(0,0,0,0.5)', backdropFilter: 'blur(10px)'
+                        }}>
+                            <Bot size={20} className="text-orange-500" style={{ marginTop: 2 }} />
+                            <input
+                                type="text"
+                                value={aiPrompt}
+                                onChange={(e) => setAiPrompt(e.target.value)}
+                                placeholder="AI Mode: I want to build an agent that parses invoices from emails and saves them..."
+                                style={{ flex: 1, background: 'transparent', border: 'none', color: 'white', outline: 'none', fontSize: 14 }}
+                            />
+                            <button type="submit" className="text-orange-500 font-bold" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>Generate</button>
+                        </form>
+                    </Panel>
+
+                    <Panel position="top-left" style={{ background: 'rgba(15,23,42,0.9)', padding: 16, borderRadius: 12, border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                        <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 4 }}>NODE PALETTE</div>
+                        <button className="btn" style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-start', background: 'rgba(255,255,255,0.02)', padding: '8px 12px' }}><Mail size={14} className="text-emerald-500" /> Webhook</button>
+                        <button className="btn" style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-start', background: 'rgba(255,255,255,0.02)', padding: '8px 12px' }}><MessageSquare size={14} className="text-blue-500" /> WhatsApp API</button>
+                        <button className="btn" style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-start', background: 'rgba(255,255,255,0.02)', padding: '8px 12px' }}><Bot size={14} className="text-orange-500" /> AI Processing</button>
+                        <button className="btn" style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-start', background: 'rgba(255,255,255,0.02)', padding: '8px 12px' }}><Database size={14} className="text-indigo-500" /> PostgreSQL</button>
+                    </Panel>
+                </ReactFlow>
+            </div>
+        </div>
+    );
+}

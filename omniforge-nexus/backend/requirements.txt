@@ -1,0 +1,40 @@
+fastapi==0.133.1
+uvicorn[standard]==0.41.0
+pydantic==2.12.5
+pydantic[email]
+pydantic-settings==2.13.1
+python-dotenv==1.2.1
+
+# Database
+sqlalchemy==2.0.47
+asyncpg==0.31.0
+greenlet==3.3.2
+
+# Authentication & Security
+python-jose[cryptography]==3.5.0
+passlib==1.7.4
+bcrypt==4.3.0
+cryptography==46.0.5
+
+# HTTP Client
+httpx==0.28.1
+tenacity==9.1.4
+
+# Caching
+redis==7.2.0
+
+# AI / LLM
+openai==2.24.0
+
+# Observability
+structlog==25.5.0
+orjson==3.11.7
+prometheus-client==0.21.1
+
+# Utils
+aiofiles==25.1.0
+python-slugify==8.0.4
+
+# Optional – Celery workers
+# celery==5.4.0
+# kafka-python==2.0.2

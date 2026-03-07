@@ -1,0 +1,146 @@
+version: "3.9"
+
+# ── OmniForge Nexus – Complete Dev Stack ─────────────────────
+# Usage: docker compose up -d
+# Opens: API at http://localhost:8000, Docs at http://localhost:8000/docs
+
+services:
+
+  # ── FastAPI Backend ────────────────────────────────────────
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: omniforge_api
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://omniforge:omniforge123@db:5432/omniforge_nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    env_file:
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - ./backend/storage:/app/storage
+    restart: unless-stopped
+    networks:
+      - omniforge_net
+
+  # ── React Frontend ─────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: omniforge_frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - api
+    networks:
+      - omniforge_net
+
+  # ── PostgreSQL 16 ──────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: omniforge_postgres
+    environment:
+      POSTGRES_USER: omniforge
+      POSTGRES_PASSWORD: omniforge123
+      POSTGRES_DB: omniforge_nexus
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U omniforge"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - omniforge_net
+
+  # ── Redis 7 ───────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: omniforge_redis
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - omniforge_net
+
+  # ── Celery Worker ──────────────────────────────────────────
+  celery_worker:
+    build:
+      context: ./backend
+    container_name: omniforge_celery
+    command: celery -A services.build_service.celery_app worker --loglevel=info -c 4
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://omniforge:omniforge123@db:5432/omniforge_nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - redis
+      - db
+    networks:
+      - omniforge_net
+
+  # ── Celery Flower (Monitor) ────────────────────────────────
+  flower:
+    build:
+      context: ./backend
+    container_name: omniforge_flower
+    command: celery -A services.build_service.celery_app flower --port=5555
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/1
+    depends_on:
+      - redis
+    networks:
+      - omniforge_net
+
+  # ── PgAdmin ───────────────────────────────────────────────
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: omniforge_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@omniforge.ai
+      PGADMIN_DEFAULT_PASSWORD: omniforge123
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - omniforge_net
+
+volumes:
+  pgdata:
+  redisdata:
+
+networks:
+  omniforge_net:
+    driver: bridge
