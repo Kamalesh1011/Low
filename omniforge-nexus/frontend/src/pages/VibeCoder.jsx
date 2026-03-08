@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+﻿import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
@@ -15,7 +15,7 @@ import {
     AlertCircle, ArrowRight
 } from 'lucide-react';
 
-// ── Data ─────────────────────────────────────────────────────────
+// â”€â”€ Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const MODES = [
     { id: 'swarm', icon: Cpu, label: 'Swarm Engine', desc: 'World-Class Multi-Agent Swarm', color: '#10b981', hex: '#10b981', badgeColor: 'active-swarm' },
@@ -26,45 +26,45 @@ const MODES = [
 
 const TEMPLATES = {
     app: [
-        { id: 'a1', name: 'GST Billing App', emoji: '📊', desc: 'Invoice + tax management', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 234, time: '~45s', prompt: 'Build a GST billing app for a textile business with invoice generation, tax calculation, and monthly reports' },
-        { id: 'a2', name: 'Inventory Manager', emoji: '📦', desc: 'Multi-warehouse stock tracking', tags: ['React', 'Python', 'Redis'], stars: 187, time: '~38s', prompt: 'Create an inventory management system with stock alerts, barcode scanning UI, and reorder automation' },
-        { id: 'a3', name: 'MSME CRM', emoji: '🤝', desc: 'Customer & lead management', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 312, time: '~42s', prompt: 'Build a CRM platform for a small manufacturing company with lead tracking, follow-up reminders, and sales analytics' },
-        { id: 'a4', name: 'HR Payroll System', emoji: '💰', desc: 'Payroll + ESI/PF compliance', tags: ['React', 'Python', 'PostgreSQL'], stars: 156, time: '~55s', prompt: 'Create an HR payroll system with salary slip generation, PF/ESI compliance, and attendance management' },
-        { id: 'a5', name: 'E-commerce Store', emoji: '🛒', desc: 'Full online shop + payments', tags: ['Next.js', 'FastAPI', 'Stripe'], stars: 489, time: '~65s', prompt: 'Build a complete e-commerce platform for handicrafts with product catalog, cart, Razorpay integration, and order tracking' },
-        { id: 'a6', name: 'Analytics Dashboard', emoji: '📈', desc: 'Business intelligence tool', tags: ['React', 'FastAPI', 'Recharts'], stars: 203, time: '~40s', prompt: 'Build a business analytics dashboard with revenue charts, KPI tracking, and export to PDF/Excel' },
-        { id: 'a7', name: 'Agriculture Supply Chain', emoji: '🚜', desc: 'Farm-to-fork tracking', tags: ['React', 'Python', 'GIS'], stars: 145, time: '~50s', prompt: 'Build a supply chain app for agriculture with crop harvesting logs, transport tracking, and direct-to-consumer sales portal' },
-        { id: 'a8', name: 'Textile Order Manager', emoji: '🧶', desc: 'Design to delivery workflow', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 220, time: '~45s', prompt: 'Create a textile order management system with design upload, dye house tracking, and automated shipping labels' },
-        { id: 'a9', name: 'Food Cloud Kitchen', emoji: '🍳', desc: 'Multi-brand kitchen manager', tags: ['React', 'Python', 'WebSockets'], stars: 310, time: '~55s', prompt: 'Build a cloud kitchen manager with Swiggy/Zomato order sync, real-time KDS (Kitchen Display System), and inventory auto-deduction' },
+        { id: 'a1', name: 'GST Billing App', emoji: 'ðŸ“Š', desc: 'Invoice + tax management', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 234, time: '~45s', prompt: 'Build a GST billing app for a textile business with invoice generation, tax calculation, and monthly reports' },
+        { id: 'a2', name: 'Inventory Manager', emoji: 'ðŸ“¦', desc: 'Multi-warehouse stock tracking', tags: ['React', 'Python', 'Redis'], stars: 187, time: '~38s', prompt: 'Create an inventory management system with stock alerts, barcode scanning UI, and reorder automation' },
+        { id: 'a3', name: 'MSME CRM', emoji: 'ðŸ¤', desc: 'Customer & lead management', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 312, time: '~42s', prompt: 'Build a CRM platform for a small manufacturing company with lead tracking, follow-up reminders, and sales analytics' },
+        { id: 'a4', name: 'HR Payroll System', emoji: 'ðŸ’°', desc: 'Payroll + ESI/PF compliance', tags: ['React', 'Python', 'PostgreSQL'], stars: 156, time: '~55s', prompt: 'Create an HR payroll system with salary slip generation, PF/ESI compliance, and attendance management' },
+        { id: 'a5', name: 'E-commerce Store', emoji: 'ðŸ›’', desc: 'Full online shop + payments', tags: ['Next.js', 'FastAPI', 'Stripe'], stars: 489, time: '~65s', prompt: 'Build a complete e-commerce platform for handicrafts with product catalog, cart, Razorpay integration, and order tracking' },
+        { id: 'a6', name: 'Analytics Dashboard', emoji: 'ðŸ“ˆ', desc: 'Business intelligence tool', tags: ['React', 'FastAPI', 'Recharts'], stars: 203, time: '~40s', prompt: 'Build a business analytics dashboard with revenue charts, KPI tracking, and export to PDF/Excel' },
+        { id: 'a7', name: 'Agriculture Supply Chain', emoji: 'ðŸšœ', desc: 'Farm-to-fork tracking', tags: ['React', 'Python', 'GIS'], stars: 145, time: '~50s', prompt: 'Build a supply chain app for agriculture with crop harvesting logs, transport tracking, and direct-to-consumer sales portal' },
+        { id: 'a8', name: 'Textile Order Manager', emoji: 'ðŸ§¶', desc: 'Design to delivery workflow', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 220, time: '~45s', prompt: 'Create a textile order management system with design upload, dye house tracking, and automated shipping labels' },
+        { id: 'a9', name: 'Food Cloud Kitchen', emoji: 'ðŸ³', desc: 'Multi-brand kitchen manager', tags: ['React', 'Python', 'WebSockets'], stars: 310, time: '~55s', prompt: 'Build a cloud kitchen manager with Swiggy/Zomato order sync, real-time KDS (Kitchen Display System), and inventory auto-deduction' },
     ],
     agent: [
-        { id: 'ag1', name: 'Customer Support Bot', emoji: '💬', desc: 'Handle FAQs, complaints, escalations', tags: ['OpenAI', 'Twilio', 'FastAPI'], stars: 398, time: '~30s', prompt: 'Build a customer support AI agent that handles FAQs via WhatsApp, email, and web chat with escalation logic' },
-        { id: 'ag2', name: 'GST Filing Agent', emoji: '📋', desc: 'Auto-file GSTR-1, GSTR-3B monthly', tags: ['Python', 'OpenAI', 'GST API'], stars: 267, time: '~35s', prompt: 'Create an AI agent that automatically prepares and files GST returns, reconciles invoices, and alerts on discrepancies' },
-        { id: 'ag3', name: 'Inventory Monitor', emoji: '📦', desc: 'Alert on low stock, auto POs', tags: ['Python', 'ML', 'FastAPI'], stars: 189, time: '~28s', prompt: 'Build an inventory monitoring AI agent that tracks stock levels, predicts demand, and auto-generates purchase orders' },
-        { id: 'ag4', name: 'Lead Nurture Agent', emoji: '🎯', desc: 'Follow up leads via email/WhatsApp', tags: ['OpenAI', 'Twilio', 'CRM'], stars: 445, time: '~32s', prompt: 'Create an AI lead nurturing agent that follows up with prospects via personalized messages across WhatsApp, email, and SMS' },
-        { id: 'ag5', name: 'Finance Tracker', emoji: '💹', desc: 'Monitor cash flow, flag anomalies', tags: ['Python', 'OpenAI', 'PostgreSQL'], stars: 223, time: '~30s', prompt: 'Build a finance monitoring AI agent that tracks transactions, identifies anomalies, and generates weekly cash flow reports' },
-        { id: 'ag6', name: 'Scheme Finder Bot', emoji: '🏛️', desc: 'Match MSME to gov schemes', tags: ['Python', 'OpenAI', 'FastAPI'], stars: 534, time: '~25s', prompt: 'Create an AI agent that matches MSMEs with relevant government schemes based on their profile and auto-generates applications' },
-        { id: 'ag7', name: 'Tax Compliance Auditor', emoji: '⚖️', desc: 'Scan bills for tax leaks', tags: ['Vision AI', 'Python', 'GST'], stars: 278, time: '~40s', prompt: 'Build an AI agent that scans purchase invoices using OCR and identifies missing GST credits or tax discrepancies' },
-        { id: 'ag8', name: 'Market Sentiment Agent', emoji: '📊', desc: 'Trend analysis for local markets', tags: ['Scrapy', 'NLP', 'FastAPI'], stars: 195, time: '~35s', prompt: 'Create an AI agent that monitors social media and local news for textile market trends and competitor pricing shifts' },
-        { id: 'ag9', name: 'Auto-Booking Agent', emoji: '📦', desc: 'AI Logistics & Courier booking', tags: ['Python', 'Delhivery API', 'LLM'], stars: 312, time: '~30s', prompt: 'Create an AI agent that automatically chooses the cheapest courier for an order and books the pickup via API' },
+        { id: 'ag1', name: 'Customer Support Bot', emoji: 'ðŸ’¬', desc: 'Handle FAQs, complaints, escalations', tags: ['OpenAI', 'Twilio', 'FastAPI'], stars: 398, time: '~30s', prompt: 'Build a customer support AI agent that handles FAQs via WhatsApp, email, and web chat with escalation logic' },
+        { id: 'ag2', name: 'GST Filing Agent', emoji: 'ðŸ“‹', desc: 'Auto-file GSTR-1, GSTR-3B monthly', tags: ['Python', 'OpenAI', 'GST API'], stars: 267, time: '~35s', prompt: 'Create an AI agent that automatically prepares and files GST returns, reconciles invoices, and alerts on discrepancies' },
+        { id: 'ag3', name: 'Inventory Monitor', emoji: 'ðŸ“¦', desc: 'Alert on low stock, auto POs', tags: ['Python', 'ML', 'FastAPI'], stars: 189, time: '~28s', prompt: 'Build an inventory monitoring AI agent that tracks stock levels, predicts demand, and auto-generates purchase orders' },
+        { id: 'ag4', name: 'Lead Nurture Agent', emoji: 'ðŸŽ¯', desc: 'Follow up leads via email/WhatsApp', tags: ['OpenAI', 'Twilio', 'CRM'], stars: 445, time: '~32s', prompt: 'Create an AI lead nurturing agent that follows up with prospects via personalized messages across WhatsApp, email, and SMS' },
+        { id: 'ag5', name: 'Finance Tracker', emoji: 'ðŸ’¹', desc: 'Monitor cash flow, flag anomalies', tags: ['Python', 'OpenAI', 'PostgreSQL'], stars: 223, time: '~30s', prompt: 'Build a finance monitoring AI agent that tracks transactions, identifies anomalies, and generates weekly cash flow reports' },
+        { id: 'ag6', name: 'Scheme Finder Bot', emoji: 'ðŸ›ï¸', desc: 'Match MSME to gov schemes', tags: ['Python', 'OpenAI', 'FastAPI'], stars: 534, time: '~25s', prompt: 'Create an AI agent that matches MSMEs with relevant government schemes based on their profile and auto-generates applications' },
+        { id: 'ag7', name: 'Tax Compliance Auditor', emoji: 'âš–ï¸', desc: 'Scan bills for tax leaks', tags: ['Vision AI', 'Python', 'GST'], stars: 278, time: '~40s', prompt: 'Build an AI agent that scans purchase invoices using OCR and identifies missing GST credits or tax discrepancies' },
+        { id: 'ag8', name: 'Market Sentiment Agent', emoji: 'ðŸ“Š', desc: 'Trend analysis for local markets', tags: ['Scrapy', 'NLP', 'FastAPI'], stars: 195, time: '~35s', prompt: 'Create an AI agent that monitors social media and local news for textile market trends and competitor pricing shifts' },
+        { id: 'ag9', name: 'Auto-Booking Agent', emoji: 'ðŸ“¦', desc: 'AI Logistics & Courier booking', tags: ['Python', 'Delhivery API', 'LLM'], stars: 312, time: '~30s', prompt: 'Create an AI agent that automatically chooses the cheapest courier for an order and books the pickup via API' },
     ],
     website: [
-        { id: 'w1', name: 'Business Landing Page', emoji: '🏢', desc: 'Professional company website', tags: ['React', 'Tailwind', 'Framer'], stars: 612, time: '~25s', prompt: 'Build a professional landing page for a manufacturing business with hero, services, gallery, and WhatsApp contact' },
-        { id: 'w2', name: 'Product Catalog Site', emoji: '🛍️', desc: 'Showcase products with inquiry', tags: ['Next.js', 'Vercel', 'Sanity'], stars: 334, time: '~30s', prompt: 'Create a product catalog website for a handicraft exporter with photo gallery, product specs, and international inquiry form' },
-        { id: 'w3', name: 'Portfolio Site', emoji: '✨', desc: 'Personal brand & profile', tags: ['React', 'GSAP', 'Netlify'], stars: 287, time: '~20s', prompt: 'Build a personal portfolio website for an MSME founder with achievements, business story, media, and contact form' },
-        { id: 'w4', name: 'Event / Trade Fair', emoji: '🎪', desc: 'Event registration + agenda', tags: ['Next.js', 'Stripe', 'PostgreSQL'], stars: 178, time: '~35s', prompt: 'Create a trade fair event website with exhibitor registration, agenda display, speaker profiles, and QR-based entry' },
+        { id: 'w1', name: 'Business Landing Page', emoji: 'ðŸ¢', desc: 'Professional company website', tags: ['React', 'Tailwind', 'Framer'], stars: 612, time: '~25s', prompt: 'Build a professional landing page for a manufacturing business with hero, services, gallery, and WhatsApp contact' },
+        { id: 'w2', name: 'Product Catalog Site', emoji: 'ðŸ›ï¸', desc: 'Showcase products with inquiry', tags: ['Next.js', 'Vercel', 'Sanity'], stars: 334, time: '~30s', prompt: 'Create a product catalog website for a handicraft exporter with photo gallery, product specs, and international inquiry form' },
+        { id: 'w3', name: 'Portfolio Site', emoji: 'âœ¨', desc: 'Personal brand & profile', tags: ['React', 'GSAP', 'Netlify'], stars: 287, time: '~20s', prompt: 'Build a personal portfolio website for an MSME founder with achievements, business story, media, and contact form' },
+        { id: 'w4', name: 'Event / Trade Fair', emoji: 'ðŸŽª', desc: 'Event registration + agenda', tags: ['Next.js', 'Stripe', 'PostgreSQL'], stars: 178, time: '~35s', prompt: 'Create a trade fair event website with exhibitor registration, agenda display, speaker profiles, and QR-based entry' },
     ],
 };
 
 const BUILD_PHASES = [
-    { phase: 'Planning', icon: '🧠', color: '#8b5cf6', steps: ['Analyzing requirements…', 'Defining architecture…', 'Planning DB schema…', 'Setting up project…'] },
-    { phase: 'Backend', icon: '⚙️', color: '#f97316', steps: ['Generating FastAPI routes…', 'Creating Pydantic models…', 'Setting up PostgreSQL…', 'Adding JWT auth…', 'Writing tests…'] },
-    { phase: 'Frontend', icon: '🎨', color: '#3b82f6', steps: ['Building React components…', 'Creating UI layouts…', 'Adding state management…', 'Connecting APIs…', 'Adding animations…'] },
-    { phase: 'Testing', icon: '🧪', color: '#10b981', steps: ['Running unit tests…', 'Integration testing…', 'Validating API schemas…', 'Performance benchmark…'] },
-    { phase: 'Deploy', icon: '🚀', color: '#f59e0b', steps: ['Containerizing Docker…', 'Setting up CI/CD…', 'Configuring Nginx…', 'Finalizing deployment…'] },
+    { phase: 'Planning', icon: 'ðŸ§ ', color: '#8b5cf6', steps: ['Analyzing requirementsâ€¦', 'Defining architectureâ€¦', 'Planning DB schemaâ€¦', 'Setting up projectâ€¦'] },
+    { phase: 'Backend', icon: 'âš™ï¸', color: '#f97316', steps: ['Generating FastAPI routesâ€¦', 'Creating Pydantic modelsâ€¦', 'Setting up PostgreSQLâ€¦', 'Adding JWT authâ€¦', 'Writing testsâ€¦'] },
+    { phase: 'Frontend', icon: 'ðŸŽ¨', color: '#3b82f6', steps: ['Building React componentsâ€¦', 'Creating UI layoutsâ€¦', 'Adding state managementâ€¦', 'Connecting APIsâ€¦', 'Adding animationsâ€¦'] },
+    { phase: 'Testing', icon: 'ðŸ§ª', color: '#10b981', steps: ['Running unit testsâ€¦', 'Integration testingâ€¦', 'Validating API schemasâ€¦', 'Performance benchmarkâ€¦'] },
+    { phase: 'Deploy', icon: 'ðŸš€', color: '#f59e0b', steps: ['Containerizing Dockerâ€¦', 'Setting up CI/CDâ€¦', 'Configuring Nginxâ€¦', 'Finalizing deploymentâ€¦'] },
 ];
 
 const CODE_SAMPLES = {
-    backend: `# 🔥 FastAPI Backend — Auto-generated by OmniForge Nexus
+    backend: `# ðŸ”¥ FastAPI Backend â€” Auto-generated by OmniForge Nexus
 from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -95,7 +95,7 @@ async def calculate_gst(amount: float, hsn_code: str):
     rate = await get_gst_rate_by_hsn(hsn_code)
     return {"base": amount, "cgst": round(amount * rate / 200, 2), "sgst": round(amount * rate / 200, 2)}`,
 
-    frontend: `// ⚡ React Frontend — Auto-generated by OmniForge Nexus
+    frontend: `// âš¡ React Frontend â€” Auto-generated by OmniForge Nexus
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
@@ -115,7 +115,7 @@ export function InvoiceManager() {
   const createMutation = useMutation({
     mutationFn: (invoice) => api.post('/invoices', invoice),
     onSuccess: () => {
-      toast.success('Invoice created! 🎉');
+      toast.success('Invoice created! ðŸŽ‰');
       qc.invalidateQueries({ queryKey: ['invoices'] });
     },
     onError: (err) => toast.error(\`Error: \${err.message}\`),
@@ -130,7 +130,7 @@ export function InvoiceManager() {
   );
 }`,
 
-    agent: `# 🤖 AI Agent — Auto-generated by OmniForge Nexus
+    agent: `# ðŸ¤– AI Agent â€” Auto-generated by OmniForge Nexus
 from agents import Agent, Runner, tool
 from typing import Annotated
 
@@ -163,7 +163,7 @@ async def run_agent(user_message: str):
     result = await Runner.run(MSMESupportAgent(), user_message)
     return result.messages[-1].content`,
 
-    docker: `# 🐳 Docker Compose — Auto-generated by OmniForge Nexus
+    docker: `# ðŸ³ Docker Compose â€” Auto-generated by OmniForge Nexus
 version: '3.9'
 services:
   backend:
@@ -225,7 +225,7 @@ const FILE_TREE = [
     { name: '.env.example', type: 'file' },
 ];
 
-// ── Sub-Components ────────────────────────────────────────────────
+// â”€â”€ Sub-Components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function TemplateCard({ item, onSelect }) {
     return (
@@ -347,11 +347,11 @@ function TerminalPanel({ logs, error }) {
                 </span>
             </div>
             <div ref={ref} className="terminal-body">
-                <div style={{ color: '#34d399' }}>omniforge@nexus:~$ <span style={{ color: '#94a3b8' }}>starting build pipeline…</span></div>
+                <div style={{ color: '#34d399' }}>omniforge@nexus:~$ <span style={{ color: '#94a3b8' }}>starting build pipelineâ€¦</span></div>
                 {logs.map((log, i) => (
-                    <div key={i} style={{ color: log.includes('ERROR') ? '#f87171' : log.includes('✅') || log.includes('SUCCESS') ? '#34d399' : log.includes('WARNING') ? '#fbbf24' : '#94a3b8' }}>{log}</div>
+                    <div key={i} style={{ color: log.includes('ERROR') ? '#f87171' : log.includes('âœ…') || log.includes('SUCCESS') ? '#34d399' : log.includes('WARNING') ? '#fbbf24' : '#94a3b8' }}>{log}</div>
                 ))}
-                {error && <div style={{ color: '#f87171', marginTop: 6 }}>❌ Error: {error}</div>}
+                {error && <div style={{ color: '#f87171', marginTop: 6 }}>âŒ Error: {error}</div>}
                 <span style={{ display: 'inline-block', width: 7, height: '1em', background: '#6366f1', animation: 'blink 1s step-end infinite', verticalAlign: 'text-bottom' }} />
             </div>
         </div>
@@ -427,11 +427,11 @@ function DeployModal({ app, onClose, mode, prompt }) {
                                     flexShrink: 0,
                                 }}>
                                     <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${color}, ${color}99)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>
-                                        {mode === 'agent' ? '🤖' : mode === 'website' ? '🌐' : '🏢'}
+                                        {mode === 'agent' ? 'ðŸ¤–' : mode === 'website' ? 'ðŸŒ' : 'ðŸ¢'}
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 12, color: 'var(--t1)', letterSpacing: 1, textTransform: 'uppercase' }}>{appName}</span>
-                                        <span style={{ fontSize: 9, color: '#00ff88', fontWeight: 600 }}>● RUNNING V1.0.0</span>
+                                        <span style={{ fontSize: 9, color: '#00ff88', fontWeight: 600 }}>â— RUNNING V1.0.0</span>
                                     </div>
                                     <div style={{ flex: 1 }} />
                                     {['Dashboard', 'Analytics', 'System', 'Logs'].map(n => (
@@ -455,7 +455,7 @@ function DeployModal({ app, onClose, mode, prompt }) {
                                             <div key={s.label} style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${s.color}20`, borderRadius: 10, padding: '12px 14px' }}>
                                                 <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 700, color: s.color }}>{s.value}</div>
                                                 <div style={{ fontSize: 10, color: 'var(--t3)', marginTop: 3 }}>{s.label}</div>
-                                                <div style={{ fontSize: 9.5, color: s.color, marginTop: 4, opacity: 0.8 }}>↑ {s.delta}</div>
+                                                <div style={{ fontSize: 9.5, color: s.color, marginTop: 4, opacity: 0.8 }}>â†‘ {s.delta}</div>
                                             </div>
                                         ))}
                                     </div>
@@ -474,9 +474,9 @@ function DeployModal({ app, onClose, mode, prompt }) {
                                             </tr></thead>
                                             <tbody>
                                                 {[
-                                                    { no: 'INV-2024-001', cust: 'Mehta Traders', amt: '₹45,000', gst: '₹8,100', status: 'Paid', date: '15 Feb' },
-                                                    { no: 'INV-2024-002', cust: 'Sharma Textiles', amt: '₹1,20,000', gst: '₹21,600', status: 'Pending', date: '18 Feb' },
-                                                    { no: 'INV-2024-003', cust: 'Patel Industries', amt: '₹78,500', gst: '₹14,130', status: 'Paid', date: '20 Feb' },
+                                                    { no: 'INV-2024-001', cust: 'Mehta Traders', amt: 'â‚¹45,000', gst: 'â‚¹8,100', status: 'Paid', date: '15 Feb' },
+                                                    { no: 'INV-2024-002', cust: 'Sharma Textiles', amt: 'â‚¹1,20,000', gst: 'â‚¹21,600', status: 'Pending', date: '18 Feb' },
+                                                    { no: 'INV-2024-003', cust: 'Patel Industries', amt: 'â‚¹78,500', gst: 'â‚¹14,130', status: 'Paid', date: '20 Feb' },
                                                 ].map(row => (
                                                     <tr key={row.no} style={{ borderBottom: '1px solid var(--b0)', cursor: 'pointer', transition: 'background 0.15s' }}
                                                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
@@ -521,7 +521,7 @@ function DeployModal({ app, onClose, mode, prompt }) {
                                     </div>
                                     <div>
                                         <div style={{ fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 700, color: '#00ff88', letterSpacing: 1 }}>DEPLOYED</div>
-                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--t3)', marginTop: 1 }}>Build #4 · 2m 34s</div>
+                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--t3)', marginTop: 1 }}>Build #4 Â· 2m 34s</div>
                                     </div>
                                 </div>
                                 {[
@@ -542,7 +542,7 @@ function DeployModal({ app, onClose, mode, prompt }) {
                                 <button className="btn btn-primary" style={{ justifyContent: 'center', fontSize: 9.5 }} onClick={() => window.open('http://localhost:5173', '_blank')}>
                                     <ExternalLink size={11} /> Open Live App
                                 </button>
-                                <button className="btn btn-secondary" style={{ justifyContent: 'center', fontSize: 9.5 }} onClick={() => toast.success('Source code downloaded as omniforge_build.zip', { icon: '📦' })}>
+                                <button className="btn btn-secondary" style={{ justifyContent: 'center', fontSize: 9.5 }} onClick={() => toast.success('Source code downloaded as omniforge_build.zip', { icon: 'ðŸ“¦' })}>
                                     <Download size={11} /> Download Code
                                 </button>
                                 <button className="btn btn-secondary" style={{ justifyContent: 'center', fontSize: 9.5 }} onClick={() => { toast.loading('Pushing to GitHub...', { id: 'gh' }); setTimeout(() => toast.success('Pushed to GitHub: /user/msme-app', { id: 'gh' }), 2000); }}>
@@ -561,7 +561,25 @@ function DeployModal({ app, onClose, mode, prompt }) {
 }
 
 function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }) {
+    const navigate = useNavigate();
+    const { github, setGitHubToken } = useStore();
     const [viewType, setViewType] = useState('ui'); // ui | logs | raw
+    const [showQuickConnect, setShowQuickConnect] = useState(false);
+    const [quickToken, setQuickToken] = useState('');
+    const [connecting, setConnecting] = useState(false);
+
+    const handleQuickConnect = async () => {
+        if (!quickToken.trim()) return;
+        setConnecting(true);
+        const result = await setGitHubToken(quickToken.trim());
+        setConnecting(false);
+        if (result.success) {
+            toast.success('GitHub connected!');
+            setShowQuickConnect(false);
+        } else {
+            toast.error(result.error || 'Failed to connect');
+        }
+    };
 
     // Website Live Preview (Real-time iframe)
     const getWebsiteSource = () => {
@@ -576,7 +594,7 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }
             <head>
                 <style>${css}</style>
             </head>
-            <body>
+            <body style="margin:0; padding:0; background:#f4f7fb; font-family: sans-serif;">
                 ${html}
                 <script>${js}</script>
             </body>
@@ -585,7 +603,7 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }
     };
 
     const downloadCode = async () => {
-        const filesToDownload = app?.result?.files || generatedFiles;
+        const filesToDownload = app?.result?.files || {};
         if (!filesToDownload || Object.keys(filesToDownload).length === 0) {
             toast.error('No files generated yet');
             return;
@@ -643,7 +661,7 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }
                         <CheckCircle size={17} style={{ color: '#34d399' }} />
                     </div>
                     <div>
-                        <div style={{ fontSize: 14, fontWeight: 800, color: '#34d399' }}>🎉 Build Complete!</div>
+                        <div style={{ fontSize: 14, fontWeight: 800, color: '#34d399' }}>ðŸŽ‰ Build Complete!</div>
                         <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginTop: 1 }}>
                             {app?.files?.length || Object.keys(app?.result?.files || {}).length || 0} files generated by real AI
                         </div>
@@ -671,7 +689,6 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }
                 <div style={{ display: 'flex', gap: 7 }}>
                     <button className="btn btn-primary" style={{ flex: 1, justifyContent: 'center', fontSize: 11.5 }} onClick={onOpenDeploy}><ExternalLink size={12} /> Open Demo</button>
                     <button className="btn btn-secondary" style={{ fontSize: 11.5 }} onClick={downloadCode}><Download size={12} /> Download</button>
-                    <button className="btn btn-secondary" style={{ fontSize: 11.5 }} onClick={onPushGitHub}><GitBranch size={12} /> GitHub</button>
                 </div>
             </div>
 
@@ -712,35 +729,75 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }
             {/* GitHub Connect / Push */}
             <div style={{ background: githubConnected ? 'rgba(0,255,136,0.04)' : 'rgba(255,255,255,0.025)', border: `1px solid ${githubConnected ? 'rgba(0,255,136,0.2)' : 'var(--border-subtle)'}`, borderRadius: 14, padding: 14 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontSize: 11.5, fontWeight: 700, color: githubConnected ? '#34d399' : 'var(--text-primary)', marginBottom: 2, display: 'flex', alignItems: 'center', gap: 6 }}>
                             <GitBranch size={13} />
-                            {githubConnected ? '✅ GitHub Connected' : 'Connect GitHub'}
+                            {githubConnected ? 'âœ… GitHub Connected' : 'Connect GitHub'}
                         </div>
-                        <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>
-                            {githubConnected ? 'Push generated code to your GitHub repository' : 'Go to Settings → Deployment to connect your account'}
+                        <div style={{ fontSize: 10, color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {githubConnected ? `Push generated code to @${github?.user?.login}'s repository` : 'Connect your account to enable one-click deployments'}
                         </div>
+
+                        {!githubConnected && showQuickConnect && (
+                            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} style={{ marginTop: 10, display: 'flex', gap: 6 }}>
+                                <input
+                                    type="password"
+                                    placeholder="Paste GitHub PAT..."
+                                    value={quickToken}
+                                    onChange={(e) => setQuickToken(e.target.value)}
+                                    className="input-field"
+                                    style={{ flex: 1, fontSize: 11, padding: '4px 10px', height: 32, background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                                />
+                                <button
+                                    onClick={handleQuickConnect}
+                                    disabled={connecting || !quickToken}
+                                    className="btn btn-primary"
+                                    style={{ height: 32, fontSize: 10, padding: '0 12px' }}
+                                >
+                                    {connecting ? '...' : 'Connect'}
+                                </button>
+                                <button onClick={() => setShowQuickConnect(false)} className="btn btn-secondary" style={{ height: 32, width: 32, padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={12} /></button>
+                            </motion.div>
+                        )}
                     </div>
-                    {githubConnected ? (
-                        <button className="btn btn-primary" style={{ fontSize: 11, padding: '6px 14px' }} onClick={onPushGitHub}>
-                            <GitBranch size={13} style={{ marginRight: 4 }} /> Push to GitHub
-                        </button>
-                    ) : (
-                        <a href="#settings" className="btn btn-secondary" style={{ fontSize: 11, padding: '6px 14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
-                            <ExternalLink size={12} /> Open Settings
-                        </a>
-                    )}
+
+                    <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                        {githubConnected ? (
+                            <button className="btn btn-primary" style={{ fontSize: 11, padding: '6px 14px' }} onClick={() => onPushGitHub()}>
+                                <GitBranch size={13} style={{ marginRight: 4 }} /> Push to GitHub
+                            </button>
+                        ) : (
+                            <>
+                                {!showQuickConnect && (
+                                    <button
+                                        className="btn btn-primary"
+                                        style={{ fontSize: 11, padding: '6px 14px' }}
+                                        onClick={() => setShowQuickConnect(true)}
+                                    >
+                                        <Zap size={12} /> Quick Connect
+                                    </button>
+                                )}
+                                <button
+                                    className="btn btn-secondary"
+                                    style={{ fontSize: 11, padding: '6px 14px' }}
+                                    onClick={() => navigate('/settings?tab=deployment')}
+                                >
+                                    <Settings size={12} /> Config
+                                </button>
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
 
             <div style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid var(--border-subtle)', borderRadius: 14, padding: 14 }}>
-                <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 10 }}>📦 Tech Stack Generated</div>
+                <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 10 }}>ðŸ“¦ Tech Stack Generated</div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7 }}>
                     {stackItems.map(s => (
                         <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '7px 9px', background: 'rgba(255,255,255,0.03)', borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
                             <div style={{ width: 7, height: 7, borderRadius: '50%', background: s.color, flexShrink: 0 }} />
-                            <div>
-                                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-primary)' }}>{String(s.name)}</div>
+                            <div style={{ minWidth: 0 }}>
+                                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{String(s.name)}</div>
                                 <div style={{ fontSize: 9.5, color: 'var(--text-muted)' }}>{s.role}</div>
                             </div>
                         </div>
@@ -754,10 +811,12 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }
 function EmptyState({ mode }) {
     const m = MODES.find(x => x.id === mode);
     const features = {
-        app: [['⚛️', 'React + TypeScript'], ['⚡', 'FastAPI Backend'], ['🗄️', 'PostgreSQL + Redis'], ['🔐', 'JWT Auth'], ['🐳', 'Docker Ready'], ['📊', 'Admin Dashboard']],
-        agent: [['🧠', 'GPT-4o Powered'], ['💬', 'WhatsApp + Email'], ['🔄', 'Auto-retry Logic'], ['📈', 'Built-in Analytics'], ['⏰', 'Scheduled Runs'], ['🔗', 'API Integrations']],
-        website: [['📱', 'Mobile-first'], ['🚀', 'Edge Hosting'], ['🖼️', 'AI Image Gen'], ['📊', 'SEO Optimized'], ['💬', 'WhatsApp CTA'], ['🌐', 'Custom Domain']],
+        app: [['âš›ï¸', 'React + TypeScript'], ['âš¡', 'FastAPI Backend'], ['ðŸ—„ï¸', 'PostgreSQL + Redis'], ['ðŸ”', 'JWT Auth'], ['ðŸ³', 'Docker Ready'], ['ðŸ“Š', 'Admin Dashboard']],
+        agent: [['ðŸ§ ', 'GPT-4o Powered'], ['ðŸ’¬', 'WhatsApp + Email'], ['ðŸ”„', 'Auto-retry Logic'], ['ðŸ“ˆ', 'Built-in Analytics'], ['â°', 'Scheduled Runs'], ['ðŸ”—', 'API Integrations']],
+        website: [['ðŸ“±', 'Mobile-first'], ['ðŸš€', 'Edge Hosting'], ['ðŸ–¼ï¸', 'AI Image Gen'], ['ðŸ“Š', 'SEO Optimized'], ['ðŸ’¬', 'WhatsApp CTA'], ['ðŸŒ', 'Custom Domain']],
+        swarm: [['ðŸ', 'Swarm Coordination'], ['ðŸ§ ', 'Multi-Agent Logic'], ['âš¡', 'Real-time Sync'], ['ðŸ”„', 'Task Delegation'], ['ðŸš€', 'Auto-Scaling'], ['ðŸ›¡ï¸', 'Secure Sandbox']],
     };
+    const activeFeatures = features[mode] || features.app;
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: 20, padding: 32, textAlign: 'center' }}>
             <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
@@ -769,7 +828,7 @@ function EmptyState({ mode }) {
                 <p style={{ fontSize: 12.5, color: 'var(--text-muted)', lineHeight: 1.8, maxWidth: 380 }}>{m.desc}<br />Describe what you want and hit <strong style={{ color: m.color }}>Generate</strong>.</p>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, maxWidth: 420 }}>
-                {features[mode].map(([icon, text], i) => (
+                {activeFeatures.map(([icon, text], i) => (
                     <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
                         style={{ padding: '9px 11px', borderRadius: 9, background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-faint)', display: 'flex', alignItems: 'center', gap: 6 }}>
                         <span style={{ fontSize: 14 }}>{icon}</span>
@@ -781,7 +840,7 @@ function EmptyState({ mode }) {
     );
 }
 
-// ── Main Component ────────────────────────────────────────────────
+// â”€â”€ Main Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function VibeCoder() {
     const [mode, setMode] = useState('app');
@@ -815,24 +874,13 @@ export default function VibeCoder() {
         { id: 'docker', label: 'Docker', icon: Package, color: '#0ea5e9', file: 'docker-compose.yml' },
     ];
 
-    const simulateBuild = useCallback((onDone) => {
-        let p = 0, s = 0;
-        setPhase(0); setStepIdx(0);
+    const cycleSubsteps = useCallback((p) => {
         if (timerRef.current) clearInterval(timerRef.current);
+        let s = 0;
         timerRef.current = setInterval(() => {
             s++;
-            if (s >= BUILD_PHASES[p].steps.length) {
-                s = 0; p++;
-                if (p >= BUILD_PHASES.length) {
-                    clearInterval(timerRef.current);
-                    if (onDone) onDone();
-                    return;
-                }
-                setPhase(p);
-            }
-            setStepIdx(s);
-            setLogs(prev => [...prev.slice(-30), `[${BUILD_PHASES[p]?.phase}] ${BUILD_PHASES[p]?.steps[s % BUILD_PHASES[p]?.steps.length]}`]);
-        }, 80);
+            setStepIdx(s % BUILD_PHASES[p].steps.length);
+        }, 800);
     }, []);
 
     const startBuild = async () => {
@@ -841,10 +889,9 @@ export default function VibeCoder() {
         setGeneratedFiles({}); setGeneratedResult(null); setStreamingText('');
         setBuiltApp(null); setLogs([]); setStreamError(null); setRightPanel('terminal');
 
-        // Start build pipeline animation in parallel
-        simulateBuild(() => {
-            // Will be finalized when LLM completes
-        });
+        // Start cycling initial phase (Planning)
+        setPhase(0);
+        cycleSubsteps(0);
 
         try {
             const endpoint = mode === 'swarm' ? '/api/v1/multiagent/swarm' : '/api/v1/llm/generate/stream';
@@ -878,16 +925,21 @@ export default function VibeCoder() {
                     try {
                         const evt = JSON.parse(dataStr);
                         if (evt.type === 'start') {
-                            setLogs(prev => [...prev.slice(-30), `[INFO] [System] ${evt.message || '🚀 Initializing Swarm Engine...'}`]);
+                            setLogs(prev => [...prev.slice(-30), `[INFO] [System] ${evt.message || 'ðŸš€ Initializing Swarm Engine...'}`]);
                         } else if (evt.type === 'agent_start') {
-                            setLogs(prev => [...prev.slice(-30), `[INFO] [Agent] 🤖 ${evt.agent} (${evt.model}) starting...`]);
+                            const agentPhases = { 'Architect': 0, 'Backend': 1, 'Frontend': 2, 'QA': 3, 'Deploy': 4 };
+                            const newPhase = agentPhases[evt.agent] ?? -1;
+                            if (newPhase !== -1) {
+                                setPhase(newPhase);
+                                cycleSubsteps(newPhase);
+                            }
+                            setLogs(prev => [...prev.slice(-30), `[INFO] [Agent] ðŸ¤– ${evt.agent} (${evt.model}) starting...`]);
                             setLogs(prev => [...prev.slice(-30), `[${evt.agent}] ${evt.status}`]);
                         } else if (evt.type === 'agent_complete') {
-                            setLogs(prev => [...prev.slice(-30), `[SUCCESS] [Agent] ✅ ${evt.agent} logic complete.`]);
+                            setLogs(prev => [...prev.slice(-30), `[SUCCESS] [Agent] âœ… ${evt.agent} logic complete.`]);
                         } else if (evt.type === 'chunk') {
                             const content = evt.content || '';
                             setStreamingText(prev => prev + content);
-                            // Occasional character echo to terminal for life
                             if (Math.random() > 0.95) {
                                 setLogs(prev => [...prev.slice(-30), `[STREAM] ${content.slice(0, 5)}...`]);
                             }
@@ -898,12 +950,12 @@ export default function VibeCoder() {
                             setGeneratedFiles(files);
 
                             const fileList = Object.keys(files);
-                            setLogs(prev => [...prev.slice(-30), `[SUCCESS] [Builder] ✅ Synthesized ${fileList.length} files.`]);
+                            setLogs(prev => [...prev.slice(-30), `[SUCCESS] [Builder] âœ… Synthesized ${fileList.length} files.`]);
 
                             if (timerRef.current) clearInterval(timerRef.current);
                             setBuilding(false);
                             setDone(true);
-                            setPhase(4); setStepIdx(4);
+                            setPhase(4); setStepIdx(3);
                             setRightPanel('preview');
 
                             const generatedAppData = {
@@ -930,7 +982,7 @@ export default function VibeCoder() {
                             });
 
                             if (github?.connected) {
-                                setLogs(prev => [...prev.slice(-30), `[INFO] [Turbo] ⚡ Auto-Deploying to GitHub...`]);
+                                setLogs(prev => [...prev.slice(-30), `[INFO] [Turbo] âš¡ Auto-Deploying to GitHub...`]);
                                 pushToGitHub(files);
                             }
                         } else if (evt.type === 'error') {
@@ -945,7 +997,7 @@ export default function VibeCoder() {
         } catch (err) {
             console.error('LLM build error:', err);
             setStreamError(err.message);
-            setLogs(prev => [...prev.slice(-30), `[ERROR] [System] ❌ ${err.message}`]);
+            setLogs(prev => [...prev.slice(-30), `[ERROR] [System] âŒ ${err.message}`]);
             // Stop animation if still running
             if (timerRef.current) clearInterval(timerRef.current);
             setBuilding(false);
@@ -960,13 +1012,13 @@ export default function VibeCoder() {
             return;
         }
         if (!filesToPush || Object.keys(filesToPush).length === 0) {
-            toast.error('No files to push — generate a project first');
+            toast.error('No files to push â€” generate a project first');
             return;
         }
         const repoName = (builtApp?.result?.project_name || builtApp?.result?.agent_name || builtApp?.result?.site_name || 'omniforge-project').toLowerCase().replace(/[^a-z0-9-]/g, '-');
 
-        setLogs(prev => [...prev, `[INFO] [Turbo] 🌐 Committing ${Object.keys(filesToPush).length} files via Git Data Tree API...`]);
-        setLogs(prev => [...prev, `[INFO] [Turbo] 🚄 Atomically syncing to main branch...`]);
+        setLogs(prev => [...prev, `[INFO] [Turbo] ðŸŒ Committing ${Object.keys(filesToPush).length} files via Git Data Tree API...`]);
+        setLogs(prev => [...prev, `[INFO] [Turbo] ðŸš„ Atomically syncing to main branch...`]);
 
         const deployId = toast.loading(`Turbo-Sync: Building Git Tree...`);
         try {
@@ -978,22 +1030,22 @@ export default function VibeCoder() {
                     username: github.user?.login,
                     repo_name: repoName,
                     files: filesToPush,
-                    description: `🚀 Turbo-Deploy: ${prompt.slice(0, 50)}`,
+                    description: `ðŸš€ Turbo-Deploy: ${prompt.slice(0, 50)}`,
                     private: false,
                 }),
             });
             const data = await res.json();
             if (data.success) {
-                setLogs(prev => [...prev, `[SUCCESS] [Turbo] ✅ Sync Complete! Commit [${data.commit_sha}]`]);
-                setLogs(prev => [...prev, `[SUCCESS] [Turbo] 🌍 Live Repository: ${data.repo_url}`]);
-                toast.success(`🚀 Turbo-Deployed Successfully!`, { id: deployId, duration: 4000 });
+                setLogs(prev => [...prev, `[SUCCESS] [Turbo] âœ… Sync Complete! Commit [${data.commit_sha}]`]);
+                setLogs(prev => [...prev, `[SUCCESS] [Turbo] ðŸŒ Live Repository: ${data.repo_url}`]);
+                toast.success(`ðŸš€ Turbo-Deployed Successfully!`, { id: deployId, duration: 4000 });
                 setBuiltApp(prev => ({ ...prev, githubRepo: data.repo_url }));
                 setRightPanel('preview');
             } else {
                 throw new Error(data.detail || 'Push failed');
             }
         } catch (e) {
-            setLogs(prev => [...prev, `[ERROR] [GitHub] ❌ Deployment failed: ${e.message}`]);
+            setLogs(prev => [...prev, `[ERROR] [GitHub] âŒ Deployment failed: ${e.message}`]);
             toast.error(`GitHub push failed: ${e.message}`, { id: deployId });
         }
     };
@@ -1003,7 +1055,7 @@ export default function VibeCoder() {
     return (
         <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: 'var(--bg-primary)', flexDirection: 'column' }}>
 
-            {/* ── Top Bar ────────────────────────────────────────── */}
+            {/* â”€â”€ Top Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
             <div className="vc-topbar">
                 {/* Brand */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -1012,7 +1064,7 @@ export default function VibeCoder() {
                     </div>
                     <div>
                         <div style={{ fontSize: 12.5, fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>Nexus Coder</div>
-                        <div style={{ fontSize: 8.5, color: 'var(--text-muted)', letterSpacing: 1 }}>AI BUILDER · MSME PLATFORM</div>
+                        <div style={{ fontSize: 8.5, color: 'var(--text-muted)', letterSpacing: 1 }}>AI BUILDER Â· MSME PLATFORM</div>
                     </div>
                 </div>
 
@@ -1094,7 +1146,7 @@ export default function VibeCoder() {
                 </div>
             </div>
 
-            {/* ── Main Workspace ─────────────────────────────────── */}
+            {/* â”€â”€ Main Workspace â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
             <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
 
                 {/* LEFT: Prompt + Templates */}
@@ -1113,10 +1165,10 @@ export default function VibeCoder() {
                                 onChange={e => setPrompt(e.target.value)}
                                 onKeyDown={e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) startBuild(); }}
                                 placeholder={
-                                    mode === 'app' ? 'Describe your app…\n\nEx: GST billing app for a textile business with invoice PDF generation'
-                                        : mode === 'agent' ? 'Describe your agent…\n\nEx: AI agent that monitors inventory and sends WhatsApp alerts when stock is low'
-                                            : mode === 'swarm' ? 'Describe a complex world-class project…\n\nEx: A multi-tenant ERP system for manufacturing with AI planning agents and supply chain tracking'
-                                                : 'Describe your website…\n\nEx: Professional website for my handicraft export business with product gallery'
+                                    mode === 'app' ? 'Describe your appâ€¦\n\nEx: GST billing app for a textile business with invoice PDF generation'
+                                        : mode === 'agent' ? 'Describe your agentâ€¦\n\nEx: AI agent that monitors inventory and sends WhatsApp alerts when stock is low'
+                                            : mode === 'swarm' ? 'Describe a complex world-class projectâ€¦\n\nEx: A multi-tenant ERP system for manufacturing with AI planning agents and supply chain tracking'
+                                                : 'Describe your websiteâ€¦\n\nEx: Professional website for my handicraft export business with product gallery'
                                 }
                                 rows={5}
                                 style={{
@@ -1167,7 +1219,7 @@ export default function VibeCoder() {
                     {/* Templates */}
                     <div style={{ flex: 1, overflowY: 'auto', padding: '0 12px 14px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                            <span style={{ fontSize: 9.5, fontWeight: 800, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase' }}>⚡ Recommended </span>
+                            <span style={{ fontSize: 9.5, fontWeight: 800, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase' }}>âš¡ Recommended </span>
                             <span style={{ fontSize: 9, background: 'rgba(255,255,255,0.06)', padding: '2px 8px', borderRadius: 20, color: 'var(--text-faint)' }}>{(TEMPLATES[mode] || TEMPLATES.app).length}</span>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1264,7 +1316,7 @@ export default function VibeCoder() {
                                                 <span style={{ fontSize: 9, fontWeight: 900, color: '#6366f1', letterSpacing: 1 }}>RAW STREAM</span>
                                             </div>
                                             <CodePanel
-                                                code={streamingText + ' █'}
+                                                code={streamingText + ' â–ˆ'}
                                                 filename="stream_buffer.json"
                                             />
                                         </div>
@@ -1325,7 +1377,7 @@ export default function VibeCoder() {
                         <Cpu size={12} style={{ color: '#6366f1' }} />
                         <span className="panel-title">AI CONSOLE</span>
                         <motion.div animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}>
-                            <span style={{ fontSize: 9, color: '#f97316', marginLeft: 4 }}>● Claude 3.5 Sonnet</span>
+                            <span style={{ fontSize: 9, color: '#f97316', marginLeft: 4 }}>â— Claude 3.5 Sonnet</span>
                         </motion.div>
                     </div>
 
@@ -1360,13 +1412,13 @@ export default function VibeCoder() {
 
                     {/* AI Suggestions */}
                     <div style={{ flex: 1, overflowY: 'auto', padding: '10px 12px' }}>
-                        <div className="section-label" style={{ fontSize: 9, marginBottom: 8 }}>💡 AI SUGGESTIONS</div>
+                        <div className="section-label" style={{ fontSize: 9, marginBottom: 8 }}>ðŸ’¡ AI SUGGESTIONS</div>
                         {(generatedResult?.suggestions || [
-                            { icon: '🔒', text: 'Add rate limiting to API endpoints', type: 'Security' },
-                            { icon: '⚡', text: 'Enable Redis caching for 2x speed boost', type: 'Performance' },
-                            { icon: '📱', text: 'Add PWA support for mobile users', type: 'UX' },
-                            { icon: '🧪', text: 'Generate unit tests with pytest', type: 'Testing' },
-                            { icon: '📊', text: 'Connect Mixpanel for user analytics', type: 'Analytics' },
+                            { icon: 'ðŸ”’', text: 'Add rate limiting to API endpoints', type: 'Security' },
+                            { icon: 'âš¡', text: 'Enable Redis caching for 2x speed boost', type: 'Performance' },
+                            { icon: 'ðŸ“±', text: 'Add PWA support for mobile users', type: 'UX' },
+                            { icon: 'ðŸ§ª', text: 'Generate unit tests with pytest', type: 'Testing' },
+                            { icon: 'ðŸ“Š', text: 'Connect Mixpanel for user analytics', type: 'Analytics' },
                         ]).slice(0, 5).map((tip, i) => (
                             <motion.div key={i} whileHover={{ x: 3 }} style={{
                                 display: 'flex', alignItems: 'flex-start', gap: 8, padding: '9px 10px',
@@ -1387,7 +1439,7 @@ export default function VibeCoder() {
                     <div style={{ padding: '10px 12px', borderTop: '1px solid var(--border-subtle)', flexShrink: 0 }}>
                         <div style={{ display: 'flex', gap: 6, alignItems: 'center', padding: '8px 10px', borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-subtle)' }}>
                             <input
-                                placeholder="Ask AI anything…"
+                                placeholder="Ask AI anythingâ€¦"
                                 style={{ background: 'none', border: 'none', outline: 'none', color: 'var(--text-primary)', fontSize: 11.5, flex: 1, fontFamily: 'var(--font-ui)' }}
                             />
                             <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
@@ -1413,10 +1465,10 @@ function AppSimulator({ app }) {
     return (
         <div style={{ height: '100%', background: '#0a1122', display: 'flex', flexDirection: 'column', color: '#eef2ff' }}>
             <div style={{ padding: '14px 20px', background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${color}, #2563eb)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, boxShadow: `0 4px 12px ${color}30` }}>🏢</div>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${color}, #2563eb)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, boxShadow: `0 4px 12px ${color}30` }}>ðŸ¢</div>
                 <div>
                     <div style={{ fontSize: 13, fontWeight: 800, color: 'white' }}>{appName}</div>
-                    <div style={{ fontSize: 9, color: '#34d399', fontWeight: 700, marginTop: 2 }}>PRODUCTION READY • v1.0.0</div>
+                    <div style={{ fontSize: 9, color: '#34d399', fontWeight: 700, marginTop: 2 }}>PRODUCTION READY â€¢ v1.0.0</div>
                 </div>
                 <div style={{ flex: 1 }} />
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -1481,7 +1533,7 @@ function AgentSimulator({ agent }) {
     return (
         <div style={{ height: '100%', background: '#0a0f1d', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255,255,255,0.05)' }}>
             <div style={{ padding: '12px 20px', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 26, height: 26, borderRadius: 8, background: `linear-gradient(135deg, ${color}, #7c3aed)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, boxShadow: `0 4px 10px ${color}30` }}>🤖</div>
+                <div style={{ width: 26, height: 26, borderRadius: 8, background: `linear-gradient(135deg, ${color}, #7c3aed)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, boxShadow: `0 4px 10px ${color}30` }}>ðŸ¤–</div>
                 <div>
                     <div style={{ fontSize: 12.5, fontWeight: 800, color: 'white' }}>{agentName}</div>
                     <div style={{ fontSize: 8.5, color: '#a78bfa', fontWeight: 700, textTransform: 'uppercase' }}>Autonomous Engine</div>
@@ -1501,7 +1553,7 @@ function AgentSimulator({ agent }) {
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, margin: '4px 0' }}>
                     {capabilities.map((cap, i) => (
                         <div key={i} style={{ fontSize: 9, fontWeight: 800, color: color, background: `${color}15`, padding: '4px 10px', borderRadius: 100, border: `1px solid ${color}30` }}>
-                            ⚡ {cap.toUpperCase()}
+                            âš¡ {cap.toUpperCase()}
                         </div>
                     ))}
                 </div>
