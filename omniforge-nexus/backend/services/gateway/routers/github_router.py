@@ -56,17 +56,26 @@ async def github_get(endpoint: str, token: str) -> dict:
         resp = await client.get(
             f"{GITHUB_API}{endpoint}",
             headers={
-                "Authorization": f"token {token}",
+                "Authorization": f"Bearer {token}",
                 "Accept": "application/vnd.github.v3+json",
                 "X-GitHub-Api-Version": "2022-11-28",
+                "User-Agent": "OmniForge-Nexus",
             },
             timeout=30,
         )
         if resp.status_code == 401:
-            raise HTTPException(status_code=401, detail="Invalid GitHub token")
+            raise HTTPException(status_code=401, detail="Invalid GitHub token (Unauthorized)")
+        if resp.status_code == 403:
+            detail = resp.json().get("message", "Rate limit exceeded or insufficient permissions")
+            raise HTTPException(status_code=403, detail=f"GitHub Forbidden: {detail}")
         if resp.status_code == 404:
             raise HTTPException(status_code=404, detail="GitHub resource not found")
-        resp.raise_for_status()
+        
+        if resp.status_code >= 400:
+            error_data = resp.json() if resp.headers.get("Content-Type") == "application/json" else resp.text
+            logger.error("github.api_error", status_code=resp.status_code, error=error_data)
+            raise HTTPException(status_code=resp.status_code, detail=f"GitHub API Error: {error_data}")
+            
         return resp.json()
 
 
@@ -76,20 +85,20 @@ async def github_post(endpoint: str, token: str, payload: dict) -> dict:
         resp = await client.post(
             f"{GITHUB_API}{endpoint}",
             headers={
-                "Authorization": f"token {token}",
+                "Authorization": f"Bearer {token}",
                 "Accept": "application/vnd.github.v3+json",
                 "X-GitHub-Api-Version": "2022-11-28",
                 "Content-Type": "application/json",
+                "User-Agent": "OmniForge-Nexus",
             },
             json=payload,
             timeout=30,
         )
         if resp.status_code == 401:
             raise HTTPException(status_code=401, detail="Invalid GitHub token")
-        if resp.status_code == 422:
-            detail = resp.json().get("message", "Validation failed")
-            raise HTTPException(status_code=422, detail=detail)
-        resp.raise_for_status()
+        if resp.status_code >= 400:
+            error_data = resp.json() if resp.headers.get("Content-Type") == "application/json" else resp.text
+            raise HTTPException(status_code=resp.status_code, detail=f"GitHub API Error: {error_data}")
         return resp.json()
 
 
@@ -99,17 +108,19 @@ async def github_put(endpoint: str, token: str, payload: dict) -> dict:
         resp = await client.put(
             f"{GITHUB_API}{endpoint}",
             headers={
-                "Authorization": f"token {token}",
+                "Authorization": f"Bearer {token}",
                 "Accept": "application/vnd.github.v3+json",
                 "X-GitHub-Api-Version": "2022-11-28",
                 "Content-Type": "application/json",
+                "User-Agent": "OmniForge-Nexus",
             },
             json=payload,
             timeout=30,
         )
         if resp.status_code == 401:
             raise HTTPException(status_code=401, detail="Invalid GitHub token")
-        resp.raise_for_status()
+        if resp.status_code >= 400:
+            raise HTTPException(status_code=resp.status_code, detail="GitHub PUT request failed")
         return resp.json()
 
 
@@ -284,17 +295,19 @@ async def github_patch(endpoint: str, token: str, payload: dict) -> dict:
         resp = await client.patch(
             f"{GITHUB_API}{endpoint}",
             headers={
-                "Authorization": f"token {token}",
+                "Authorization": f"Bearer {token}",
                 "Accept": "application/vnd.github.v3+json",
                 "X-GitHub-Api-Version": "2022-11-28",
                 "Content-Type": "application/json",
+                "User-Agent": "OmniForge-Nexus",
             },
             json=payload,
             timeout=30,
         )
         if resp.status_code == 401:
             raise HTTPException(status_code=401, detail="Invalid GitHub token")
-        resp.raise_for_status()
+        if resp.status_code >= 400:
+            raise HTTPException(status_code=resp.status_code, detail="GitHub PATCH request failed")
         return resp.json()
 
 
@@ -311,8 +324,9 @@ async def deploy_to_github_pages(body: DeployRequest):
             resp = await client.post(
                 f"{GITHUB_API}/repos/{repo_full}/pages",
                 headers={
-                    "Authorization": f"token {body.github_token}",
+                    "Authorization": f"Bearer {body.github_token}",
                     "Accept": "application/vnd.github.v3+json",
+                    "User-Agent": "OmniForge-Nexus",
                 },
                 json={
                     "source": {

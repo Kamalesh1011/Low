@@ -1,0 +1,48 @@
+# ═══════════════════════════════════════════════════
+# OmniForge Nexus — .gitignore
+# ═══════════════════════════════════════════════════
+
+# ── Environment & Secrets ──────────────────────────
+.env
+.env.local
+.env.*.local
+!.env.production
+
+# ── Dependencies ───────────────────────────────────
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# ── Build Output ───────────────────────────────────
+dist/
+build/
+*.egg-info/
+
+# ── IDE ────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── OS ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ───────────────────────────────────────────
+*.log
+error.log
+
+# ── Backend ────────────────────────────────────────
+backend/storage/
+backend/generated_apps/
+backend/error.log
+
+# ── Misc ───────────────────────────────────────────
+*.patch
+diff.patch
+build_error.txt

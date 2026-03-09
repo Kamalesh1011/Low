@@ -12,7 +12,7 @@ from fastmcp import FastMCP
 mcp = FastMCP("NexusForge")
 
 # Working directory for generated apps
-BASE_DIR = Path("e:/projects/Low/Low/omniforge-nexus/generated_apps")
+BASE_DIR = Path(__file__).parent / "generated_apps"
 BASE_DIR.mkdir(parents=True, exist_ok=True)
 
 @mcp.tool()

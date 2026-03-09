@@ -21,7 +21,8 @@ class NexusMCPServer:
     def __init__(self, base_dir: str = None):
         # Default to a 'generated_apps' folder in the project root
         if base_dir is None:
-            self.base_dir = Path("e:/projects/Low/Low/omniforge-nexus/generated_apps")
+            # Default to a 'generated_apps' folder relative to the backend root
+            self.base_dir = Path(__file__).parent.parent.parent.parent / "generated_apps"
         else:
             self.base_dir = Path(base_dir)
         
