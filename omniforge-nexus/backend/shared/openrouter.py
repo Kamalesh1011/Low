@@ -223,13 +223,61 @@ class OpenRouterClient:
             model=model,
             agent_type=agent_type,
             temperature=temperature,
-            response_format={"type": "json_object"},
         )
-        return json.loads(result.content)
+        content = result.content.strip()
+        if content.startswith("```json"):
+            content = content[7:]
+        elif content.startswith("```"):
+            content = content[3:]
+        if content.endswith("```"):
+            content = content[:-3]
+        content = content.strip()
+        
+        try:
+            return json.loads(content)
+        except json.JSONDecodeError:
+            # Try to find JSON object in text
+            start = content.find('{')
+            end = content.rfind('}')
+            if start != -1 and end != -1:
+                return json.loads(content[start:end+1])
+            # Try list
+            start_list = content.find('[')
+            end_list = content.rfind(']')
+            if start_list != -1 and end_list != -1:
+                return json.loads(content[start_list:end_list+1])
+            raise
 
 
 # ── Prompt Templates ──────────────────────────────────────────
 class Prompts:
+    # ── Multi-Target System Prompts ──────────────────────────────
+    TARGET_WEBSITE = """You are a master Web Designer. 
+Generate a beautiful, responsive, single-page Website with HTML, CSS, and vanilla JavaScript. 
+Include stunning CSS animations, glassmorphism, and modern typography.
+Return ONLY valid JSON: {"files": {"index.html": "...", "styles.css": "...", "script.js": "..."}}"""
+
+    TARGET_WEB_APP = """You are an Expert Full-Stack Developer. 
+Generate a production-ready Web Application.
+Backend: FastAPI (Python), Frontend: React + Tailwind CSS (Vite setup).
+Return ONLY valid JSON: {"files": {"backend/main.py": "...", "frontend/src/App.jsx": "...", ...}}"""
+
+    TARGET_MOBILE_UI = """You are an Expert Mobile UX Engineer.
+Generate a React Native style UI (using standard React + Tailwind formatted to look like a mobile app screen).
+Ensure it has a bottom tab bar, mobile-first responsive design (max-width: 480px), and touch-friendly targets.
+Return ONLY valid JSON: {"files": {"App.jsx": "...", "components/TabBar.jsx": "..."}}"""
+
+    TARGET_CHROME_EXT = """You are an Expert browser extension developer.
+Generate a complete Manifest V3 Chrome Extension.
+Include manifest.json, popup.html, popup.js, and background/content scripts if necessary.
+Return ONLY valid JSON: {"files": {"manifest.json": "...", "popup.html": "...", "popup.js": "..."}}"""
+
+    TARGET_CLI_TOOL = """You are a Senior Systems Engineer.
+Generate a professional Python CLI tool using the 'click' or 'argparse' library.
+Include rich terminal output (using 'rich' library), proper error handling, and a clear --help menu.
+Return ONLY valid JSON: {"files": {"cli.py": "...", "requirements.txt": "...", "README.md": "..."}}"""
+
+    # ── Core Agent Prompts ────────────────────────────────────────
     SYSTEM_PLANNER = """You are the PlannerBot agent of OmniForge Nexus, an AI-native app generation platform.
 Your role: Take a user's natural language description and produce a detailed JSON execution plan.
 Output a JSON object with:

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
 import {
     Settings, User, Bell, Shield, CreditCard, Palette, Globe,
     Cpu, Save, ChevronRight, GitBranch, Check, X, Eye, EyeOff,
@@ -252,9 +253,22 @@ function GitHubSection() {
 
 export default function SettingsPage() {
     const { user } = useStore();
-    const [active, setActive] = useState('profile');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [active, setActive] = useState(searchParams.get('tab') || 'profile');
     const [name, setName] = useState(user?.name || 'Demo User');
     const [email, setEmail] = useState(user?.email || 'demo@omniforge.ai');
+
+    useEffect(() => {
+        const tab = searchParams.get('tab');
+        if (tab && SECTIONS.some(s => s.id === tab)) {
+            setActive(tab);
+        }
+    }, [searchParams]);
+
+    const handleTabChange = (tabId) => {
+        setActive(tabId);
+        setSearchParams({ tab: tabId });
+    };
 
     return (
         <div className="flex-1 overflow-y-auto">
@@ -266,7 +280,7 @@ export default function SettingsPage() {
                         {SECTIONS.map(s => (
                             <button
                                 key={s.id}
-                                onClick={() => setActive(s.id)}
+                                onClick={() => handleTabChange(s.id)}
                                 className={`sidebar-item w-full mb-0.5 ${active === s.id ? 'active' : ''}`}
                             >
                                 <s.icon size={15} />

@@ -67,7 +67,7 @@ class Settings(BaseSettings):
     AWS_REGION: str = "ap-south-1"
 
     class Config:
-        env_file = ".env"
+        env_file = (".env", "../.env")
         case_sensitive = True
         extra = "ignore"  # Silently ignore unknown env vars
 

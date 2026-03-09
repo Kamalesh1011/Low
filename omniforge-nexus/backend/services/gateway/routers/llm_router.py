@@ -166,6 +166,10 @@ async def stream_llm_response(prompt: str, mode: str, model: Optional[str]) -> A
     yield f"data: {json.dumps({'type': 'start', 'model': resolved_model})}\n\n"
     
     accumulated = ""
+    in_thinking = False
+    in_json = False
+    current_key_buffer = ""
+    current_file = None
     
     async with httpx.AsyncClient(timeout=httpx.Timeout(180.0, connect=10.0)) as client:
         async with client.stream(
@@ -190,8 +194,39 @@ async def stream_llm_response(prompt: str, mode: str, model: Optional[str]) -> A
                     delta = data["choices"][0].get("delta", {})
                     if content := delta.get("content"):
                         accumulated += content
-                        # Stream each chunk
-                        yield f"data: {json.dumps({'type': 'chunk', 'content': content})}\n\n"
+                        
+                        # Very simple state machine for demonstration of structured streaming
+                        if "<think>" in content or "<thinking>" in content:
+                            in_thinking = True
+                            yield f"data: {json.dumps({'type': 'stage', 'stage': 'thinking'})}\n\n"
+                        elif "</think>" in content or "</thinking>" in content:
+                            in_thinking = False
+                            yield f"data: {json.dumps({'type': 'stage', 'stage': 'coding'})}\n\n"
+                            
+                        if in_thinking:
+                             yield f"data: {json.dumps({'type': 'thinking', 'content': content})}\n\n"
+                        else:
+                             # This represents standard chunks. In a perfect parser, 
+                             # we'd extract actual JSON keys here for file_start/file_end natively.
+                             # For robust rapid demo, we just echo chunks 
+                             yield f"data: {json.dumps({'type': 'chunk', 'content': content})}\n\n"
+
+                        # Heuristically detect file boundaries in the raw string for dramatic UI
+                        if len(accumulated) > 100:
+                             lines = accumulated.split('\\n')
+                             if len(lines) > 2:
+                                 last_few = "\\n".join(lines[-3:])
+                                 # if it looks like a file path key in JSON
+                                 if '": "' in last_few and ('/' in last_few or '.' in last_few) and not current_file:
+                                      import re
+                                      m = re.search(r'"([^"]+\.[a-zA-Z0-9]+)":\s*"', last_few)
+                                      if m:
+                                          current_file = m.group(1)
+                                          yield f"data: {json.dumps({'type': 'file_start', 'file': current_file})}\n\n"
+                                 elif current_file and '",' in last_few:
+                                      yield f"data: {json.dumps({'type': 'file_end', 'file': current_file})}\n\n"
+                                      current_file = None
+
                 except (json.JSONDecodeError, KeyError, IndexError):
                     continue
     

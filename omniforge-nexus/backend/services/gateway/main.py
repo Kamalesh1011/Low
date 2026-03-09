@@ -53,13 +53,17 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning("database.fallback", error=str(e))
 
-    # Ping Redis
-    try:
-        r = await get_redis()
-        await r.ping()
-        logger.info("redis.ready")
-    except Exception as e:
-        logger.warning("redis.unavailable", error=str(e))
+    # Ping Redis only when REDIS_URL is configured
+    if settings.REDIS_URL:
+        try:
+            r = await get_redis()
+            if r:
+                await r.ping()
+                logger.info("redis.ready")
+        except Exception as e:
+            logger.warning("redis.unavailable", error=str(e))
+    else:
+        logger.info("redis.skipped", reason="REDIS_URL not set — using in-memory fallback")
 
     logger.info("omniforge.ready", env=settings.APP_ENV)
     yield
@@ -67,6 +71,7 @@ async def lifespan(app: FastAPI):
     # Shutdown
     await close_redis()
     logger.info("omniforge.shutdown")
+
 
 
 # ── App Instance ───────────────────────────────────────────────
@@ -142,6 +147,9 @@ app.include_router(websocket_router.router, tags=["WebSocket"])
 app.include_router(github_router.router, prefix=f"{API_V1}/github", tags=["GitHub"])
 app.include_router(llm_router.router, prefix=f"{API_V1}/llm", tags=["LLM"])
 app.include_router(multiagent_router.router, prefix=f"{API_V1}/multiagent", tags=["MultiAgent"])
+
+
+
 
 
 # ── Health & Meta ─────────────────────────────────────────────

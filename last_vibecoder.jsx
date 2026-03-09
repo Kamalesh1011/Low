@@ -12,11 +12,10 @@ import {
     RefreshCw, Maximize2, Star, Clock, Users,
     Folder, FolderOpen, File, Search,
     Smartphone, BarChart3, Shield, ExternalLink,
-    AlertCircle, ArrowRight, ShieldAlert, AlertTriangle,
-    Wrench, Activity, Monitor, Tablet, Check
+    AlertCircle, ArrowRight
 } from 'lucide-react';
 
-// ── Data ─────────────────────────────────────────────────────────
+// ΓöÇΓöÇ Data ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 
 const MODES = [
     { id: 'swarm', icon: Cpu, label: 'Swarm Engine', desc: 'World-Class Multi-Agent Swarm', color: '#10b981', hex: '#10b981', badgeColor: 'active-swarm' },
@@ -27,45 +26,45 @@ const MODES = [
 
 const TEMPLATES = {
     app: [
-        { id: 'a1', name: 'GST Billing App', emoji: '📊', desc: 'Invoice + tax management', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 234, time: '~45s', prompt: 'Build a GST billing app for a textile business with invoice generation, tax calculation, and monthly reports' },
-        { id: 'a2', name: 'Inventory Manager', emoji: '📦', desc: 'Multi-warehouse stock tracking', tags: ['React', 'Python', 'Redis'], stars: 187, time: '~38s', prompt: 'Create an inventory management system with stock alerts, barcode scanning UI, and reorder automation' },
-        { id: 'a3', name: 'MSME CRM', emoji: '🤝', desc: 'Customer & lead management', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 312, time: '~42s', prompt: 'Build a CRM platform for a small manufacturing company with lead tracking, follow-up reminders, and sales analytics' },
-        { id: 'a4', name: 'HR Payroll System', emoji: '💰', desc: 'Payroll + ESI/PF compliance', tags: ['React', 'Python', 'PostgreSQL'], stars: 156, time: '~55s', prompt: 'Create an HR payroll system with salary slip generation, PF/ESI compliance, and attendance management' },
-        { id: 'a5', name: 'E-commerce Store', emoji: '🛒', desc: 'Full online shop + payments', tags: ['Next.js', 'FastAPI', 'Stripe'], stars: 489, time: '~65s', prompt: 'Build a complete e-commerce platform for handicrafts with product catalog, cart, Razorpay integration, and order tracking' },
-        { id: 'a6', name: 'Analytics Dashboard', emoji: '📈', desc: 'Business intelligence tool', tags: ['React', 'FastAPI', 'Recharts'], stars: 203, time: '~40s', prompt: 'Build a business analytics dashboard with revenue charts, KPI tracking, and export to PDF/Excel' },
-        { id: 'a7', name: 'Agriculture Supply Chain', emoji: '🚜', desc: 'Farm-to-fork tracking', tags: ['React', 'Python', 'GIS'], stars: 145, time: '~50s', prompt: 'Build a supply chain app for agriculture with crop harvesting logs, transport tracking, and direct-to-consumer sales portal' },
-        { id: 'a8', name: 'Textile Order Manager', emoji: '🧶', desc: 'Design to delivery workflow', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 220, time: '~45s', prompt: 'Create a textile order management system with design upload, dye house tracking, and automated shipping labels' },
-        { id: 'a9', name: 'Food Cloud Kitchen', emoji: '🍳', desc: 'Multi-brand kitchen manager', tags: ['React', 'Python', 'WebSockets'], stars: 310, time: '~55s', prompt: 'Build a cloud kitchen manager with Swiggy/Zomato order sync, real-time KDS (Kitchen Display System), and inventory auto-deduction' },
+        { id: 'a1', name: 'GST Billing App', emoji: '≡ƒôè', desc: 'Invoice + tax management', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 234, time: '~45s', prompt: 'Build a GST billing app for a textile business with invoice generation, tax calculation, and monthly reports' },
+        { id: 'a2', name: 'Inventory Manager', emoji: '≡ƒôª', desc: 'Multi-warehouse stock tracking', tags: ['React', 'Python', 'Redis'], stars: 187, time: '~38s', prompt: 'Create an inventory management system with stock alerts, barcode scanning UI, and reorder automation' },
+        { id: 'a3', name: 'MSME CRM', emoji: '≡ƒñ¥', desc: 'Customer & lead management', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 312, time: '~42s', prompt: 'Build a CRM platform for a small manufacturing company with lead tracking, follow-up reminders, and sales analytics' },
+        { id: 'a4', name: 'HR Payroll System', emoji: '≡ƒÆ░', desc: 'Payroll + ESI/PF compliance', tags: ['React', 'Python', 'PostgreSQL'], stars: 156, time: '~55s', prompt: 'Create an HR payroll system with salary slip generation, PF/ESI compliance, and attendance management' },
+        { id: 'a5', name: 'E-commerce Store', emoji: '≡ƒ¢Æ', desc: 'Full online shop + payments', tags: ['Next.js', 'FastAPI', 'Stripe'], stars: 489, time: '~65s', prompt: 'Build a complete e-commerce platform for handicrafts with product catalog, cart, Razorpay integration, and order tracking' },
+        { id: 'a6', name: 'Analytics Dashboard', emoji: '≡ƒôê', desc: 'Business intelligence tool', tags: ['React', 'FastAPI', 'Recharts'], stars: 203, time: '~40s', prompt: 'Build a business analytics dashboard with revenue charts, KPI tracking, and export to PDF/Excel' },
+        { id: 'a7', name: 'Agriculture Supply Chain', emoji: '≡ƒÜ£', desc: 'Farm-to-fork tracking', tags: ['React', 'Python', 'GIS'], stars: 145, time: '~50s', prompt: 'Build a supply chain app for agriculture with crop harvesting logs, transport tracking, and direct-to-consumer sales portal' },
+        { id: 'a8', name: 'Textile Order Manager', emoji: '≡ƒº╢', desc: 'Design to delivery workflow', tags: ['React', 'FastAPI', 'PostgreSQL'], stars: 220, time: '~45s', prompt: 'Create a textile order management system with design upload, dye house tracking, and automated shipping labels' },
+        { id: 'a9', name: 'Food Cloud Kitchen', emoji: '≡ƒì│', desc: 'Multi-brand kitchen manager', tags: ['React', 'Python', 'WebSockets'], stars: 310, time: '~55s', prompt: 'Build a cloud kitchen manager with Swiggy/Zomato order sync, real-time KDS (Kitchen Display System), and inventory auto-deduction' },
     ],
     agent: [
-        { id: 'ag1', name: 'Customer Support Bot', emoji: '💬', desc: 'Handle FAQs, complaints, escalations', tags: ['OpenAI', 'Twilio', 'FastAPI'], stars: 398, time: '~30s', prompt: 'Build a customer support AI agent that handles FAQs via WhatsApp, email, and web chat with escalation logic' },
-        { id: 'ag2', name: 'GST Filing Agent', emoji: '📋', desc: 'Auto-file GSTR-1, GSTR-3B monthly', tags: ['Python', 'OpenAI', 'GST API'], stars: 267, time: '~35s', prompt: 'Create an AI agent that automatically prepares and files GST returns, reconciles invoices, and alerts on discrepancies' },
-        { id: 'ag3', name: 'Inventory Monitor', emoji: '📦', desc: 'Alert on low stock, auto POs', tags: ['Python', 'ML', 'FastAPI'], stars: 189, time: '~28s', prompt: 'Build an inventory monitoring AI agent that tracks stock levels, predicts demand, and auto-generates purchase orders' },
-        { id: 'ag4', name: 'Lead Nurture Agent', emoji: '🎯', desc: 'Follow up leads via email/WhatsApp', tags: ['OpenAI', 'Twilio', 'CRM'], stars: 445, time: '~32s', prompt: 'Create an AI lead nurturing agent that follows up with prospects via personalized messages across WhatsApp, email, and SMS' },
-        { id: 'ag5', name: 'Finance Tracker', emoji: '💹', desc: 'Monitor cash flow, flag anomalies', tags: ['Python', 'OpenAI', 'PostgreSQL'], stars: 223, time: '~30s', prompt: 'Build a finance monitoring AI agent that tracks transactions, identifies anomalies, and generates weekly cash flow reports' },
-        { id: 'ag6', name: 'Scheme Finder Bot', emoji: '🏛️', desc: 'Match MSME to gov schemes', tags: ['Python', 'OpenAI', 'FastAPI'], stars: 534, time: '~25s', prompt: 'Create an AI agent that matches MSMEs with relevant government schemes based on their profile and auto-generates applications' },
-        { id: 'ag7', name: 'Tax Compliance Auditor', emoji: '⚖️', desc: 'Scan bills for tax leaks', tags: ['Vision AI', 'Python', 'GST'], stars: 278, time: '~40s', prompt: 'Build an AI agent that scans purchase invoices using OCR and identifies missing GST credits or tax discrepancies' },
-        { id: 'ag8', name: 'Market Sentiment Agent', emoji: '📊', desc: 'Trend analysis for local markets', tags: ['Scrapy', 'NLP', 'FastAPI'], stars: 195, time: '~35s', prompt: 'Create an AI agent that monitors social media and local news for textile market trends and competitor pricing shifts' },
-        { id: 'ag9', name: 'Auto-Booking Agent', emoji: '📦', desc: 'AI Logistics & Courier booking', tags: ['Python', 'Delhivery API', 'LLM'], stars: 312, time: '~30s', prompt: 'Create an AI agent that automatically chooses the cheapest courier for an order and books the pickup via API' },
+        { id: 'ag1', name: 'Customer Support Bot', emoji: '≡ƒÆ¼', desc: 'Handle FAQs, complaints, escalations', tags: ['OpenAI', 'Twilio', 'FastAPI'], stars: 398, time: '~30s', prompt: 'Build a customer support AI agent that handles FAQs via WhatsApp, email, and web chat with escalation logic' },
+        { id: 'ag2', name: 'GST Filing Agent', emoji: '≡ƒôï', desc: 'Auto-file GSTR-1, GSTR-3B monthly', tags: ['Python', 'OpenAI', 'GST API'], stars: 267, time: '~35s', prompt: 'Create an AI agent that automatically prepares and files GST returns, reconciles invoices, and alerts on discrepancies' },
+        { id: 'ag3', name: 'Inventory Monitor', emoji: '≡ƒôª', desc: 'Alert on low stock, auto POs', tags: ['Python', 'ML', 'FastAPI'], stars: 189, time: '~28s', prompt: 'Build an inventory monitoring AI agent that tracks stock levels, predicts demand, and auto-generates purchase orders' },
+        { id: 'ag4', name: 'Lead Nurture Agent', emoji: '≡ƒÄ»', desc: 'Follow up leads via email/WhatsApp', tags: ['OpenAI', 'Twilio', 'CRM'], stars: 445, time: '~32s', prompt: 'Create an AI lead nurturing agent that follows up with prospects via personalized messages across WhatsApp, email, and SMS' },
+        { id: 'ag5', name: 'Finance Tracker', emoji: '≡ƒÆ╣', desc: 'Monitor cash flow, flag anomalies', tags: ['Python', 'OpenAI', 'PostgreSQL'], stars: 223, time: '~30s', prompt: 'Build a finance monitoring AI agent that tracks transactions, identifies anomalies, and generates weekly cash flow reports' },
+        { id: 'ag6', name: 'Scheme Finder Bot', emoji: '≡ƒÅ¢∩╕Å', desc: 'Match MSME to gov schemes', tags: ['Python', 'OpenAI', 'FastAPI'], stars: 534, time: '~25s', prompt: 'Create an AI agent that matches MSMEs with relevant government schemes based on their profile and auto-generates applications' },
+        { id: 'ag7', name: 'Tax Compliance Auditor', emoji: 'ΓÜû∩╕Å', desc: 'Scan bills for tax leaks', tags: ['Vision AI', 'Python', 'GST'], stars: 278, time: '~40s', prompt: 'Build an AI agent that scans purchase invoices using OCR and identifies missing GST credits or tax discrepancies' },
+        { id: 'ag8', name: 'Market Sentiment Agent', emoji: '≡ƒôè', desc: 'Trend analysis for local markets', tags: ['Scrapy', 'NLP', 'FastAPI'], stars: 195, time: '~35s', prompt: 'Create an AI agent that monitors social media and local news for textile market trends and competitor pricing shifts' },
+        { id: 'ag9', name: 'Auto-Booking Agent', emoji: '≡ƒôª', desc: 'AI Logistics & Courier booking', tags: ['Python', 'Delhivery API', 'LLM'], stars: 312, time: '~30s', prompt: 'Create an AI agent that automatically chooses the cheapest courier for an order and books the pickup via API' },
     ],
     website: [
-        { id: 'w1', name: 'Business Landing Page', emoji: '🏢', desc: 'Professional company website', tags: ['React', 'Tailwind', 'Framer'], stars: 612, time: '~25s', prompt: 'Build a professional landing page for a manufacturing business with hero, services, gallery, and WhatsApp contact' },
-        { id: 'w2', name: 'Product Catalog Site', emoji: '🛍️', desc: 'Showcase products with inquiry', tags: ['Next.js', 'Vercel', 'Sanity'], stars: 334, time: '~30s', prompt: 'Create a product catalog website for a handicraft exporter with photo gallery, product specs, and international inquiry form' },
-        { id: 'w3', name: 'Portfolio Site', emoji: '✨', desc: 'Personal brand & profile', tags: ['React', 'GSAP', 'Netlify'], stars: 287, time: '~20s', prompt: 'Build a personal portfolio website for an MSME founder with achievements, business story, media, and contact form' },
-        { id: 'w4', name: 'Event / Trade Fair', emoji: '🎪', desc: 'Event registration + agenda', tags: ['Next.js', 'Stripe', 'PostgreSQL'], stars: 178, time: '~35s', prompt: 'Create a trade fair event website with exhibitor registration, agenda display, speaker profiles, and QR-based entry' },
+        { id: 'w1', name: 'Business Landing Page', emoji: '≡ƒÅó', desc: 'Professional company website', tags: ['React', 'Tailwind', 'Framer'], stars: 612, time: '~25s', prompt: 'Build a professional landing page for a manufacturing business with hero, services, gallery, and WhatsApp contact' },
+        { id: 'w2', name: 'Product Catalog Site', emoji: '≡ƒ¢ì∩╕Å', desc: 'Showcase products with inquiry', tags: ['Next.js', 'Vercel', 'Sanity'], stars: 334, time: '~30s', prompt: 'Create a product catalog website for a handicraft exporter with photo gallery, product specs, and international inquiry form' },
+        { id: 'w3', name: 'Portfolio Site', emoji: 'Γ£¿', desc: 'Personal brand & profile', tags: ['React', 'GSAP', 'Netlify'], stars: 287, time: '~20s', prompt: 'Build a personal portfolio website for an MSME founder with achievements, business story, media, and contact form' },
+        { id: 'w4', name: 'Event / Trade Fair', emoji: '≡ƒÄ¬', desc: 'Event registration + agenda', tags: ['Next.js', 'Stripe', 'PostgreSQL'], stars: 178, time: '~35s', prompt: 'Create a trade fair event website with exhibitor registration, agenda display, speaker profiles, and QR-based entry' },
     ],
 };
 
 const BUILD_PHASES = [
-    { phase: 'Planning', icon: '🧠', color: '#8b5cf6', steps: ['Analyzing requirements…', 'Defining architecture…', 'Planning DB schema…', 'Setting up project…'] },
-    { phase: 'Backend', icon: '⚙️', color: '#f97316', steps: ['Generating FastAPI routes…', 'Creating Pydantic models…', 'Setting up PostgreSQL…', 'Adding JWT auth…', 'Writing tests…'] },
-    { phase: 'Frontend', icon: '🎨', color: '#3b82f6', steps: ['Building React components…', 'Creating UI layouts…', 'Adding state management…', 'Connecting APIs…', 'Adding animations…'] },
-    { phase: 'Testing', icon: '🧪', color: '#10b981', steps: ['Running unit tests…', 'Integration testing…', 'Validating API schemas…', 'Performance benchmark…'] },
-    { phase: 'Deploy', icon: '🚀', color: '#f59e0b', steps: ['Containerizing Docker…', 'Setting up CI/CD…', 'Configuring Nginx…', 'Finalizing deployment…'] },
+    { phase: 'Planning', icon: '≡ƒºá', color: '#8b5cf6', steps: ['Analyzing requirementsΓÇª', 'Defining architectureΓÇª', 'Planning DB schemaΓÇª', 'Setting up projectΓÇª'] },
+    { phase: 'Backend', icon: 'ΓÜÖ∩╕Å', color: '#f97316', steps: ['Generating FastAPI routesΓÇª', 'Creating Pydantic modelsΓÇª', 'Setting up PostgreSQLΓÇª', 'Adding JWT authΓÇª', 'Writing testsΓÇª'] },
+    { phase: 'Frontend', icon: '≡ƒÄ¿', color: '#3b82f6', steps: ['Building React componentsΓÇª', 'Creating UI layoutsΓÇª', 'Adding state managementΓÇª', 'Connecting APIsΓÇª', 'Adding animationsΓÇª'] },
+    { phase: 'Testing', icon: '≡ƒº¬', color: '#10b981', steps: ['Running unit testsΓÇª', 'Integration testingΓÇª', 'Validating API schemasΓÇª', 'Performance benchmarkΓÇª'] },
+    { phase: 'Deploy', icon: '≡ƒÜÇ', color: '#f59e0b', steps: ['Containerizing DockerΓÇª', 'Setting up CI/CDΓÇª', 'Configuring NginxΓÇª', 'Finalizing deploymentΓÇª'] },
 ];
 
 const CODE_SAMPLES = {
-    backend: `# 🔥 FastAPI Backend — Auto-generated by OmniForge Nexus
+    backend: `# ≡ƒöÑ FastAPI Backend ΓÇö Auto-generated by OmniForge Nexus
 from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -96,7 +95,7 @@ async def calculate_gst(amount: float, hsn_code: str):
     rate = await get_gst_rate_by_hsn(hsn_code)
     return {"base": amount, "cgst": round(amount * rate / 200, 2), "sgst": round(amount * rate / 200, 2)}`,
 
-    frontend: `// ⚡ React Frontend — Auto-generated by OmniForge Nexus
+    frontend: `// ΓÜí React Frontend ΓÇö Auto-generated by OmniForge Nexus
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
@@ -116,7 +115,7 @@ export function InvoiceManager() {
   const createMutation = useMutation({
     mutationFn: (invoice) => api.post('/invoices', invoice),
     onSuccess: () => {
-      toast.success('Invoice created! 🎉');
+      toast.success('Invoice created! ≡ƒÄë');
       qc.invalidateQueries({ queryKey: ['invoices'] });
     },
     onError: (err) => toast.error(\`Error: \${err.message}\`),
@@ -131,7 +130,7 @@ export function InvoiceManager() {
   );
 }`,
 
-    agent: `# 🤖 AI Agent — Auto-generated by OmniForge Nexus
+    agent: `# ≡ƒñû AI Agent ΓÇö Auto-generated by OmniForge Nexus
 from agents import Agent, Runner, tool
 from typing import Annotated
 
@@ -164,7 +163,7 @@ async def run_agent(user_message: str):
     result = await Runner.run(MSMESupportAgent(), user_message)
     return result.messages[-1].content`,
 
-    docker: `# 🐳 Docker Compose — Auto-generated by OmniForge Nexus
+    docker: `# ≡ƒÉ│ Docker Compose ΓÇö Auto-generated by OmniForge Nexus
 version: '3.9'
 services:
   backend:
@@ -226,46 +225,7 @@ const FILE_TREE = [
     { name: '.env.example', type: 'file' },
 ];
 
-// ── Sub-Components ────────────────────────────────────────────────
-
-// Helper to convert flat paths {'src/App.jsx': code} into nested tree structure
-function buildTree(filesMap) {
-    const root = [];
-    Object.keys(filesMap).forEach(path => {
-        const parts = path.split('/');
-        let currentLevel = root;
-        for (let i = 0; i < parts.length; i++) {
-            const part = parts[i];
-            const isFile = i === parts.length - 1;
-            let existingPath = currentLevel.find(p => p.name === part);
-
-            if (!existingPath) {
-                existingPath = {
-                    name: part,
-                    type: isFile ? 'file' : 'dir',
-                    path: path,
-                    size: isFile ? new Blob([filesMap[path] || '']).size : 0,
-                    children: isFile ? undefined : []
-                };
-                currentLevel.push(existingPath);
-            }
-            if (!isFile) {
-                currentLevel = existingPath.children;
-            }
-        }
-    });
-
-    // Helper to sort: dirs first, then files alphabetically
-    const sortTree = (nodes) => {
-        nodes.sort((a, b) => {
-            if (a.type !== b.type) return a.type === 'dir' ? -1 : 1;
-            return a.name.localeCompare(b.name);
-        });
-        nodes.forEach(n => { if (n.children) sortTree(n.children); });
-    };
-    sortTree(root);
-    return root;
-}
+// ΓöÇΓöÇ Sub-Components ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 
 function TemplateCard({ item, onSelect }) {
     return (
@@ -296,7 +256,7 @@ function TemplateCard({ item, onSelect }) {
     );
 }
 
-function BuildPipeline({ phase, stepIdx, generatingFile, isThinking }) {
+function BuildPipeline({ phase, stepIdx }) {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {BUILD_PHASES.map((p, pi) => {
@@ -311,13 +271,7 @@ function BuildPipeline({ phase, stepIdx, generatingFile, isThinking }) {
                             <div style={{ fontSize: 11, fontWeight: 700, color: done ? '#34d399' : cur ? p.color : 'var(--text-muted)' }}>{p.phase}</div>
                             {cur && (
                                 <motion.div key={stepIdx} initial={{ opacity: 0, y: 3 }} animate={{ opacity: 1, y: 0 }} style={{ fontSize: 9.5, color: 'var(--text-muted)', marginTop: 1 }}>
-                                    {isThinking && pi === 1 ? (
-                                        <span style={{ color: '#8b5cf6' }}>🧠 Analyzing & Architecting...</span>
-                                    ) : generatingFile ? (
-                                        <span style={{ color: p.color, fontFamily: 'var(--font-mono)' }}>📝 {generatingFile}</span>
-                                    ) : (
-                                        p.steps[stepIdx % p.steps.length]
-                                    )}
+                                    {p.steps[stepIdx % p.steps.length]}
                                 </motion.div>
                             )}
                         </div>
@@ -333,45 +287,24 @@ function BuildPipeline({ phase, stepIdx, generatingFile, isThinking }) {
 function FileTreeNode({ node, depth = 0, onSelect, selected }) {
     const [open, setOpen] = useState(depth === 0);
     const isDir = node.type === 'dir';
-    const isSelected = selected === node.name || selected === node.path;
-
-    // Language colors for dots
-    const ext = !isDir ? node.name.split('.').pop().toLowerCase() : '';
-    const langColor = ext === 'py' ? '#3b82f6' :
-        ext === 'jsx' || ext === 'js' || ext === 'tsx' || ext === 'ts' ? '#f59e0b' :
-            ext === 'css' ? '#ec4899' :
-                ext === 'html' ? '#ef4444' :
-                    ext === 'json' ? '#10b981' : '#64748b';
-
+    const isSelected = selected === node.name;
     return (
         <div>
             <div onClick={() => isDir ? setOpen(!open) : onSelect(node)}
                 style={{
-                    display: 'flex', alignItems: 'center', gap: 6,
-                    padding: '5px 8px', paddingLeft: 8 + depth * 16,
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    padding: '4px 8px', paddingLeft: 8 + depth * 14,
                     borderRadius: 6, cursor: 'pointer', fontSize: 11.5,
-                    background: isSelected ? 'rgba(59,130,246,0.15)' : 'transparent',
-                    color: isSelected ? '#60a5fa' : 'var(--text-secondary)',
-                    borderLeft: isSelected ? '2px solid #3b82f6' : '2px solid transparent',
-                    transition: 'all 0.15s ease',
+                    background: isSelected ? 'rgba(249,115,22,0.12)' : 'transparent',
+                    color: isSelected ? '#fb923c' : 'var(--text-secondary)',
+                    transition: 'all 0.15s',
                 }}
                 onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
                 onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = 'transparent'; }}
             >
-                {isDir ? (
-                    open ? <FolderOpen size={13} style={{ color: '#f59e0b' }} /> : <Folder size={13} style={{ color: '#f59e0b' }} />
-                ) : (
-                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <File size={13} style={{ color: '#94a3b8' }} />
-                        <div style={{ position: 'absolute', bottom: -1, right: -2, width: 6, height: 6, borderRadius: '50%', background: langColor, border: '1px solid #0d1117' }} />
-                    </div>
-                )}
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>{node.name}</span>
-                {!isDir && node.size && (
-                    <span style={{ marginLeft: 'auto', fontSize: 9, color: 'var(--text-muted)' }}>
-                        {(node.size / 1024).toFixed(1)} KB
-                    </span>
-                )}
+                {isDir ? (open ? <FolderOpen size={12} style={{ color: '#f59e0b' }} /> : <Folder size={12} style={{ color: '#f59e0b' }} />) : <File size={12} style={{ color: '#64748b' }} />}
+                {isDir && (open ? <ChevronDown size={9} /> : <ChevronRight size={9} />)}
+                <span>{node.name}</span>
             </div>
             {isDir && open && node.children?.map((c, i) => (
                 <FileTreeNode key={i} node={c} depth={depth + 1} onSelect={onSelect} selected={selected} />
@@ -380,120 +313,23 @@ function FileTreeNode({ node, depth = 0, onSelect, selected }) {
     );
 }
 
-function CodePanel({ code, filename, onChange }) {
+function CodePanel({ code, filename }) {
     const [copied, setCopied] = useState(false);
-    const editorRef = useRef(null);
-    const containerRef = useRef(null);
-
-    // Monaco Loader & Initialization
-    useEffect(() => {
-        if (!containerRef.current) return;
-
-        const initMonaco = () => {
-            if (window.monaco && !editorRef.current) {
-                // Determine language
-                const ext = filename?.split('.').pop()?.toLowerCase();
-                const langMap = {
-                    'js': 'javascript', 'jsx': 'javascript', 'ts': 'typescript', 'tsx': 'typescript',
-                    'py': 'python', 'html': 'html', 'css': 'css', 'json': 'json', 'md': 'markdown', 'yml': 'yaml', 'yaml': 'yaml'
-                };
-                const language = langMap[ext] || 'plaintext';
-
-                editorRef.current = window.monaco.editor.create(containerRef.current, {
-                    value: code || '',
-                    language: language,
-                    theme: 'vs-dark',
-                    automaticLayout: true,
-                    minimap: { enabled: false },
-                    fontSize: 13,
-                    fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                    scrollBeyondLastLine: false,
-                    padding: { top: 16 },
-                    renderLineHighlight: 'all',
-                    readOnly: false // Enable editing!
-                });
-
-                editorRef.current.onDidChangeModelContent(() => {
-                    const newValue = editorRef.current.getValue();
-                    if (onChange) onChange(newValue);
-                });
-            } else if (editorRef.current && window.monaco) {
-                // Update existing editor model
-                const currentModel = editorRef.current.getModel();
-                if (currentModel && currentModel.getValue() !== code) {
-                    editorRef.current.setValue(code || '');
-                }
-
-                // Update language if filename changed
-                const ext = filename?.split('.').pop()?.toLowerCase();
-                const language = {
-                    'js': 'javascript', 'jsx': 'javascript', 'ts': 'typescript', 'tsx': 'typescript',
-                    'py': 'python', 'html': 'html', 'css': 'css', 'json': 'json', 'md': 'markdown'
-                }[ext] || 'plaintext';
-                window.monaco.editor.setModelLanguage(currentModel, language);
-            }
-        };
-
-        if (window.monaco) {
-            initMonaco();
-        } else {
-            // Load script dynamically
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js';
-            script.onload = () => {
-                window.require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
-                window.require(['vs/editor/editor.main'], initMonaco);
-            };
-            document.body.appendChild(script);
-        }
-
-        return () => {
-            if (editorRef.current) {
-                editorRef.current.dispose();
-                editorRef.current = null;
-            }
-        };
-    }, [filename]); // Re-run effect when filename changes to handle initial load, content updates handled differently to avoid cursor jumps
-
-    // Separate effect just for keeping code in sync without recreating the editor
-    useEffect(() => {
-        if (editorRef.current && window.monaco) {
-            const currentModel = editorRef.current.getModel();
-            if (currentModel && currentModel.getValue() !== code) {
-                // Push edit operations to preserve cursor/undo stack instead of setValue if possible
-                const fullRange = currentModel.getFullModelRange();
-                editorRef.current.executeEdits("code-panel", [{
-                    range: fullRange,
-                    text: code || ''
-                }]);
-            }
-        }
-    }, [code]);
-
-    const copy = () => {
-        const textToCopy = editorRef.current ? editorRef.current.getValue() : code;
-        navigator.clipboard.writeText(textToCopy);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1800);
-    };
-
+    const copy = () => { navigator.clipboard.writeText(code); setCopied(true); setTimeout(() => setCopied(false), 1800); };
     return (
-        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: '#1e1e1e', borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', borderBottom: '1px solid rgba(0,0,0,0.5)', background: '#252526', flexShrink: 0 }}>
-                <div style={{ display: 'flex', gap: 6 }}>
-                    {['#ff5f56', '#ffbd2e', '#27c93f'].map((c, i) => <div key={i} style={{ width: 11, height: 11, borderRadius: '50%', background: c }} />)}
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: '#0d1117', borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)', flexShrink: 0 }}>
+                <div style={{ display: 'flex', gap: 5 }}>
+                    {['#ef4444', '#f59e0b', '#10b981'].map((c, i) => <div key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />)}
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 12, flex: 1, overflow: 'hidden' }}>
-                    <FileCode size={13} style={{ color: '#3b82f6' }} />
-                    <span style={{ fontSize: 11.5, color: '#e2e8f0', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{filename}</span>
-                </div>
-                <button onClick={copy} style={{ background: 'none', border: 'none', cursor: 'pointer', color: copied ? '#10b981' : '#94a3b8', display: 'flex', alignItems: 'center', gap: 4, fontSize: 10.5, transition: 'color 0.2s' }}>
-                    {copied ? <CheckCircle size={12} /> : <Copy size={12} />} {copied ? 'Copied' : 'Copy'}
+                <span style={{ fontSize: 11, color: '#64748b', flex: 1, textAlign: 'center', fontFamily: 'var(--font-mono)' }}>{filename}</span>
+                <button onClick={copy} style={{ background: 'none', border: 'none', cursor: 'pointer', color: copied ? '#34d399' : '#64748b', display: 'flex', alignItems: 'center', gap: 4, fontSize: 10.5 }}>
+                    {copied ? <CheckCircle size={11} /> : <Copy size={11} />} {copied ? 'Copied!' : 'Copy'}
                 </button>
             </div>
-
-            {/* Monaco Editor Container */}
-            <div ref={containerRef} style={{ flex: 1, width: '100%', height: '100%' }} />
+            <pre style={{ flex: 1, overflow: 'auto', margin: 0, padding: '14px 18px', fontSize: 12, lineHeight: 1.85, fontFamily: 'var(--font-mono)', color: '#e2e8f0', scrollbarWidth: 'thin' }}>
+                <code>{code}</code>
+            </pre>
         </div>
     );
 }
@@ -511,11 +347,11 @@ function TerminalPanel({ logs, error }) {
                 </span>
             </div>
             <div ref={ref} className="terminal-body">
-                <div style={{ color: '#34d399' }}>omniforge@nexus:~$ <span style={{ color: '#94a3b8' }}>starting build pipeline…</span></div>
+                <div style={{ color: '#34d399' }}>omniforge@nexus:~$ <span style={{ color: '#94a3b8' }}>starting build pipelineΓÇª</span></div>
                 {logs.map((log, i) => (
-                    <div key={i} style={{ color: log.includes('ERROR') ? '#f87171' : log.includes('✅') || log.includes('SUCCESS') ? '#34d399' : log.includes('WARNING') ? '#fbbf24' : '#94a3b8' }}>{log}</div>
+                    <div key={i} style={{ color: log.includes('ERROR') ? '#f87171' : log.includes('Γ£à') || log.includes('SUCCESS') ? '#34d399' : log.includes('WARNING') ? '#fbbf24' : '#94a3b8' }}>{log}</div>
                 ))}
-                {error && <div style={{ color: '#f87171', marginTop: 6 }}>❌ Error: {error}</div>}
+                {error && <div style={{ color: '#f87171', marginTop: 6 }}>Γ¥î Error: {error}</div>}
                 <span style={{ display: 'inline-block', width: 7, height: '1em', background: '#6366f1', animation: 'blink 1s step-end infinite', verticalAlign: 'text-bottom' }} />
             </div>
         </div>
@@ -523,7 +359,6 @@ function TerminalPanel({ logs, error }) {
 }
 
 function DeployModal({ app, onClose, mode, prompt }) {
-    const [viewType, setViewType] = useState('ui'); // ui | api
     const modeColors = { app: '#ff6b35', agent: '#7b2fff', website: '#00d4ff' };
     const color = modeColors[mode] || '#ff6b35';
     // Simulate the built app as a mini preview inside the modal
@@ -592,11 +427,11 @@ function DeployModal({ app, onClose, mode, prompt }) {
                                     flexShrink: 0,
                                 }}>
                                     <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${color}, ${color}99)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>
-                                        {mode === 'agent' ? '🤖' : mode === 'website' ? '🌐' : '🏢'}
+                                        {mode === 'agent' ? '≡ƒñû' : mode === 'website' ? '≡ƒîÉ' : '≡ƒÅó'}
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 12, color: 'var(--t1)', letterSpacing: 1, textTransform: 'uppercase' }}>{appName}</span>
-                                        <span style={{ fontSize: 9, color: '#00ff88', fontWeight: 600 }}>● RUNNING V1.0.0</span>
+                                        <span style={{ fontSize: 9, color: '#00ff88', fontWeight: 600 }}>ΓùÅ RUNNING V1.0.0</span>
                                     </div>
                                     <div style={{ flex: 1 }} />
                                     {['Dashboard', 'Analytics', 'System', 'Logs'].map(n => (
@@ -609,86 +444,56 @@ function DeployModal({ app, onClose, mode, prompt }) {
 
                                 {/* App Content */}
                                 <div style={{ flex: 1, overflow: 'auto', padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
-
-                                    {/* Tabs */}
-                                    <div style={{ display: 'flex', gap: 10, marginBottom: 4, borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 10 }}>
-                                        <button onClick={() => setViewType('ui')} style={{ background: viewType === 'ui' ? `${color}20` : 'transparent', color: viewType === 'ui' ? color : 'var(--text-muted)', border: 'none', padding: '6px 12px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Dashboard UI</button>
-                                        <button onClick={() => setViewType('api')} style={{ background: viewType === 'api' ? `${color}20` : 'transparent', color: viewType === 'api' ? color : 'var(--text-muted)', border: 'none', padding: '6px 12px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>API Tester</button>
+                                    {/* Stats row */}
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+                                        {[
+                                            { label: 'Total API Calls', value: '1,280', delta: '+18%', color },
+                                            { label: 'Active Tasks', value: String(app?.apis || 8), delta: '+2', color: '#7b2fff' },
+                                            { label: 'DB Latency', value: '14ms', delta: 'Fast', color: '#00ff88' },
+                                            { label: 'Uptime', value: '99.9%', delta: 'Live', color: '#ffd700' },
+                                        ].map(s => (
+                                            <div key={s.label} style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${s.color}20`, borderRadius: 10, padding: '12px 14px' }}>
+                                                <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 700, color: s.color }}>{s.value}</div>
+                                                <div style={{ fontSize: 10, color: 'var(--t3)', marginTop: 3 }}>{s.label}</div>
+                                                <div style={{ fontSize: 9.5, color: s.color, marginTop: 4, opacity: 0.8 }}>Γåæ {s.delta}</div>
+                                            </div>
+                                        ))}
                                     </div>
 
-                                    {viewType === 'ui' ? (
-                                        <>
-                                            {/* Stats row */}
-                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
-                                                {[
-                                                    { label: 'Total API Calls', value: '1,280', delta: '+18%', color },
-                                                    { label: 'Active Tasks', value: String(app?.apis || 8), delta: '+2', color: '#7b2fff' },
-                                                    { label: 'DB Latency', value: '14ms', delta: 'Fast', color: '#00ff88' },
-                                                    { label: 'Uptime', value: '99.9%', delta: 'Live', color: '#ffd700' },
-                                                ].map(s => (
-                                                    <div key={s.label} style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${s.color}20`, borderRadius: 10, padding: '12px 14px' }}>
-                                                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 700, color: s.color }}>{s.value}</div>
-                                                        <div style={{ fontSize: 10, color: 'var(--t3)', marginTop: 3 }}>{s.label}</div>
-                                                        <div style={{ fontSize: 9.5, color: s.color, marginTop: 4, opacity: 0.8 }}>↑ {s.delta}</div>
-                                                    </div>
-                                                ))}
-                                            </div>
-
-                                            {/* Table */}
-                                            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--b0)', borderRadius: 10, overflow: 'hidden' }}>
-                                                <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--b0)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                    <span style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--t1)', fontFamily: 'var(--font-display)', letterSpacing: 1 }}>RECENT INVOICES</span>
-                                                    <span style={{ fontSize: 10, color, cursor: 'pointer', fontFamily: 'var(--font-display)', letterSpacing: 0.5 }}>+ NEW INVOICE</span>
-                                                </div>
-                                                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11.5 }}>
-                                                    <thead><tr style={{ borderBottom: '1px solid var(--b0)' }}>
-                                                        {['Invoice #', 'Customer', 'Amount', 'GST', 'Status', 'Date'].map(h => (
-                                                            <th key={h} style={{ padding: '8px 14px', textAlign: 'left', color: 'var(--t3)', fontFamily: 'var(--font-display)', fontSize: 9, letterSpacing: 1.5, fontWeight: 700, textTransform: 'uppercase' }}>{h}</th>
-                                                        ))}
-                                                    </tr></thead>
-                                                    <tbody>
-                                                        {[
-                                                            { no: 'INV-2024-001', cust: 'Mehta Traders', amt: '₹45,000', gst: '₹8,100', status: 'Paid', date: '15 Feb' },
-                                                            { no: 'INV-2024-002', cust: 'Sharma Textiles', amt: '₹1,20,000', gst: '₹21,600', status: 'Pending', date: '18 Feb' },
-                                                            { no: 'INV-2024-003', cust: 'Patel Industries', amt: '₹78,500', gst: '₹14,130', status: 'Paid', date: '20 Feb' },
-                                                        ].map(row => (
-                                                            <tr key={row.no} style={{ borderBottom: '1px solid var(--b0)', cursor: 'pointer', transition: 'background 0.15s' }}
-                                                                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
-                                                                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                                                                <td style={{ padding: '9px 14px', fontFamily: 'var(--font-mono)', color }}>{row.no}</td>
-                                                                <td style={{ padding: '9px 14px', color: 'var(--t1)' }}>{row.cust}</td>
-                                                                <td style={{ padding: '9px 14px', color: 'var(--t1)', fontWeight: 600 }}>{row.amt}</td>
-                                                                <td style={{ padding: '9px 14px', color: 'var(--t2)' }}>{row.gst}</td>
-                                                                <td style={{ padding: '9px 14px' }}>
-                                                                    <span style={{ padding: '2px 8px', borderRadius: 100, fontSize: 9, fontWeight: 700, fontFamily: 'var(--font-display)', letterSpacing: 0.5, background: row.status === 'Paid' ? 'rgba(0,255,136,0.12)' : 'rgba(255,215,0,0.12)', color: row.status === 'Paid' ? '#00ff88' : '#ffd700', border: `1px solid ${row.status === 'Paid' ? 'rgba(0,255,136,0.3)' : 'rgba(255,215,0,0.3)'}` }}>{row.status}</span>
-                                                                </td>
-                                                                <td style={{ padding: '9px 14px', color: 'var(--t3)' }}>{row.date}</td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--b0)', borderRadius: 10, padding: 16 }}>
-                                            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 12 }}>Test Generated API Ends</div>
-                                            <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-                                                <select style={{ background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(255,255,255,0.1)', padding: '8px', borderRadius: 6, fontSize: 11 }}>
-                                                    <option>GET {app?.result?.api_endpoints ? Object.keys(app.result.api_endpoints)[0] || '/api/v1/health' : '/api/v1/health'}</option>
-                                                    <option>POST /api/v1/data</option>
-                                                </select>
-                                                <button style={{ background: color, color: '#000', border: 'none', padding: '8px 16px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Send Request</button>
-                                            </div>
-                                            <pre style={{ background: '#000', padding: 12, borderRadius: 6, fontSize: 10, color: '#00ff88', border: '1px solid rgba(0,255,136,0.2)', overflowX: 'auto' }}>
-                                                {JSON.stringify({
-                                                    status: "success",
-                                                    message: "API endpoint active",
-                                                    timestamp: new Date().toISOString(),
-                                                    data: { id: 1, simulated: true }
-                                                }, null, 2)}
-                                            </pre>
+                                    {/* Table */}
+                                    <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--b0)', borderRadius: 10, overflow: 'hidden' }}>
+                                        <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--b0)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <span style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--t1)', fontFamily: 'var(--font-display)', letterSpacing: 1 }}>RECENT INVOICES</span>
+                                            <span style={{ fontSize: 10, color, cursor: 'pointer', fontFamily: 'var(--font-display)', letterSpacing: 0.5 }}>+ NEW INVOICE</span>
                                         </div>
-                                    )}
+                                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11.5 }}>
+                                            <thead><tr style={{ borderBottom: '1px solid var(--b0)' }}>
+                                                {['Invoice #', 'Customer', 'Amount', 'GST', 'Status', 'Date'].map(h => (
+                                                    <th key={h} style={{ padding: '8px 14px', textAlign: 'left', color: 'var(--t3)', fontFamily: 'var(--font-display)', fontSize: 9, letterSpacing: 1.5, fontWeight: 700, textTransform: 'uppercase' }}>{h}</th>
+                                                ))}
+                                            </tr></thead>
+                                            <tbody>
+                                                {[
+                                                    { no: 'INV-2024-001', cust: 'Mehta Traders', amt: 'Γé╣45,000', gst: 'Γé╣8,100', status: 'Paid', date: '15 Feb' },
+                                                    { no: 'INV-2024-002', cust: 'Sharma Textiles', amt: 'Γé╣1,20,000', gst: 'Γé╣21,600', status: 'Pending', date: '18 Feb' },
+                                                    { no: 'INV-2024-003', cust: 'Patel Industries', amt: 'Γé╣78,500', gst: 'Γé╣14,130', status: 'Paid', date: '20 Feb' },
+                                                ].map(row => (
+                                                    <tr key={row.no} style={{ borderBottom: '1px solid var(--b0)', cursor: 'pointer', transition: 'background 0.15s' }}
+                                                        onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
+                                                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                                                        <td style={{ padding: '9px 14px', fontFamily: 'var(--font-mono)', color }}>{row.no}</td>
+                                                        <td style={{ padding: '9px 14px', color: 'var(--t1)' }}>{row.cust}</td>
+                                                        <td style={{ padding: '9px 14px', color: 'var(--t1)', fontWeight: 600 }}>{row.amt}</td>
+                                                        <td style={{ padding: '9px 14px', color: 'var(--t2)' }}>{row.gst}</td>
+                                                        <td style={{ padding: '9px 14px' }}>
+                                                            <span style={{ padding: '2px 8px', borderRadius: 100, fontSize: 9, fontWeight: 700, fontFamily: 'var(--font-display)', letterSpacing: 0.5, background: row.status === 'Paid' ? 'rgba(0,255,136,0.12)' : 'rgba(255,215,0,0.12)', color: row.status === 'Paid' ? '#00ff88' : '#ffd700', border: `1px solid ${row.status === 'Paid' ? 'rgba(0,255,136,0.3)' : 'rgba(255,215,0,0.3)'}` }}>{row.status}</span>
+                                                        </td>
+                                                        <td style={{ padding: '9px 14px', color: 'var(--t3)' }}>{row.date}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
 
@@ -716,7 +521,7 @@ function DeployModal({ app, onClose, mode, prompt }) {
                                     </div>
                                     <div>
                                         <div style={{ fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 700, color: '#00ff88', letterSpacing: 1 }}>DEPLOYED</div>
-                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--t3)', marginTop: 1 }}>Build #4 · 2m 34s</div>
+                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--t3)', marginTop: 1 }}>Build #4 ┬╖ 2m 34s</div>
                                     </div>
                                 </div>
                                 {[
@@ -737,17 +542,14 @@ function DeployModal({ app, onClose, mode, prompt }) {
                                 <button className="btn btn-primary" style={{ justifyContent: 'center', fontSize: 9.5 }} onClick={() => window.open('http://localhost:5173', '_blank')}>
                                     <ExternalLink size={11} /> Open Live App
                                 </button>
-                                <button className="btn btn-secondary" style={{ justifyContent: 'center', fontSize: 9.5, background: 'rgba(0,0,0,0.5)', borderColor: '#333', color: '#fff' }} onClick={() => { toast.loading('Deploying to Vercel...', { id: 'vercel' }); setTimeout(() => toast.success('Deployed to Vercel: https://myapp.vercel.app', { id: 'vercel' }), 2500); }}>
-                                    <svg viewBox="0 0 76 65" width="11" height="11" fill="currentColor"><path d="M37.5274 0L75.0548 65H0L37.5274 0Z" /></svg> Deploy Vercel
-                                </button>
-                                <button className="btn btn-secondary" style={{ justifyContent: 'center', fontSize: 9.5, background: 'rgba(70,227,183,0.1)', borderColor: 'rgba(70,227,183,0.3)', color: '#46e3b7' }} onClick={() => { toast.loading('Generating render.yaml & deploying...', { id: 'render' }); setTimeout(() => toast.success('Deployed to Render.com!', { id: 'render' }), 3000); }}>
-                                    <Server size={11} /> Deploy Render
-                                </button>
-                                <button className="btn btn-secondary" style={{ justifyContent: 'center', fontSize: 9.5 }} onClick={() => toast.success('Source code downloaded as omniforge_build.zip', { icon: '📦' })}>
+                                <button className="btn btn-secondary" style={{ justifyContent: 'center', fontSize: 9.5 }} onClick={() => toast.success('Source code downloaded as omniforge_build.zip', { icon: '≡ƒôª' })}>
                                     <Download size={11} /> Download Code
                                 </button>
                                 <button className="btn btn-secondary" style={{ justifyContent: 'center', fontSize: 9.5 }} onClick={() => { toast.loading('Pushing to GitHub...', { id: 'gh' }); setTimeout(() => toast.success('Pushed to GitHub: /user/msme-app', { id: 'gh' }), 2000); }}>
                                     <GitBranch size={11} /> Push to GitHub
+                                </button>
+                                <button className="btn btn-secondary" style={{ justifyContent: 'center', fontSize: 9.5 }} onClick={() => toast.success('Triggering a new build...')}>
+                                    <RefreshCw size={11} /> Re-deploy
                                 </button>
                             </div>
                         </div>
@@ -760,28 +562,22 @@ function DeployModal({ app, onClose, mode, prompt }) {
 
 function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }) {
     const [viewType, setViewType] = useState('ui'); // ui | logs | raw
-    const [viewport, setViewport] = useState('desktop'); // desktop | tablet | mobile
 
     // Website Live Preview (Real-time iframe)
     const getWebsiteSource = () => {
-        if (!app?.result?.files) return null;
-        const files = app.result.files;
-        // Smart lookup for files
-        const html = files['index.html'] || files['App.html'] || Object.values(files).find(v => v.includes('<!DOCTYPE') || v.includes('<html')) || '';
-        const css = files['styles/main.css'] || files['App.css'] || files['index.css'] || Object.keys(files).filter(k => k.endsWith('.css')).map(k => files[k]).join('\n') || '';
-        const js = files['js/main.js'] || files['App.js'] || files['index.js'] || '';
+        if (mode !== 'website' || !app?.result?.files) return null;
+        const html = app.result.files['index.html'] || '';
+        const css = app.result.files['styles/main.css'] || '';
+        const js = app.result.files['js/main.js'] || '';
 
         return `
             <!DOCTYPE html>
             <html>
             <head>
-                <style>
-                    body { margin: 0; background: #000; color: #fff; font-family: sans-serif; }
-                    ${css}
-                </style>
+                <style>${css}</style>
             </head>
             <body>
-                ${html || '<div style="display:flex;height:100vh;align-items:center;justify-content:center;color:#64748b;font-size:12px">Rendering Live Environment...</div>'}
+                ${html}
                 <script>${js}</script>
             </body>
             </html>
@@ -847,7 +643,7 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }
                         <CheckCircle size={17} style={{ color: '#34d399' }} />
                     </div>
                     <div>
-                        <div style={{ fontSize: 14, fontWeight: 800, color: '#34d399' }}>🎉 Build Complete!</div>
+                        <div style={{ fontSize: 14, fontWeight: 800, color: '#34d399' }}>≡ƒÄë Build Complete!</div>
                         <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginTop: 1 }}>
                             {app?.files?.length || Object.keys(app?.result?.files || {}).length || 0} files generated by real AI
                         </div>
@@ -886,40 +682,14 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }
                         <span className="dot-live" />
                         <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 1 }}>REAL-TIME {mode?.toUpperCase()} PREVIEW</span>
                     </div>
-                    {mode === 'website' && (
-                        <div style={{ display: 'flex', background: 'rgba(0,0,0,0.5)', borderRadius: 20, padding: 2, border: '1px solid var(--border-subtle)' }}>
-                            {['desktop', 'tablet', 'mobile'].map(vp => (
-                                <button key={vp} onClick={() => setViewport(vp)} style={{
-                                    background: viewport === vp ? 'rgba(255,255,255,0.1)' : 'transparent',
-                                    border: 'none', borderRadius: 20, padding: '4px 10px', fontSize: 10, color: viewport === vp ? '#fff' : 'var(--text-muted)',
-                                    cursor: 'pointer', textTransform: 'capitalize', transition: 'all 0.2s',
-                                    display: 'flex', alignItems: 'center', gap: 4
-                                }}>
-                                    {vp === 'desktop' ? <Monitor size={11} /> : vp === 'tablet' ? <Tablet size={11} /> : <Smartphone size={11} />}
-                                    {vp}
-                                </button>
-                            ))}
-                        </div>
-                    )}
                 </div>
-                <div style={{ flex: 1, position: 'relative', overflow: 'hidden', display: 'flex', justifyContent: 'center', background: '#0f172a' }}>
+                <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
                     {mode === 'website' ? (
-                        <div style={{
-                            width: viewport === 'desktop' ? '100%' : viewport === 'tablet' ? '768px' : '375px',
-                            height: '100%',
-                            background: 'white',
-                            transition: 'width 0.3s ease',
-                            borderLeft: viewport !== 'desktop' ? '1px solid #334155' : 'none',
-                            borderRight: viewport !== 'desktop' ? '1px solid #334155' : 'none',
-                            boxShadow: viewport !== 'desktop' ? '0 0 20px rgba(0,0,0,0.5)' : 'none'
-                        }}>
-                            <iframe
-                                srcDoc={getWebsiteSource()}
-                                style={{ width: '100%', height: '100%', border: 'none', background: 'white' }}
-                                title="Live Preview"
-                                sandbox="allow-scripts allow-same-origin"
-                            />
-                        </div>
+                        <iframe
+                            srcDoc={getWebsiteSource()}
+                            style={{ width: '100%', height: '100%', border: 'none', background: 'white' }}
+                            title="Live Preview"
+                        />
                     ) : mode === 'agent' ? (
                         <AgentSimulator agent={app} />
                     ) : (
@@ -945,10 +715,10 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }
                     <div>
                         <div style={{ fontSize: 11.5, fontWeight: 700, color: githubConnected ? '#34d399' : 'var(--text-primary)', marginBottom: 2, display: 'flex', alignItems: 'center', gap: 6 }}>
                             <GitBranch size={13} />
-                            {githubConnected ? '✅ GitHub Connected' : 'Connect GitHub'}
+                            {githubConnected ? 'Γ£à GitHub Connected' : 'Connect GitHub'}
                         </div>
                         <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>
-                            {githubConnected ? 'Push generated code to your GitHub repository' : 'Go to Settings → Deployment to connect your account'}
+                            {githubConnected ? 'Push generated code to your GitHub repository' : 'Go to Settings ΓåÆ Deployment to connect your account'}
                         </div>
                     </div>
                     {githubConnected ? (
@@ -964,7 +734,7 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }
             </div>
 
             <div style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid var(--border-subtle)', borderRadius: 14, padding: 14 }}>
-                <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 10 }}>📦 Tech Stack Generated</div>
+                <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 10 }}>≡ƒôª Tech Stack Generated</div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7 }}>
                     {stackItems.map(s => (
                         <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '7px 9px', background: 'rgba(255,255,255,0.03)', borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
@@ -984,12 +754,10 @@ function PreviewPanel({ app, onOpenDeploy, onPushGitHub, githubConnected, mode }
 function EmptyState({ mode }) {
     const m = MODES.find(x => x.id === mode);
     const features = {
-        app: [['⚛️', 'React + TypeScript'], ['⚡', 'FastAPI Backend'], ['🗄️', 'PostgreSQL + Redis'], ['🔐', 'JWT Auth'], ['🐳', 'Docker Ready'], ['📊', 'Admin Dashboard']],
-        agent: [['🧠', 'GPT-4o Powered'], ['💬', 'WhatsApp + Email'], ['🔄', 'Auto-retry Logic'], ['📈', 'Built-in Analytics'], ['⏰', 'Scheduled Runs'], ['🔗', 'API Integrations']],
-        website: [['📱', 'Mobile-first'], ['🚀', 'Edge Hosting'], ['🖼️', 'AI Image Gen'], ['📊', 'SEO Optimized'], ['💬', 'WhatsApp CTA'], ['🌐', 'Custom Domain']],
-        swarm: [['🐝', 'Swarm Coordination'], ['🧠', 'Multi-Agent Logic'], ['⚡', 'Real-time Sync'], ['🔄', 'Task Delegation'], ['🚀', 'Auto-Scaling'], ['🛡️', 'Secure Sandbox']],
+        app: [['ΓÜ¢∩╕Å', 'React + TypeScript'], ['ΓÜí', 'FastAPI Backend'], ['≡ƒùä∩╕Å', 'PostgreSQL + Redis'], ['≡ƒöÉ', 'JWT Auth'], ['≡ƒÉ│', 'Docker Ready'], ['≡ƒôè', 'Admin Dashboard']],
+        agent: [['≡ƒºá', 'GPT-4o Powered'], ['≡ƒÆ¼', 'WhatsApp + Email'], ['≡ƒöä', 'Auto-retry Logic'], ['≡ƒôê', 'Built-in Analytics'], ['ΓÅ░', 'Scheduled Runs'], ['≡ƒöù', 'API Integrations']],
+        website: [['≡ƒô▒', 'Mobile-first'], ['≡ƒÜÇ', 'Edge Hosting'], ['≡ƒû╝∩╕Å', 'AI Image Gen'], ['≡ƒôè', 'SEO Optimized'], ['≡ƒÆ¼', 'WhatsApp CTA'], ['≡ƒîÉ', 'Custom Domain']],
     };
-    const activeFeatures = features[mode] || features.app;
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: 20, padding: 32, textAlign: 'center' }}>
             <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
@@ -1001,7 +769,7 @@ function EmptyState({ mode }) {
                 <p style={{ fontSize: 12.5, color: 'var(--text-muted)', lineHeight: 1.8, maxWidth: 380 }}>{m.desc}<br />Describe what you want and hit <strong style={{ color: m.color }}>Generate</strong>.</p>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, maxWidth: 420 }}>
-                {activeFeatures.map(([icon, text], i) => (
+                {features[mode].map(([icon, text], i) => (
                     <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
                         style={{ padding: '9px 11px', borderRadius: 9, background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-faint)', display: 'flex', alignItems: 'center', gap: 6 }}>
                         <span style={{ fontSize: 14 }}>{icon}</span>
@@ -1013,7 +781,7 @@ function EmptyState({ mode }) {
     );
 }
 
-// ── Main Component ────────────────────────────────────────────────
+// ΓöÇΓöÇ Main Component ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 
 export default function VibeCoder() {
     const [mode, setMode] = useState('app');
@@ -1025,61 +793,20 @@ export default function VibeCoder() {
     const [builtApp, setBuiltApp] = useState(null);
     const [logs, setLogs] = useState([]);
     const [streamError, setStreamError] = useState(null);
-    const [detectedTarget, setDetectedTarget] = useState(null);
-    const [isDetectingTarget, setIsDetectingTarget] = useState(false);
-
     const [activeCodeTab, setActiveCodeTab] = useState('backend');
     const [selectedFile, setSelectedFile] = useState(null);
-    const [projectPath, setProjectPath] = useState('');
-    const [deployUrl, setDeployUrl] = useState('');
     const [rightPanel, setRightPanel] = useState('code');
     const [showDeployModal, setShowDeployModal] = useState(false);
     // Real LLM: generated files and result from LLM
     const [generatedFiles, setGeneratedFiles] = useState({});
     const [generatedResult, setGeneratedResult] = useState(null);
     const [streamingText, setStreamingText] = useState('');
-    const [tokenCount, setTokenCount] = useState(0);
-    const [generatingFile, setGeneratingFile] = useState(null);
-    const [isThinking, setIsThinking] = useState(false);
-
-    // Chat & Edits
-    const [chatInput, setChatInput] = useState('');
-    const [isChatting, setIsChatting] = useState(false);
-    const [chatHistory, setChatHistory] = useState([]);
-
     const timerRef = useRef(null);
     const textareaRef = useRef(null);
     const currentMode = MODES.find(m => m.id === mode);
     // GitHub and save from store
     const { github, saveBuiltProject } = useStore();
     const navigate = useNavigate();
-
-    // Debounced Target Detection
-    useEffect(() => {
-        if (!prompt || prompt.length < 5) {
-            setDetectedTarget(null);
-            return;
-        }
-
-        const timer = setTimeout(async () => {
-            setIsDetectingTarget(true);
-            try {
-                const res = await fetch(`/api/v1/builds/detect-type?prompt=${encodeURIComponent(prompt)}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.data?.target) {
-                        setDetectedTarget(data.data.target);
-                    }
-                }
-            } catch (err) {
-                console.error("Target detection failed:", err);
-            } finally {
-                setIsDetectingTarget(false);
-            }
-        }, 800);
-
-        return () => clearTimeout(timer);
-    }, [prompt]);
 
     const CODE_TABS = [
         { id: 'backend', label: 'Backend', icon: Server, color: '#f97316', file: 'main.py' },
@@ -1113,10 +840,11 @@ export default function VibeCoder() {
         setBuilding(true); setDone(false); setPhase(0); setStepIdx(0);
         setGeneratedFiles({}); setGeneratedResult(null); setStreamingText('');
         setBuiltApp(null); setLogs([]); setStreamError(null); setRightPanel('terminal');
-        setTokenCount(0); setGeneratingFile(null); setIsThinking(false);
 
-        // Start build pipeline animation in parallel (will be superseded by real stage events if available)
-        simulateBuild(() => { });
+        // Start build pipeline animation in parallel
+        simulateBuild(() => {
+            // Will be finalized when LLM completes
+        });
 
         try {
             const endpoint = mode === 'swarm' ? '/api/v1/multiagent/swarm' : '/api/v1/llm/generate/stream';
@@ -1150,111 +878,45 @@ export default function VibeCoder() {
                     try {
                         const evt = JSON.parse(dataStr);
                         if (evt.type === 'start') {
-                            setLogs(prev => [...prev.slice(-30), `[INFO] [System] ${evt.message || `🚀 Initializing connection... Using model: ${evt.model || 'default'}`}`]);
+                            setLogs(prev => [...prev.slice(-30), `[INFO] [System] ${evt.message || '≡ƒÜÇ Initializing Swarm Engine...'}`]);
                         } else if (evt.type === 'agent_start') {
-                            setLogs(prev => [...prev.slice(-30), `[INFO] [Agent] 🤖 ${evt.agent} (${evt.model}) starting...`]);
+                            setLogs(prev => [...prev.slice(-30), `[INFO] [Agent] ≡ƒñû ${evt.agent} (${evt.model}) starting...`]);
                             setLogs(prev => [...prev.slice(-30), `[${evt.agent}] ${evt.status}`]);
                         } else if (evt.type === 'agent_complete') {
-                            setLogs(prev => [...prev.slice(-30), `[SUCCESS] [Agent] ✅ ${evt.agent} logic complete.`]);
-                        } else if (evt.type === 'stage') {
-                            if (evt.stage === 'thinking') {
-                                setIsThinking(true);
-                                setLogs(prev => [...prev.slice(-30), `[STAGE] 🧠 Analyzing requirements and generating architecture...`]);
-                            } else if (evt.stage === 'coding') {
-                                setIsThinking(false);
-                                setLogs(prev => [...prev.slice(-30), `[STAGE] 💻 Synthesizing code...`]);
-                                setPhase(2); // Jump to coding phase
-                            }
-                        } else if (evt.type === 'file_start') {
-                            setGeneratingFile(evt.file);
-                            setLogs(prev => [...prev.slice(-30), `[FILE] 📝 Starting generation: ${evt.file} ...`]);
-                            setGeneratedFiles(prev => ({ ...prev, [evt.file]: "// Generating..." }));
-                            setSelectedFile(evt.file);
-                        } else if (evt.type === 'file_end') {
-                            setGeneratingFile(null);
-                            setLogs(prev => [...prev.slice(-30), `[FILE] ✅ Completed generation: ${evt.file}`]);
-                        } else if (evt.type === 'thinking') {
-                            // Just count tokens and maybe echo occasionally
-                            const content = evt.content || '';
-                            setTokenCount(prev => prev + 1);
-                            if (Math.random() > 0.96) {
-                                setLogs(prev => [...prev.slice(-30), `[THINKING] ${content.slice(0, 15).replace(/\\n/g, ' ')}...`]);
-                            }
+                            setLogs(prev => [...prev.slice(-30), `[SUCCESS] [Agent] Γ£à ${evt.agent} logic complete.`]);
                         } else if (evt.type === 'chunk') {
                             const content = evt.content || '';
                             setStreamingText(prev => prev + content);
-                            setTokenCount(prev => prev + 1);
-
-                            // If we have an active file being generated, append to it in real-time
-                            if (generatingFile) {
-                                setGeneratedFiles(prev => {
-                                    const currentContent = prev[generatingFile] === "// Generating..." ? "" : (prev[generatingFile] || "");
-                                    return { ...prev, [generatingFile]: currentContent + content };
-                                });
-                            }
-
                             // Occasional character echo to terminal for life
-                            if (Math.random() > 0.95 && !generatingFile) {
+                            if (Math.random() > 0.95) {
                                 setLogs(prev => [...prev.slice(-30), `[STREAM] ${content.slice(0, 5)}...`]);
                             }
                         } else if (evt.type === 'complete') {
                             const result = evt.result;
                             setGeneratedResult(result);
-
-                            // If files were extracted manually via 'file_start/end' they are already in state,
-                            // but usually the final payload contains the clean parsed versions. We'll merge them.
-                            const files = result?.files || generatedFiles;
+                            const files = result?.files || {};
                             setGeneratedFiles(files);
-                            setGeneratingFile(null);
-                            setIsThinking(false);
 
-                            const pName = (result?.project_name || result?.agent_name || result?.site_name || 'app').toLowerCase().replace(/\s+/g, '-');
-                            const pPath = `e:/projects/Low/Low/omniforge-nexus/generated_apps/${pName}`;
-                            setProjectPath(pPath);
-
-                            setLogs(prev => [...prev.slice(-30), `[SUCCESS] [Builder] ✅ Synthesized ${Object.keys(files).length} files.`]);
-                            setLogs(prev => [...prev.slice(-30), `[MCP] [Filesystem] 📂 Workspace synchronized: ${pPath}`]);
+                            const fileList = Object.keys(files);
+                            setLogs(prev => [...prev.slice(-30), `[SUCCESS] [Builder] Γ£à Synthesized ${fileList.length} files.`]);
 
                             if (timerRef.current) clearInterval(timerRef.current);
                             setBuilding(false);
+                            setDone(true);
                             setPhase(4); setStepIdx(4);
-
-                            // Simulate MCP Underwriter.dev Analysis BEFORE showing done
-                            setLogs(prev => [...prev.slice(-30), `[MCP] 🔍 Triggering Underwriter.dev code analysis...`]);
-                            setTimeout(() => {
-                                setLogs(prev => [...prev.slice(-30), `[MCP] 🛡️ Underwriter: Scanning for security vulnerabilities...`]);
-                            }, 1000);
-                            setTimeout(() => {
-                                setLogs(prev => [...prev.slice(-30), `[MCP] ⚡ Underwriter: Checking performance bottlenecks...`]);
-                            }, 2000);
-                            setTimeout(() => {
-                                setLogs(prev => [...prev.slice(-30), `[MCP] ✅ Underwriter: Analysis complete. Score: 92/100`]);
-                                setDone(true);
-                                setRightPanel('analysis'); // Auto-switch to analysis tab
-
-                                setBuiltApp(prev => ({
-                                    ...prev,
-                                    analysis: [
-                                        { title: "Authentication Flow", status: "Pass", type: "Security", desc: "JWT implementation is secure. Consider adding rate limiting." },
-                                        { title: "Database Queries", status: "Warning", type: "Performance", desc: "Found N+1 query potential in invoice fetching logic." },
-                                        { title: "Bundle Size", status: "Pass", type: "Performance", desc: "Initial load is 142KB (Brotli compressed)." },
-                                        { title: "Accessibility", status: "Pass", type: "UX", desc: "100% ARIA compliance on standard components." }
-                                    ]
-                                }));
-                            }, 3500);
+                            setRightPanel('preview');
 
                             const generatedAppData = {
-                                url: `${pName}.omniforge.ai`,
-                                apis: Object.keys(result?.api_endpoints || {}).length || Object.keys(files).length || 8,
+                                url: `${(result?.project_name || result?.agent_name || result?.site_name || 'app').toLowerCase().replace(/\s+/g, '-')}.omniforge.ai`,
+                                apis: Object.keys(result?.api_endpoints || {}).length || fileList.length || 8,
                                 tables: result?.tables?.length || 6,
-                                files: Object.keys(files),
-                                projectPath: pPath,
+                                files: fileList,
                                 result,
                             };
                             setBuiltApp(generatedAppData);
 
-                            if (Object.keys(files).length > 0) {
-                                setSelectedFile(Object.keys(files)[0]);
+                            if (fileList.length > 0) {
+                                setSelectedFile(fileList[0]);
                                 if (rightPanel !== 'preview') setRightPanel('code');
                             }
 
@@ -1262,18 +924,16 @@ export default function VibeCoder() {
                                 id: Date.now().toString(),
                                 mode: mode,
                                 prompt: prompt,
-                                files: Object.keys(files),
-                                projectPath: pPath,
+                                files: fileList,
                                 githubRepo: null,
                                 name: result?.project_name || result?.agent_name || result?.site_name || 'AI Project'
                             });
 
                             if (github?.connected) {
-                                setLogs(prev => [...prev.slice(-30), `[INFO] [Turbo] ⚡ Auto-Deploying to GitHub...`]);
+                                setLogs(prev => [...prev.slice(-30), `[INFO] [Turbo] ΓÜí Auto-Deploying to GitHub...`]);
                                 pushToGitHub(files);
                             }
-                        }
-                        else if (evt.type === 'error') {
+                        } else if (evt.type === 'error') {
                             throw new Error(evt.message || 'Generation failed');
                         }
                     } catch (parseErr) {
@@ -1285,68 +945,11 @@ export default function VibeCoder() {
         } catch (err) {
             console.error('LLM build error:', err);
             setStreamError(err.message);
-            setLogs(prev => [...prev.slice(-30), `[ERROR] [System] ❌ ${err.message}`]);
+            setLogs(prev => [...prev.slice(-30), `[ERROR] [System] Γ¥î ${err.message}`]);
+            // Stop animation if still running
             if (timerRef.current) clearInterval(timerRef.current);
             setBuilding(false);
             setDone(false);
-        }
-    };
-
-    const handleChatSubmit = async () => {
-        if (!chatInput.trim() || isChatting) return;
-        const msg = chatInput.trim();
-        setChatInput('');
-        setChatHistory(prev => [...prev, { role: 'user', text: msg }]);
-        setIsChatting(true);
-
-        // Add a temporary typing message
-        setChatHistory(prev => [...prev, { role: 'assistant', text: '', isStreaming: true }]);
-
-        try {
-            // Simulated differential edit streaming
-            const responseText = `I've analyzed your request: "${msg}".\n\nI am modifying the workspace to apply these changes...`;
-
-            let streamText = '';
-            for (let i = 0; i < responseText.length; i++) {
-                await new Promise(r => setTimeout(r, 20));
-                streamText += responseText[i];
-                setChatHistory(prev => {
-                    const newH = [...prev];
-                    newH[newH.length - 1].text = streamText;
-                    return newH;
-                });
-            }
-
-            // Simulate a file edit in the workspace after chat
-            setTimeout(() => {
-                if (Object.keys(generatedFiles).length > 0) {
-                    const firstFile = Object.keys(generatedFiles)[0];
-                    setGeneratedFiles(prev => ({
-                        ...prev,
-                        [firstFile]: `// [Nexus Coder Modified via Chat]\n// Revisions applied dynamically.\n\n` + (prev[firstFile] || '')
-                    }));
-                    setLogs(prev => [...prev.slice(-30), `[MCP] ✨ Differential edit applied to ${firstFile}`]);
-
-                    setChatHistory(prev => {
-                        const newH = [...prev];
-                        newH[newH.length - 1].isStreaming = false;
-                        newH[newH.length - 1].text += `\n\n✅ **Applied differential edit** to \`${firstFile}\`. Check the Code tab.`;
-                        return newH;
-                    });
-                } else {
-                    setChatHistory(prev => {
-                        const newH = [...prev];
-                        newH[newH.length - 1].isStreaming = false;
-                        newH[newH.length - 1].text += `\n\n⚠️ Workspace is empty. Generate a project first.`;
-                        return newH;
-                    });
-                }
-                setIsChatting(false);
-            }, 500);
-
-        } catch (err) {
-            console.error(err);
-            setIsChatting(false);
         }
     };
 
@@ -1357,13 +960,13 @@ export default function VibeCoder() {
             return;
         }
         if (!filesToPush || Object.keys(filesToPush).length === 0) {
-            toast.error('No files to push — generate a project first');
+            toast.error('No files to push ΓÇö generate a project first');
             return;
         }
         const repoName = (builtApp?.result?.project_name || builtApp?.result?.agent_name || builtApp?.result?.site_name || 'omniforge-project').toLowerCase().replace(/[^a-z0-9-]/g, '-');
 
-        setLogs(prev => [...prev, `[INFO] [Turbo] 🌐 Committing ${Object.keys(filesToPush).length} files via Git Data Tree API...`]);
-        setLogs(prev => [...prev, `[INFO] [Turbo] 🚄 Atomically syncing to main branch...`]);
+        setLogs(prev => [...prev, `[INFO] [Turbo] ≡ƒîÉ Committing ${Object.keys(filesToPush).length} files via Git Data Tree API...`]);
+        setLogs(prev => [...prev, `[INFO] [Turbo] ≡ƒÜä Atomically syncing to main branch...`]);
 
         const deployId = toast.loading(`Turbo-Sync: Building Git Tree...`);
         try {
@@ -1375,22 +978,22 @@ export default function VibeCoder() {
                     username: github.user?.login,
                     repo_name: repoName,
                     files: filesToPush,
-                    description: `🚀 Turbo-Deploy: ${prompt.slice(0, 50)}`,
+                    description: `≡ƒÜÇ Turbo-Deploy: ${prompt.slice(0, 50)}`,
                     private: false,
                 }),
             });
             const data = await res.json();
             if (data.success) {
-                setLogs(prev => [...prev, `[SUCCESS] [Turbo] ✅ Sync Complete! Commit [${data.commit_sha}]`]);
-                setLogs(prev => [...prev, `[SUCCESS] [Turbo] 🌍 Live Repository: ${data.repo_url}`]);
-                toast.success(`🚀 Turbo-Deployed Successfully!`, { id: deployId, duration: 4000 });
+                setLogs(prev => [...prev, `[SUCCESS] [Turbo] Γ£à Sync Complete! Commit [${data.commit_sha}]`]);
+                setLogs(prev => [...prev, `[SUCCESS] [Turbo] ≡ƒîì Live Repository: ${data.repo_url}`]);
+                toast.success(`≡ƒÜÇ Turbo-Deployed Successfully!`, { id: deployId, duration: 4000 });
                 setBuiltApp(prev => ({ ...prev, githubRepo: data.repo_url }));
                 setRightPanel('preview');
             } else {
                 throw new Error(data.detail || 'Push failed');
             }
         } catch (e) {
-            setLogs(prev => [...prev, `[ERROR] [GitHub] ❌ Deployment failed: ${e.message}`]);
+            setLogs(prev => [...prev, `[ERROR] [GitHub] Γ¥î Deployment failed: ${e.message}`]);
             toast.error(`GitHub push failed: ${e.message}`, { id: deployId });
         }
     };
@@ -1400,7 +1003,7 @@ export default function VibeCoder() {
     return (
         <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: 'var(--bg-primary)', flexDirection: 'column' }}>
 
-            {/* ── Top Bar ────────────────────────────────────────── */}
+            {/* ΓöÇΓöÇ Top Bar ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
             <div className="vc-topbar">
                 {/* Brand */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -1409,7 +1012,7 @@ export default function VibeCoder() {
                     </div>
                     <div>
                         <div style={{ fontSize: 12.5, fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>Nexus Coder</div>
-                        <div style={{ fontSize: 8.5, color: 'var(--text-muted)', letterSpacing: 1 }}>AI BUILDER · MSME PLATFORM</div>
+                        <div style={{ fontSize: 8.5, color: 'var(--text-muted)', letterSpacing: 1 }}>AI BUILDER ┬╖ MSME PLATFORM</div>
                     </div>
                 </div>
 
@@ -1445,7 +1048,7 @@ export default function VibeCoder() {
 
                 {/* Right Panel Switcher */}
                 <div style={{ display: 'flex', gap: 6, background: 'rgba(0,0,0,0.2)', padding: 4, borderRadius: 12, border: '1px solid rgba(255,255,255,0.03)' }}>
-                    {[{ id: 'code', icon: Code2, label: 'Code' }, { id: 'terminal', icon: Terminal, label: 'Terminal' }, { id: 'preview', icon: Eye, label: 'Preview' }, ...(builtApp?.analysis ? [{ id: 'analysis', icon: ShieldAlert, label: 'Analysis' }] : [])].map(p => (
+                    {[{ id: 'code', icon: Code2, label: 'Code' }, { id: 'terminal', icon: Terminal, label: 'Terminal' }, { id: 'preview', icon: Eye, label: 'Preview' }].map(p => (
                         <button key={p.id} onClick={() => setRightPanel(p.id)} style={{
                             display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', borderRadius: 9,
                             background: rightPanel === p.id ? 'rgba(255,255,255,0.06)' : 'transparent',
@@ -1491,37 +1094,13 @@ export default function VibeCoder() {
                 </div>
             </div>
 
-            {/* ── Main Workspace ─────────────────────────────────── */}
+            {/* ΓöÇΓöÇ Main Workspace ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
             <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
 
                 {/* LEFT: Prompt + Templates */}
                 <div className="vc-left-panel">
                     {/* Prompt Box */}
-                    <div style={{ padding: '12px 12px 8px', flexShrink: 0, position: 'relative' }}>
-                        {/* Target Detection Badge */}
-                        {(detectedTarget || isDetectingTarget) && (
-                            <div style={{
-                                position: 'absolute', top: -4, left: 24, zIndex: 10,
-                                display: 'flex', alignItems: 'center', gap: 6,
-                                background: isDetectingTarget ? 'rgba(255,255,255,0.05)' : 'rgba(0,255,136,0.1)',
-                                border: `1px solid ${isDetectingTarget ? 'rgba(255,255,255,0.1)' : 'rgba(0,255,136,0.3)'}`,
-                                padding: '3px 12px', borderRadius: 100,
-                                boxShadow: isDetectingTarget ? 'none' : '0 0 12px rgba(0,255,136,0.2)'
-                            }}>
-                                {isDetectingTarget ? (
-                                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--text-muted)', animation: 'pulse 1.5s infinite' }} />
-                                ) : (
-                                    <span style={{ fontSize: 10 }}>🎯</span>
-                                )}
-                                <span style={{
-                                    fontSize: 9, fontWeight: 700, letterSpacing: 1,
-                                    color: isDetectingTarget ? 'var(--text-muted)' : '#00ff88',
-                                    textTransform: 'uppercase'
-                                }}>
-                                    {isDetectingTarget ? 'DETECTING TARGET...' : `TARGET: ${detectedTarget}`}
-                                </span>
-                            </div>
-                        )}
+                    <div style={{ padding: '12px 12px 8px', flexShrink: 0 }}>
                         <div style={{
                             background: 'rgba(255,255,255,0.03)',
                             border: `1px solid ${building ? `${currentMode.color}50` : 'var(--border-subtle)'}`,
@@ -1534,10 +1113,10 @@ export default function VibeCoder() {
                                 onChange={e => setPrompt(e.target.value)}
                                 onKeyDown={e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) startBuild(); }}
                                 placeholder={
-                                    mode === 'app' ? 'Describe your app…\n\nEx: GST billing app for a textile business with invoice PDF generation'
-                                        : mode === 'agent' ? 'Describe your agent…\n\nEx: AI agent that monitors inventory and sends WhatsApp alerts when stock is low'
-                                            : mode === 'swarm' ? 'Describe a complex world-class project…\n\nEx: A multi-tenant ERP system for manufacturing with AI planning agents and supply chain tracking'
-                                                : 'Describe your website…\n\nEx: Professional website for my handicraft export business with product gallery'
+                                    mode === 'app' ? 'Describe your appΓÇª\n\nEx: GST billing app for a textile business with invoice PDF generation'
+                                        : mode === 'agent' ? 'Describe your agentΓÇª\n\nEx: AI agent that monitors inventory and sends WhatsApp alerts when stock is low'
+                                            : mode === 'swarm' ? 'Describe a complex world-class projectΓÇª\n\nEx: A multi-tenant ERP system for manufacturing with AI planning agents and supply chain tracking'
+                                                : 'Describe your websiteΓÇª\n\nEx: Professional website for my handicraft export business with product gallery'
                                 }
                                 rows={5}
                                 style={{
@@ -1550,12 +1129,6 @@ export default function VibeCoder() {
                             <div style={{ display: 'flex', alignItems: 'center', padding: '7px 11px', borderTop: '1px solid var(--border-faint)', gap: 8 }}>
                                 <span style={{ fontSize: 9.5, color: 'var(--text-muted)' }}>Ctrl+Enter to build</span>
                                 <div style={{ flex: 1 }} />
-                                {building && tokenCount > 0 && (
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginRight: 8, fontSize: 9.5, color: '#10b981' }}>
-                                        <Activity size={10} style={{ animation: 'pulse 1s infinite' }} />
-                                        <span>{tokenCount.toLocaleString()} {isThinking ? 'ops (thinking)' : 'tokens'}</span>
-                                    </div>
-                                )}
                                 <span style={{ fontSize: 9.5, color: prompt.length > 400 ? '#f59e0b' : 'var(--text-muted)' }}>{prompt.length}/500</span>
                                 <motion.button
                                     onClick={startBuild}
@@ -1586,7 +1159,7 @@ export default function VibeCoder() {
                                     <div style={{ width: 4, height: 4, borderRadius: '50%', background: currentMode.color, boxShadow: `0 0 8px ${currentMode.color}` }} />
                                     Synthesizing {currentMode.label}
                                 </div>
-                                <BuildPipeline phase={phase} stepIdx={stepIdx} generatingFile={generatingFile} isThinking={isThinking} />
+                                <BuildPipeline phase={phase} stepIdx={stepIdx} />
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -1594,7 +1167,7 @@ export default function VibeCoder() {
                     {/* Templates */}
                     <div style={{ flex: 1, overflowY: 'auto', padding: '0 12px 14px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                            <span style={{ fontSize: 9.5, fontWeight: 800, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase' }}>⚡ Recommended </span>
+                            <span style={{ fontSize: 9.5, fontWeight: 800, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase' }}>ΓÜí Recommended </span>
                             <span style={{ fontSize: 9, background: 'rgba(255,255,255,0.06)', padding: '2px 8px', borderRadius: 20, color: 'var(--text-faint)' }}>{(TEMPLATES[mode] || TEMPLATES.app).length}</span>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1605,53 +1178,35 @@ export default function VibeCoder() {
                     </div>
                 </div>
 
-                {/* CENTER: File Tree (IDE Workspace) */}
-                <div style={{ width: 260, borderRight: '1px solid var(--border-subtle)', background: '#0d1117', display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ padding: '12px 14px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.02)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                            <div style={{ width: 22, height: 22, borderRadius: 6, background: 'rgba(59,130,246,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <FolderOpen size={13} style={{ color: '#3b82f6' }} />
-                            </div>
-                            <span style={{ fontSize: 10.5, fontWeight: 800, color: '#eef2ff', letterSpacing: 1.2, textTransform: 'uppercase' }}>Workspace</span>
+                {/* CENTER: File Tree */}
+                <div style={{ width: 220, borderRight: '1px solid var(--border-subtle)', background: 'rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ padding: '12px 14px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.02)' }}>
+                        <div style={{ width: 22, height: 22, borderRadius: 6, background: 'rgba(245,158,11,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <FolderOpen size={13} style={{ color: '#f59e0b' }} />
                         </div>
-                        <div style={{ display: 'flex', gap: 6 }}>
-                            <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }} title="New File" onClick={() => {
-                                const fName = window.prompt("Enter file path (e.g. src/utils.js):", "newfile.md");
-                                if (fName) {
-                                    setGeneratedFiles(prev => ({ ...prev, [fName]: "// New file created" }));
-                                    setSelectedFile(fName);
-                                }
-                            }}>
-                                <Plus size={14} />
-                            </button>
-                            {done && (
-                                <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#34d399', boxShadow: '0 0 10px #34d399' }} title="Workspace Synced" />
-                                </motion.div>
-                            )}
-                        </div>
+                        <span style={{ fontSize: 10.5, fontWeight: 800, color: '#eef2ff', letterSpacing: 1.2, textTransform: 'uppercase' }}>Workspace</span>
+                        {done && (
+                            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} style={{ marginLeft: 'auto' }}>
+                                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#34d399', boxShadow: '0 0 10px #34d399' }} />
+                            </motion.div>
+                        )}
                     </div>
-                    <div style={{ flex: 1, overflowY: 'auto', padding: '10px 6px' }}>
+                    <div style={{ flex: 1, overflowY: 'auto', padding: '8px' }}>
                         {Object.keys(generatedFiles).length > 0 ? (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                {buildTree(generatedFiles).map((node, i) => (
-                                    <FileTreeNode
-                                        key={i}
-                                        node={node}
-                                        onSelect={n => n.type === 'file' && setSelectedFile(n.path)}
-                                        selected={selectedFile}
-                                    />
+                                {Object.keys(generatedFiles).map((file, i) => (
+                                    <FileTreeNode key={i} node={{ name: file, type: 'file' }} onSelect={n => setSelectedFile(n.name)} selected={selectedFile} />
                                 ))}
                             </div>
                         ) : building ? (
-                            <div style={{ padding: '40px 10px', textAlign: 'center' }}>
-                                <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} style={{ margin: '0 auto 12px', width: 26, height: 26, borderRadius: '50%', border: `2px solid ${currentMode.color}40`, borderTopColor: currentMode.color }} />
-                                <div style={{ fontSize: 10.5, color: 'var(--text-muted)', fontWeight: 600 }}>Building Tree...</div>
+                            <div style={{ padding: '30px 10px', textAlign: 'center' }}>
+                                <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} style={{ margin: '0 auto 12px', width: 24, height: 24, borderRadius: '50%', border: `2px solid ${currentMode.color}40`, borderTopColor: currentMode.color }} />
+                                <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>Synthesizing Project...</div>
                             </div>
                         ) : (
-                            <div style={{ padding: '50px 10px', textAlign: 'center', opacity: 0.4 }}>
-                                <Folder size={36} style={{ margin: '0 auto 10px', color: 'var(--text-muted)' }} />
-                                <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>Empty Workspace</div>
+                            <div style={{ padding: '40px 10px', textAlign: 'center', opacity: 0.4 }}>
+                                <Folder size={32} style={{ margin: '0 auto 10px', color: 'var(--text-muted)' }} />
+                                <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>No files yet</div>
                             </div>
                         )}
                     </div>
@@ -1709,7 +1264,7 @@ export default function VibeCoder() {
                                                 <span style={{ fontSize: 9, fontWeight: 900, color: '#6366f1', letterSpacing: 1 }}>RAW STREAM</span>
                                             </div>
                                             <CodePanel
-                                                code={streamingText + ' █'}
+                                                code={streamingText + ' Γûê'}
                                                 filename="stream_buffer.json"
                                             />
                                         </div>
@@ -1732,32 +1287,17 @@ export default function VibeCoder() {
                                 <motion.div key="terminal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ height: '100%', padding: 12 }}>
                                     <TerminalPanel logs={logs} error={streamError} />
                                 </motion.div>
-                            ) : rightPanel === 'preview' ? (
+                            ) : (
                                 <motion.div key="preview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ height: '100%', padding: 12 }}>
-                                    {done ? (
-                                        <PreviewPanel app={builtApp} onOpenDeploy={() => setShowDeployModal(true)} onPushGitHub={pushToGitHub} githubConnected={github?.connected} mode={mode} />
-                                    ) : streamError ? (
+                                    {done ? <PreviewPanel app={builtApp} onOpenDeploy={() => setShowDeployModal(true)} onPushGitHub={pushToGitHub} githubConnected={github?.connected} mode={mode} /> : streamError ? (
                                         <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12, color: '#ef4444', textAlign: 'center', padding: 20 }}>
                                             <AlertCircle size={36} />
                                             <div style={{ fontSize: 14, fontWeight: 700 }}>Build Failed</div>
                                             <div style={{ fontSize: 12, color: 'var(--text-muted)', maxWidth: 300 }}>{streamError}</div>
+                                            <div style={{ fontSize: 11, color: 'var(--text-faint)', marginTop: 8 }}>
+                                                Check your OpenRouter API Key in <code>backend/.env</code> or your account credits.
+                                            </div>
                                             <button className="btn btn-secondary" style={{ marginTop: 12 }} onClick={startBuild}>Retry Build</button>
-                                        </div>
-                                    ) : building ? (
-                                        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 20, color: 'var(--text-muted)', background: 'rgba(0,0,0,0.3)', borderRadius: 12 }}>
-                                            <div style={{ position: 'relative', width: 80, height: 80 }}>
-                                                <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                                                    style={{ position: 'absolute', inset: 0, border: '2px solid rgba(0,212,255,0.1)', borderTopColor: 'var(--cyan)', borderRadius: '50%' }} />
-                                                <motion.div animate={{ rotate: -360 }} transition={{ duration: 7, repeat: Infinity, ease: 'linear' }}
-                                                    style={{ position: 'absolute', inset: 10, border: '2px dotted rgba(123,47,255,0.2)', borderRightColor: 'var(--plasma)', borderRadius: '50%' }} />
-                                                <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Cpu size={24} style={{ color: 'var(--cyan)', opacity: 0.8 }} />
-                                                </div>
-                                            </div>
-                                            <div style={{ textAlign: 'center' }}>
-                                                <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 4 }}>Neural Engine Working</div>
-                                                <div style={{ fontSize: 10.5, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>Initializing virtual runtime...</div>
-                                            </div>
                                         </div>
                                     ) : (
                                         <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16, color: 'var(--text-muted)' }}>
@@ -1774,70 +1314,7 @@ export default function VibeCoder() {
                                         </div>
                                     )}
                                 </motion.div>
-                            ) : rightPanel === 'analysis' && builtApp?.analysis ? (
-                                <motion.div key="analysis" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ height: '100%', padding: 20, overflowY: 'auto' }}>
-                                    <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-subtle)', borderRadius: 14, padding: 20 }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-                                            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(123,47,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                <ShieldAlert size={20} style={{ color: '#7b2fff' }} />
-                                            </div>
-                                            <div>
-                                                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 8 }}>
-                                                    Underwriter.dev Report <span style={{ fontSize: 10, background: '#7b2fff', color: '#fff', padding: '2px 8px', borderRadius: 100 }}>MCP CONNECTED</span>
-                                                </div>
-                                                <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>Automated code quality and security analysis</div>
-                                            </div>
-                                            <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-                                                <div style={{ fontSize: 24, fontWeight: 900, color: '#34d399', fontFamily: 'var(--font-display)' }}>92/100</div>
-                                                <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Quality Score</div>
-                                            </div>
-                                        </div>
-
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12, marginBottom: 20 }}>
-                                            {[
-                                                { label: 'Security', score: '98%', color: '#34d399' },
-                                                { label: 'Performance', score: '88%', color: '#fbbf24' },
-                                                { label: 'Accessibility', score: '100%', color: '#3b82f6' },
-                                                { label: 'Best Practices', score: '90%', color: '#6366f1' },
-                                            ].map(stat => (
-                                                <div key={stat.label} style={{ padding: 12, borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                                                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}>{stat.label}</div>
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                                        <div style={{ flex: 1, height: 4, background: 'rgba(255,255,255,0.1)', borderRadius: 2, overflow: 'hidden' }}>
-                                                            <div style={{ width: stat.score, height: '100%', background: stat.color }} />
-                                                        </div>
-                                                        <span style={{ fontSize: 12, fontWeight: 700, color: stat.color }}>{stat.score}</span>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 12 }}>Detailed Findings</div>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                                            {builtApp.analysis.map((item, i) => (
-                                                <div key={i} style={{ display: 'flex', gap: 12, padding: 14, background: 'rgba(0,0,0,0.3)', borderRadius: 10, borderLeft: `3px solid ${item.status === 'Pass' ? '#34d399' : '#fbbf24'}` }}>
-                                                    <div style={{ flexShrink: 0, marginTop: 2 }}>
-                                                        {item.status === 'Pass' ? <CheckCircle size={16} style={{ color: '#34d399' }} /> : <AlertTriangle size={16} style={{ color: '#fbbf24' }} />}
-                                                    </div>
-                                                    <div>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                                                            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{item.title}</span>
-                                                            <span style={{ fontSize: 9, background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: 4, color: 'var(--text-muted)' }}>{item.type}</span>
-                                                        </div>
-                                                        <div style={{ fontSize: 11.5, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{item.desc}</div>
-
-                                                        {item.status !== 'Pass' && (
-                                                            <button className="btn btn-secondary" style={{ marginTop: 10, fontSize: 10, padding: '4px 10px' }} onClick={() => toast.success('Applying auto-fix via MCP...')}>
-                                                                <Wrench size={11} style={{ marginRight: 4 }} /> Auto-Fix Issue
-                                                            </button>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ) : null}
+                            )}
                         </AnimatePresence>
                     </div>
                 </div>
@@ -1848,7 +1325,7 @@ export default function VibeCoder() {
                         <Cpu size={12} style={{ color: '#6366f1' }} />
                         <span className="panel-title">AI CONSOLE</span>
                         <motion.div animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}>
-                            <span style={{ fontSize: 9, color: '#f97316', marginLeft: 4 }}>● Claude 3.5 Sonnet</span>
+                            <span style={{ fontSize: 9, color: '#f97316', marginLeft: 4 }}>ΓùÅ Claude 3.5 Sonnet</span>
                         </motion.div>
                     </div>
 
@@ -1869,6 +1346,8 @@ export default function VibeCoder() {
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7 }}>
                             {[
                                 { label: 'Apps Built', value: '3', color: '#f97316' },
+                                { label: 'Agents', value: '2', color: '#6366f1' },
+                                { label: 'Websites', value: '1', color: '#10b981' },
                                 { label: 'AI Credits', value: '480', color: '#f59e0b' },
                             ].map(s => (
                                 <div key={s.label} style={{ padding: '8px 10px', borderRadius: 9, background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-faint)', textAlign: 'center' }}>
@@ -1879,59 +1358,40 @@ export default function VibeCoder() {
                         </div>
                     </div>
 
-                    {/* AI Chat History */}
-                    <div style={{ flex: 1, overflowY: 'auto', padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-                        <div className="section-label" style={{ fontSize: 9, marginBottom: 2 }}>💬 CHAT & EDITS</div>
-                        {chatHistory.map((msg, i) => (
-                            <div key={i} style={{
-                                display: 'flex', gap: 8,
-                                flexDirection: msg.role === 'user' ? 'row-reverse' : 'row',
-                                alignItems: 'flex-start'
+                    {/* AI Suggestions */}
+                    <div style={{ flex: 1, overflowY: 'auto', padding: '10px 12px' }}>
+                        <div className="section-label" style={{ fontSize: 9, marginBottom: 8 }}>≡ƒÆí AI SUGGESTIONS</div>
+                        {(generatedResult?.suggestions || [
+                            { icon: '≡ƒöÆ', text: 'Add rate limiting to API endpoints', type: 'Security' },
+                            { icon: 'ΓÜí', text: 'Enable Redis caching for 2x speed boost', type: 'Performance' },
+                            { icon: '≡ƒô▒', text: 'Add PWA support for mobile users', type: 'UX' },
+                            { icon: '≡ƒº¬', text: 'Generate unit tests with pytest', type: 'Testing' },
+                            { icon: '≡ƒôè', text: 'Connect Mixpanel for user analytics', type: 'Analytics' },
+                        ]).slice(0, 5).map((tip, i) => (
+                            <motion.div key={i} whileHover={{ x: 3 }} style={{
+                                display: 'flex', alignItems: 'flex-start', gap: 8, padding: '9px 10px',
+                                borderRadius: 9, border: '1px solid var(--border-faint)',
+                                background: 'rgba(255,255,255,0.02)', cursor: 'pointer', marginBottom: 6,
+                                transition: 'all 0.18s',
                             }}>
-                                <div style={{
-                                    width: 18, height: 18, borderRadius: '50%', flexShrink: 0,
-                                    background: msg.role === 'user' ? 'rgba(255,255,255,0.1)' : 'rgba(99,102,241,0.2)',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10
-                                }}>
-                                    {msg.role === 'user' ? 'U' : '🤖'}
+                                <span style={{ fontSize: 14, flexShrink: 0 }}>{tip.icon}</span>
+                                <div>
+                                    <div style={{ fontSize: 10.5, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{tip.text}</div>
+                                    <span style={{ fontSize: 9, color: 'var(--text-muted)', marginTop: 3, display: 'inline-block', padding: '1px 6px', borderRadius: 100, background: 'rgba(255,255,255,0.05)' }}>{tip.type}</span>
                                 </div>
-                                <div style={{
-                                    background: msg.role === 'user' ? 'rgba(255,255,255,0.05)' : 'rgba(99,102,241,0.08)',
-                                    border: `1px solid ${msg.role === 'user' ? 'var(--border-subtle)' : 'rgba(99,102,241,0.15)'}`,
-                                    padding: '8px 10px', borderRadius: 10, fontSize: 10.5, lineHeight: 1.5,
-                                    color: msg.role === 'user' ? 'var(--text-primary)' : 'var(--text-secondary)',
-                                    whiteSpace: 'pre-wrap'
-                                }}>
-                                    {msg.text}
-                                    {msg.isStreaming && <span className="dot-live" style={{ display: 'inline-block', marginLeft: 4, width: 4, height: 4, background: '#6366f1' }} />}
-                                </div>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
 
                     {/* AI Input */}
-                    <div style={{ padding: '10px 12px', borderTop: '1px solid var(--border-subtle)', flexShrink: 0, background: 'rgba(0,0,0,0.2)' }}>
-                        {projectPath && (
-                            <div style={{ marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4, padding: '4px 8px', borderRadius: 4, background: 'rgba(52,211,153,0.06)' }}>
-                                <CheckCircle size={10} style={{ color: '#34d399' }} />
-                                <span style={{ fontSize: 9, color: 'var(--text-muted)' }}>Workspace ATTACHED</span>
-                            </div>
-                        )}
-                        <div style={{ display: 'flex', gap: 6, alignItems: 'center', padding: '6px 10px', borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ padding: '10px 12px', borderTop: '1px solid var(--border-subtle)', flexShrink: 0 }}>
+                        <div style={{ display: 'flex', gap: 6, alignItems: 'center', padding: '8px 10px', borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-subtle)' }}>
                             <input
-                                value={chatInput}
-                                onChange={e => setChatInput(e.target.value)}
-                                onKeyDown={e => { if (e.key === 'Enter') handleChatSubmit(); }}
-                                placeholder="Require a diff edit?"
-                                disabled={isChatting}
-                                style={{ background: 'none', border: 'none', outline: 'none', color: 'var(--text-primary)', fontSize: 11, flex: 1, fontFamily: 'var(--font-ui)' }}
+                                placeholder="Ask AI anythingΓÇª"
+                                style={{ background: 'none', border: 'none', outline: 'none', color: 'var(--text-primary)', fontSize: 11.5, flex: 1, fontFamily: 'var(--font-ui)' }}
                             />
-                            <button
-                                onClick={handleChatSubmit}
-                                disabled={isChatting || !chatInput.trim()}
-                                style={{ background: 'none', border: 'none', cursor: isChatting ? 'default' : 'pointer', color: chatInput.trim() ? '#6366f1' : 'var(--text-muted)', display: 'flex', alignItems: 'center' }}
-                            >
-                                {isChatting ? <Loader size={12} style={{ animation: 'spin 1s linear infinite' }} /> : <Send size={12} />}
+                            <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+                                <Send size={13} />
                             </button>
                         </div>
                     </div>
@@ -1939,28 +1399,24 @@ export default function VibeCoder() {
             </div>
 
             {showDeployModal && <DeployModal app={builtApp} onClose={() => setShowDeployModal(false)} mode={mode} prompt={prompt} />}
-        </div >
+        </div>
     );
 }
 
 function AppSimulator({ app }) {
     const color = '#3b82f6';
     const result = app?.result || {};
-    const appName = result?.project_name || result?.name || 'AI Application';
-    const features = result?.features || result?.ui_components || ['Database Management', 'Auth Integration', 'API Routing'];
+    const appName = result?.project_name || 'AI Application';
+    const features = result?.features || ['Database Management', 'Auth Integration', 'API Routing'];
     const techItems = result?.tech_stack ? Object.entries(result.tech_stack) : [['frontend', 'React'], ['backend', 'FastAPI']];
-    const invoices = result?.sample_data?.invoices || [
-        { no: 'INV-001', cust: 'Client A', amt: '₹45,000', gst: '₹8,100', status: 'Paid', date: 'Today' },
-        { no: 'INV-002', cust: 'Client B', amt: '₹1,20,000', gst: '₹21,600', status: 'Pending', date: 'Yesterday' }
-    ];
 
     return (
         <div style={{ height: '100%', background: '#0a1122', display: 'flex', flexDirection: 'column', color: '#eef2ff' }}>
             <div style={{ padding: '14px 20px', background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${color}, #2563eb)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, boxShadow: `0 4px 12px ${color}30` }}>🏢</div>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${color}, #2563eb)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, boxShadow: `0 4px 12px ${color}30` }}>≡ƒÅó</div>
                 <div>
                     <div style={{ fontSize: 13, fontWeight: 800, color: 'white' }}>{appName}</div>
-                    <div style={{ fontSize: 9, color: '#34d399', fontWeight: 700, marginTop: 2 }}>PRODUCTION READY • v1.0.0</div>
+                    <div style={{ fontSize: 9, color: '#34d399', fontWeight: 700, marginTop: 2 }}>PRODUCTION READY ΓÇó v1.0.0</div>
                 </div>
                 <div style={{ flex: 1 }} />
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -2025,7 +1481,7 @@ function AgentSimulator({ agent }) {
     return (
         <div style={{ height: '100%', background: '#0a0f1d', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255,255,255,0.05)' }}>
             <div style={{ padding: '12px 20px', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 26, height: 26, borderRadius: 8, background: `linear-gradient(135deg, ${color}, #7c3aed)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, boxShadow: `0 4px 10px ${color}30` }}>🤖</div>
+                <div style={{ width: 26, height: 26, borderRadius: 8, background: `linear-gradient(135deg, ${color}, #7c3aed)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, boxShadow: `0 4px 10px ${color}30` }}>≡ƒñû</div>
                 <div>
                     <div style={{ fontSize: 12.5, fontWeight: 800, color: 'white' }}>{agentName}</div>
                     <div style={{ fontSize: 8.5, color: '#a78bfa', fontWeight: 700, textTransform: 'uppercase' }}>Autonomous Engine</div>
@@ -2045,7 +1501,7 @@ function AgentSimulator({ agent }) {
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, margin: '4px 0' }}>
                     {capabilities.map((cap, i) => (
                         <div key={i} style={{ fontSize: 9, fontWeight: 800, color: color, background: `${color}15`, padding: '4px 10px', borderRadius: 100, border: `1px solid ${color}30` }}>
-                            ⚡ {cap.toUpperCase()}
+                            ΓÜí {cap.toUpperCase()}
                         </div>
                     ))}
                 </div>

@@ -58,6 +58,49 @@ async def start_build(
     )
 
 
+# ── GET /detect-type – Auto-Detect Target Type ────────────────
+@router.get("/detect-type", response_model=APIResponse[dict])
+async def detect_output_type(prompt: str = Query(..., description="The user's build prompt")):
+    """
+    Analyzes the prompt to determine the intended output type.
+    Returns one of: Website, Web App, Mobile UI, Chrome Extension, CLI Tool.
+    """
+    if not prompt or len(prompt) < 5:
+        return APIResponse.ok(data={"target": "Web App", "confidence": 0})
+        
+    system_prompt = """You are an AI router. Read the user's software prompt and categorize it exactly into ONE of these 5 categories, outputting only the category string:
+1. Website (Static landing pages, portfolios, single HTML/CSS pages)
+2. Web App (SaaS dashboards, databases, full-stack applications with auth)
+3. Mobile UI (Mobile apps, React Native style, phone screens)
+4. Chrome Extension (Browser plugins, manifest.json)
+5. CLI Tool (Python scripts, terminal commands, backend utilities)"""
+
+    try:
+        from shared.openrouter import llm
+        result = await llm.complete(
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt}
+            ],
+            model="anthropic/claude-3-haiku-20240307", # Fast lightweight model
+            temperature=0.0,
+            max_tokens=20
+        )
+        
+        detected = result.content.strip()
+        valid_targets = ["Website", "Web App", "Mobile UI", "Chrome Extension", "CLI Tool"]
+        
+        # Clean up common LLM chatting
+        for target in valid_targets:
+            if target.lower() in detected.lower():
+                return APIResponse.ok(data={"target": target, "confidence": 0.95})
+                
+        return APIResponse.ok(data={"target": "Web App", "confidence": 0.5}) # Default fallback
+    except Exception as e:
+        logger.warning("build.detect_type_failed", error=str(e))
+        return APIResponse.ok(data={"target": "Web App", "confidence": 0.0}) # Safe fallback
+
+
 # ── GET /demo – Start a Demo Build (no auth) ──────────────────
 @router.post("/demo", response_model=APIResponse[dict], status_code=202)
 async def demo_build(
