@@ -188,8 +188,12 @@ async def orchestrate_multi_agent(prompt: str) -> AsyncGenerator[str, None]:
 
 
 @router.post("/swarm")
-async def start_swarm(body: MultiAgentRequest):
+@router.get("/swarm")
+async def start_swarm(body: Optional[MultiAgentRequest] = None):
     """Start the Multi-Agent Swarm build."""
+    if body is None:
+        return {"status": "alive", "message": "Multi-Agent Swarm Engine is online. Use POST to start a build."}
+        
     if not settings.OPENROUTER_API_KEY:
         raise HTTPException(status_code=503, detail="OpenRouter API key not configured")
     

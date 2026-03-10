@@ -8,7 +8,7 @@ import time
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import ORJSONResponse, RedirectResponse
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 import structlog
 
@@ -89,7 +89,7 @@ app = FastAPI(
 # ── Middleware ────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -149,11 +149,22 @@ app.include_router(llm_router.router, prefix=f"{API_V1}/llm", tags=["LLM"])
 app.include_router(multiagent_router.router, prefix=f"{API_V1}/multiagent", tags=["MultiAgent"])
 
 
+# ── Compatibility Aliases ─────────────────────────────────────
+@app.get("/build", include_in_schema=False)
+@app.post("/build", include_in_schema=False)
+@app.get(f"{API_V1}/build", include_in_schema=False)
+@app.post(f"{API_V1}/build", include_in_schema=False)
+async def build_compatibility_alias():
+    """Redirects singular /build to plural /builds/"""
+    return RedirectResponse(url=f"{API_V1}/builds/", status_code=307)
+
+
 
 
 
 # ── Health & Meta ─────────────────────────────────────────────
 @app.get("/health", tags=["Meta"])
+@app.head("/health", tags=["Meta"])
 async def health():
     """Health check endpoint for load balancers."""
     try:
@@ -181,6 +192,7 @@ async def metrics():
 
 
 @app.get("/", tags=["Meta"])
+@app.head("/", tags=["Meta"])
 async def root():
     return {
         "name": "OmniForge Nexus API",
