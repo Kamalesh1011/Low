@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import useStore from '../store/useStore';
+import { apiFetch } from '../lib/api';
 import {
     Sparkles, Send, Bot, Code2, Globe, Layers,
     Play, Copy, Download, Terminal, Eye,
@@ -1064,7 +1065,7 @@ export default function VibeCoder() {
         const timer = setTimeout(async () => {
             setIsDetectingTarget(true);
             try {
-                const res = await fetch(`/api/v1/builds/detect-type?prompt=${encodeURIComponent(prompt)}`);
+                const res = await apiFetch(`/api/v1/builds/detect-type?prompt=${encodeURIComponent(prompt)}`);
                 if (res.ok) {
                     const data = await res.json();
                     if (data.data?.target) {
@@ -1120,9 +1121,8 @@ export default function VibeCoder() {
 
         try {
             const endpoint = mode === 'swarm' ? '/api/v1/multiagent/swarm' : '/api/v1/llm/generate/stream';
-            const res = await fetch(endpoint, {
+            const res = await apiFetch(endpoint, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ prompt, mode, stream: true }),
             });
 
@@ -1367,7 +1367,7 @@ export default function VibeCoder() {
 
         const deployId = toast.loading(`Turbo-Sync: Building Git Tree...`);
         try {
-            const res = await fetch('/api/v1/github/repos/push', {
+            const res = await apiFetch('/api/v1/github/repos/push', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

@@ -249,12 +249,14 @@ async def stream_llm_response(prompt: str, mode: str, model: Optional[str]) -> A
 # ── Routes ───────────────────────────────────────────────────────
 
 @router.post("/generate/stream")
-async def generate_stream(body: GenerateRequest):
+@router.get("/generate/stream")
+async def generate_stream(body: Optional[GenerateRequest] = None):
     """
     Stream code generation from LLM.
-    Connect with EventSource('/api/v1/llm/generate/stream')
-    Returns SSE stream with type: start | chunk | complete | error
     """
+    if body is None:
+        return {"status": "alive", "message": "LLM Stream Engine is online."}
+        
     if body.mode not in ["app", "agent", "website"]:
         raise HTTPException(status_code=400, detail="Mode must be 'app', 'agent', or 'website'")
     
@@ -276,11 +278,15 @@ async def generate_stream(body: GenerateRequest):
 
 
 @router.post("/generate")
-async def generate_sync(body: GenerateRequest):
+@router.get("/generate")
+async def generate_sync(body: Optional[GenerateRequest] = None):
     """
     Synchronous code generation (non-streaming).
     Returns the full result at once.
     """
+    if body is None:
+        return {"status": "alive", "message": "LLM Sync Engine is online."}
+        
     if not settings.OPENROUTER_API_KEY:
         raise HTTPException(status_code=503, detail="OpenRouter API key not configured")
     

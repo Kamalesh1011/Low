@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { apiFetch } from '../lib/api';
 
 const useStore = create(
     persist(
@@ -283,9 +284,8 @@ const useStore = create(
                     return { success: false };
                 }
                 try {
-                    const res = await fetch('/api/v1/github/verify', {
+                    const res = await apiFetch('/api/v1/github/verify', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ token }),
                     });
                     const data = await res.json();
@@ -317,7 +317,7 @@ const useStore = create(
                 const { github } = get();
                 if (!github.connected || !github.token) return;
                 try {
-                    const res = await fetch(`/api/v1/github/repos?token=${github.token}`);
+                    const res = await apiFetch(`/api/v1/github/repos?token=${github.token}`);
                     const data = await res.json();
                     if (data.success) {
                         set(state => ({ github: { ...state.github, repos: data.repos } }));
@@ -367,9 +367,8 @@ const useStore = create(
                 const startTime = Date.now();
 
                 try {
-                    const res = await fetch('/api/v1/llm/chat', {
+                    const res = await apiFetch('/api/v1/llm/chat', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             messages: [
                                 { role: 'system', content: agent.instructions || `You are ${agent.name}, an AI agent.` },
